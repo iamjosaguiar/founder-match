@@ -15,6 +15,7 @@ model User {
   image             String?
   profileImage      String?  // Professional profile photo URL
   password          String?  // For credentials login
+  founderJourney    String?  // Founder journey stage from onboarding
   title             String?
   bio               String?
   skills            String?  // Store as JSON string or comma-separated

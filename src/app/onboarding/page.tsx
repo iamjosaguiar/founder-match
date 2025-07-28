@@ -11,6 +11,14 @@ import { Badge } from "@/components/ui/badge";
 // Using regular select elements instead of custom Select component
 
 type CompleteOnboardingData = {
+  // Founder Journey & Agreements
+  founderJourney: string;
+  agreeTerms: boolean;
+  agreePrivacy: boolean;
+  agreeBusiness: boolean;
+  agreeAccurate: boolean;
+  agreeAge: boolean;
+  
   // Profile Information
   title: string;
   bio: string;
@@ -70,6 +78,14 @@ const workStyleOptions = [
   "Highly Structured", "Somewhat Structured", "Flexible", "Very Flexible"
 ];
 
+// Founder Journey options
+const founderJourneyOptions = [
+  { value: "idea-cofounder", label: "I have an idea and want to find a co-founder" },
+  { value: "company-cofounder", label: "I have a company and need a co-founder" },
+  { value: "exploring", label: "I'm exploring startup opportunities" },
+  { value: "join-startup", label: "I want to join someone else's startup" },
+];
+
 const psychQuestions = [
   { key: "openness1", trait: "Openness", question: "I enjoy trying new approaches to problems", reverse: false },
   { key: "openness2", trait: "Openness", question: "I am interested in abstract ideas and concepts", reverse: false },
@@ -86,7 +102,7 @@ const psychQuestions = [
 ];
 
 export default function Onboarding() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentSkill, setCurrentSkill] = useState("");
   const router = useRouter();
@@ -120,6 +136,16 @@ export default function Onboarding() {
     (step - 4) * questionsPerPage
   );
 
+  // Step 0: Founder Journey & Agreements
+  const isStep0Complete = !!(
+    watchedValues.founderJourney &&
+    watchedValues.agreeTerms &&
+    watchedValues.agreePrivacy &&
+    watchedValues.agreeBusiness &&
+    watchedValues.agreeAccurate &&
+    watchedValues.agreeAge
+  );
+  
   const isStep1Complete = !!(watchedValues.title && watchedValues.bio);
   const isStep2Complete = !!(skills.length > 0 && watchedValues.experience);
   const isStep3Complete = !!watchedValues.lookingFor;
@@ -136,7 +162,8 @@ export default function Onboarding() {
   );
 
   let isCurrentStepComplete = false;
-  if (step === 1) isCurrentStepComplete = isStep1Complete;
+  if (step === 0) isCurrentStepComplete = isStep0Complete;
+  else if (step === 1) isCurrentStepComplete = isStep1Complete;
   else if (step === 2) isCurrentStepComplete = isStep2Complete;
   else if (step === 3) isCurrentStepComplete = isStep3BusinessComplete;
   else if (step === 4) isCurrentStepComplete = isStep3Complete;
@@ -235,7 +262,11 @@ export default function Onboarding() {
     const currentData = getValues();
     let dataToSave: any = {};
     
-    if (step === 1) {
+    if (step === 0) {
+      dataToSave = {
+        founderJourney: currentData.founderJourney
+      };
+    } else if (step === 1) {
       dataToSave = {
         title: currentData.title,
         bio: currentData.bio
@@ -303,12 +334,12 @@ export default function Onboarding() {
   };
 
   const prevStep = () => {
-    if (step > 1) {
+    if (step > 0) {
       setStep(step - 1);
     }
   };
 
-  const totalSteps = 4 + totalPsychPages; // Profile + Business + Psychology + Summary
+  const totalSteps = 5 + totalPsychPages; // Founder Journey + Profile + Business + Psychology + Summary
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
@@ -338,6 +369,101 @@ export default function Onboarding() {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               
+              {/* Step 0: Founder Journey & Agreements */}
+              {step === 0 && (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-center">Welcome to Founder Match</h3>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-4">Where are you in your founder journey?</label>
+                      <div className="space-y-3">
+                        {founderJourneyOptions.map((option) => (
+                          <label key={option.value} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                            <input
+                              type="radio"
+                              value={option.value}
+                              {...register("founderJourney", { required: "Please select your founder journey stage" })}
+                              className="w-4 h-4 text-blue-600"
+                            />
+                            <span className="text-sm">{option.label}</span>
+                          </label>
+                        ))}
+                      </div>
+                      {errors.founderJourney && (
+                        <p className="text-red-500 text-sm mt-2">{errors.founderJourney.message}</p>
+                      )}
+                    </div>
+
+                    <div className="border-t pt-6">
+                      <p className="text-sm font-medium mb-4">Please review and agree to the following:</p>
+                      <div className="space-y-3">
+                        <label className="flex items-start space-x-3">
+                          <input
+                            type="checkbox"
+                            {...register("agreeTerms", { required: true })}
+                            className="w-4 h-4 text-blue-600 mt-0.5"
+                          />
+                          <span className="text-sm">
+                            I agree to Founder Match's{" "}
+                            <a href="/terms" target="_blank" className="text-blue-600 underline">
+                              Terms of Service
+                            </a>
+                          </span>
+                        </label>
+
+                        <label className="flex items-start space-x-3">
+                          <input
+                            type="checkbox"
+                            {...register("agreePrivacy", { required: true })}
+                            className="w-4 h-4 text-blue-600 mt-0.5"
+                          />
+                          <span className="text-sm">
+                            I agree to Founder Match's{" "}
+                            <a href="/privacy" target="_blank" className="text-blue-600 underline">
+                              Privacy Policy
+                            </a>
+                          </span>
+                        </label>
+
+                        <label className="flex items-start space-x-3">
+                          <input
+                            type="checkbox"
+                            {...register("agreeBusiness", { required: true })}
+                            className="w-4 h-4 text-blue-600 mt-0.5"
+                          />
+                          <span className="text-sm">
+                            I understand this platform is for finding business co-founders
+                          </span>
+                        </label>
+
+                        <label className="flex items-start space-x-3">
+                          <input
+                            type="checkbox"
+                            {...register("agreeAccurate", { required: true })}
+                            className="w-4 h-4 text-blue-600 mt-0.5"
+                          />
+                          <span className="text-sm">
+                            I will provide accurate information about myself and my experience
+                          </span>
+                        </label>
+
+                        <label className="flex items-start space-x-3">
+                          <input
+                            type="checkbox"
+                            {...register("agreeAge", { required: true })}
+                            className="w-4 h-4 text-blue-600 mt-0.5"
+                          />
+                          <span className="text-sm">
+                            I am at least 18 years old
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Step 1: Basic Information */}
               {step === 1 && (
                 <div className="space-y-4">
@@ -566,7 +692,7 @@ export default function Onboarding() {
                   type="button"
                   variant="outline"
                   onClick={prevStep}
-                  disabled={step === 1}
+                  disabled={step === 0}
                 >
                   Previous
                 </Button>

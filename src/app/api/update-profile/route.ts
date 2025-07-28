@@ -13,13 +13,13 @@ export async function POST(request: NextRequest) {
     }
 
     const { 
-      title, bio, skills, experience, lookingFor,
+      founderJourney, title, bio, skills, experience, lookingFor,
       industry, stage, location, remoteOk, timeCommitment, 
       fundingStatus, companyGoals, workStyle 
     } = await request.json();
 
     // Validate that at least some data is provided
-    if (!title && !bio && !skills && !experience && !lookingFor && !industry) {
+    if (!founderJourney && !title && !bio && !skills && !experience && !lookingFor && !industry) {
       return NextResponse.json({ 
         message: 'At least one field must be provided' 
       }, { status: 400 });
@@ -30,6 +30,7 @@ export async function POST(request: NextRequest) {
       updatedAt: new Date(),
     };
     
+    if (founderJourney !== undefined) updateData.founderJourney = founderJourney;
     if (title !== undefined) updateData.title = title;
     if (bio !== undefined) updateData.bio = bio;
     if (skills !== undefined) updateData.skills = skills;
