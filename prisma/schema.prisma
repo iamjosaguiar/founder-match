@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  name              String?
+  emailVerified     DateTime?
+  image             String?
+  profileImage      String?  // Professional profile photo URL
+  password          String?  // For credentials login
+  title             String?
+  bio               String?
+  skills            String?  // Store as JSON string or comma-separated
+  experience        String?
+  lookingFor        String?
+  projectLinks      String?  // Store as JSON string
+  quizCompleted     Boolean  @default(false)
+  quizScores        Json?    // Store { openness: 4.2, conscientiousness: 3.8, ... }
+  personalityProfile Json?   // Calculated compatibility profile
+  
+  // Additional profile fields for filtering
+  industry          String?  // Tech, Fintech, Healthcare, etc.
+  stage             String?  // Idea, MVP, Early Revenue, Scaling
+  location          String?  // City/region
+  remoteOk          Boolean  @default(true)
+  timeCommitment    String?  // Full-time, Part-time, Flexible
+  fundingStatus     String?  // Bootstrapped, Seeking, Funded
+  companyGoals      String?  // Lifestyle, Scale, Unicorn
+  workStyle         String?  // Structured, Flexible, Fast-paced
+  
+  // Filter preferences for discovery
+  filterPreferences Json?    // Store discovery filter preferences
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // NextAuth relationships
+  accounts          Account[]
+  sessions          Session[]
+  
+  // Matching relationships
+  sentMatches       Match[] @relation("MatchSender")
+  receivedMatches   Match[] @relation("MatchReceiver")
+  
+  @@map("users")
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model Match {
+  id         String    @id @default(uuid())
+  senderId   String
+  receiverId String
+  liked      Boolean   // true = liked, false = passed
+  matched    Boolean   @default(false) // true when both users like each other
+  createdAt  DateTime  @default(now())
+  
+  sender     User @relation("MatchSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User @relation("MatchReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  
+  @@unique([senderId, receiverId])
+  @@map("matches")
+}

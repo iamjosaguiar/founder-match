@@ -1,0 +1,130 @@
+import { prisma } from './prisma';
+
+const demoUsers = [
+  {
+    email: 'sarah.chen@example.com',
+    name: 'Sarah Chen',
+    title: 'Tech Entrepreneur',
+    bio: 'Former Google PM building the next generation of AI-powered productivity tools. Looking for a technical co-founder with ML expertise.',
+    skills: 'Product Management,AI/ML,Strategy,Fundraising',
+    experience: 'experienced',
+    lookingFor: 'Technical co-founder with ML/AI background',
+    profileImage: 'https://i.pravatar.cc/400?img=1',
+    industry: 'AI/ML',
+    stage: 'Building MVP',
+    location: 'San Francisco',
+    remoteOk: true,
+    timeCommitment: 'Full-time',
+    fundingStatus: 'Seeking Seed',
+    companyGoals: 'Scale Nationally',
+    workStyle: 'Somewhat Structured',
+    quizCompleted: true,
+    quizScores: {
+      openness: 4.5,
+      conscientiousness: 4.2,
+      extraversion: 3.8,
+      agreeableness: 4.0,
+      neuroticism: 2.1,
+      emotionalStability: 3.9,
+      riskTolerance: 4.3,
+    },
+    personalityProfile: {
+      leadershipStyle: 'directive',
+      innovationPreference: 'high',
+      riskProfile: 'risk-seeking',
+      communicationStyle: 'expressive',
+      workStyle: 'structured',
+      stressHandling: 'resilient',
+      founderType: 'visionary-leader',
+    },
+  },
+  {
+    email: 'marcus.rodriguez@example.com',
+    name: 'Marcus Rodriguez',
+    title: 'Full-Stack Developer',
+    bio: 'Senior engineer with 8 years at startups. Built and scaled platforms to 1M+ users. Ready to start my own company in fintech.',
+    skills: 'React,Node.js,AWS,PostgreSQL,Docker',
+    experience: 'first-time',
+    lookingFor: 'Business-minded co-founder with domain expertise',
+    profileImage: 'https://i.pravatar.cc/400?img=2',
+    industry: 'Fintech',
+    stage: 'Idea Stage',
+    location: 'Austin',
+    remoteOk: true,
+    timeCommitment: 'Full-time',
+    fundingStatus: 'Bootstrapped',
+    companyGoals: 'Regional Success',
+    workStyle: 'Flexible',
+    quizCompleted: true,
+    quizScores: {
+      openness: 3.8,
+      conscientiousness: 4.5,
+      extraversion: 2.9,
+      agreeableness: 3.7,
+      neuroticism: 2.3,
+      emotionalStability: 3.7,
+      riskTolerance: 3.2,
+    },
+    personalityProfile: {
+      leadershipStyle: 'supportive',
+      innovationPreference: 'medium',
+      riskProfile: 'balanced',
+      communicationStyle: 'diplomatic',
+      workStyle: 'structured',
+      stressHandling: 'resilient',
+      founderType: 'executor',
+    },
+  },
+  {
+    email: 'emily.johnson@example.com',
+    name: 'Emily Johnson',
+    title: 'Marketing Executive',
+    bio: 'Growth marketing expert who scaled 3 startups to $10M+ ARR. Specialized in B2B SaaS go-to-market strategies.',
+    skills: 'Growth Marketing,B2B Sales,Analytics,Content Strategy',
+    experience: 'serial',
+    lookingFor: 'Technical co-founder for B2B SaaS product',
+    profileImage: 'https://i.pravatar.cc/400?img=3',
+    industry: 'SaaS',
+    stage: 'Early Revenue',
+    location: 'New York',
+    remoteOk: false,
+    timeCommitment: 'Full-time',
+    fundingStatus: 'Series A+',
+    companyGoals: 'Global Unicorn',
+    workStyle: 'Somewhat Structured',
+    quizCompleted: true,
+    quizScores: {
+      openness: 4.1,
+      conscientiousness: 3.9,
+      extraversion: 4.4,
+      agreeableness: 4.2,
+      neuroticism: 1.8,
+      emotionalStability: 4.2,
+      riskTolerance: 3.9,
+    },
+    personalityProfile: {
+      leadershipStyle: 'collaborative',
+      innovationPreference: 'high',
+      riskProfile: 'balanced',
+      communicationStyle: 'expressive',
+      workStyle: 'flexible',
+      stressHandling: 'resilient',
+      founderType: 'people-leader',
+    },
+  },
+];
+
+export async function seedDemoUsers() {
+  try {
+    for (const userData of demoUsers) {
+      await prisma.user.upsert({
+        where: { email: userData.email },
+        update: userData,
+        create: userData,
+      });
+    }
+    console.log('Demo users seeded successfully');
+  } catch (error) {
+    console.error('Error seeding demo users:', error);
+  }
+}
