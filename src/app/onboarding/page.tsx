@@ -206,16 +206,21 @@ export default function Onboarding() {
         riskTolerance2: Number(data.riskTolerance2),
       };
 
+      console.log('Submitting quiz data:', quizData);
       const quizResponse = await fetch('/api/submit-quiz', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(quizData),
       });
       
+      console.log('Quiz response status:', quizResponse.status);
       if (quizResponse.ok) {
+        const quizResult = await quizResponse.json();
+        console.log('Quiz submitted successfully:', quizResult);
         router.push('/discover');
       } else {
         const error = await quizResponse.json();
+        console.error('Quiz submission failed:', error);
         alert(`Error: ${error.message || 'Failed to submit assessment'}`);
       }
     } catch (error) {
