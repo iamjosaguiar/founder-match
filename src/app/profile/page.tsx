@@ -101,14 +101,6 @@ export default function Profile() {
   const { register, handleSubmit, formState: { errors }, setValue, watch, reset } = useForm<ProfileData>();
   const watchedValues = watch();
 
-  useEffect(() => {
-    if (status === "loading") return;
-    if (!session) {
-      router.push("/auth/signin");
-      return;
-    }
-    fetchProfile();
-  }, [session, status, router, fetchProfile]);
 
   const fetchProfile = useCallback(async () => {
     try {
@@ -140,6 +132,15 @@ export default function Profile() {
       setIsLoading(false);
     }
   }, [reset]);
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/auth/signin");
+      return;
+    }
+    fetchProfile();
+  }, [session, status, router, fetchProfile]);
 
   const addSkill = () => {
     if (currentSkill.trim() && !watchedValues.skills?.includes(currentSkill.trim())) {
