@@ -279,15 +279,20 @@ export default function Onboarding() {
   };
 
   const nextStep = async () => {
+    console.log('nextStep clicked, current step:', step, 'isCurrentStepComplete:', isCurrentStepComplete);
     if (step < 3 + totalPsychPages) {
       try {
+        console.log('About to save current step...');
         await saveCurrentStep();
+        console.log('Step saved successfully, moving to next step');
         setStep(step + 1);
       } catch (error) {
         console.error('Error in nextStep:', error);
         // Still proceed to next step even if save fails
         setStep(step + 1);
       }
+    } else {
+      console.log('Cannot proceed - at max steps');
     }
   };
 
