@@ -124,6 +124,19 @@ export default function Onboarding() {
   const isStep2Complete = !!(skills.length > 0 && watchedValues.experience);
   const isStep3Complete = !!watchedValues.lookingFor;
   
+  // Debug step 2 specifically
+  if (step === 2) {
+    console.log('Step 2 Debug:', {
+      step,
+      skills,
+      skillsLength: skills.length,
+      experience: watchedValues.experience,
+      experienceValue: JSON.stringify(watchedValues.experience),
+      isStep2Complete,
+      watchedValues: JSON.stringify(watchedValues)
+    });
+  }
+  
   // Step validation for business information
   const isStep3BusinessComplete = !!(
     watchedValues.industry && 
