@@ -126,7 +126,7 @@ export default function Discover() {
     return () => {
       isMounted = false;
     };
-  }, [session]);
+  }, [session, fetchFounders, fetchCurrentUserProfile]);
 
   useEffect(() => {
     if (allFounders.length > 0) {
@@ -136,7 +136,7 @@ export default function Discover() {
     }
   }, [filters, allFounders, applyFilters]);
 
-  const fetchFounders = async () => {
+  const fetchFounders = useCallback(async () => {
     try {
       // Fetch all users
       const response = await fetch('/api/users');
@@ -166,9 +166,9 @@ export default function Discover() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [session, applyFilters]);
 
-  const fetchCurrentUserProfile = async () => {
+  const fetchCurrentUserProfile = useCallback(async () => {
     try {
       const response = await fetch('/api/profile');
       if (response.ok) {
@@ -178,7 +178,7 @@ export default function Discover() {
     } catch (error) {
       console.error('Error fetching current user profile:', error);
     }
-  };
+  }, []);
   
   const currentFounder = founders[currentIndex];
 
