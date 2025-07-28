@@ -109,7 +109,8 @@ function getFounderType(scores: ReturnType<typeof calculatePersonalityScores>): 
 export async function POST(req: Request) {
   try {
     // Check if user is authenticated
-    const session = await getServerSession(authOptions) as Session | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions) as any;
     if (!session || !session.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },

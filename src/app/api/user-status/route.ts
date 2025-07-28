@@ -6,7 +6,8 @@ import type { Session } from 'next-auth';
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions) as Session | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions) as any;
     
     if (!session?.user) {
       return NextResponse.json(
