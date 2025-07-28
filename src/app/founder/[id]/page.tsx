@@ -185,6 +185,7 @@ export default function FounderProfile() {
   }, [params.id]);
 
   const handleInteraction = (liked: boolean) => {
+    if (!founder) return;
     const action = liked ? "liked" : "passed on";
     alert(`You ${action} ${founder.name}! In a real app, this would update your matches.`);
   };
@@ -225,7 +226,7 @@ export default function FounderProfile() {
             <div className="flex items-center gap-3">
               <Badge variant="outline" className="bg-slate-50 text-slate-700">
                 <Award className="w-3 h-3 mr-1" />
-                {founder.personalityProfile.founderType?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                {founder.personalityProfile?.founderType?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
               </Badge>
               <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
                 <Link href="/matches" className="flex items-center gap-2">
@@ -259,7 +260,7 @@ export default function FounderProfile() {
                   <div className="flex flex-wrap justify-center sm:justify-start gap-2">
                     <Badge className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
                       <Award className="w-4 h-4 mr-2" />
-                      {founder.personalityProfile.founderType?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                      {founder.personalityProfile?.founderType?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
                     </Badge>
                     <Badge variant="outline" className="border-slate-300">
                       {founder.experience?.replace("-", " ").replace(/\b\w/g, (l: string) => l.toUpperCase())}
@@ -356,29 +357,29 @@ export default function FounderProfile() {
                 <div className="space-y-4">
                   <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-slate-200/50">
                     <div className="font-bold text-slate-700 mb-1">Leadership Style</div>
-                    <div className="text-slate-600 capitalize">{founder.personalityProfile.leadershipStyle}</div>
+                    <div className="text-slate-600 capitalize">{founder.personalityProfile?.leadershipStyle}</div>
                   </div>
                   <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-slate-200/50">
                     <div className="font-bold text-slate-700 mb-1">Work Style</div>
-                    <div className="text-slate-600 capitalize">{founder.personalityProfile.workStyle}</div>
+                    <div className="text-slate-600 capitalize">{founder.personalityProfile?.workStyle}</div>
                   </div>
                   <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-slate-200/50">
                     <div className="font-bold text-slate-700 mb-1">Innovation</div>
-                    <div className="text-slate-600 capitalize">{founder.personalityProfile.innovationPreference}</div>
+                    <div className="text-slate-600 capitalize">{founder.personalityProfile?.innovationPreference}</div>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-slate-200/50">
                     <div className="font-bold text-slate-700 mb-1">Risk Profile</div>
-                    <div className="text-slate-600 capitalize">{founder.personalityProfile.riskProfile}</div>
+                    <div className="text-slate-600 capitalize">{founder.personalityProfile?.riskProfile}</div>
                   </div>
                   <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-slate-200/50">
                     <div className="font-bold text-slate-700 mb-1">Communication</div>
-                    <div className="text-slate-600 capitalize">{founder.personalityProfile.communicationStyle}</div>
+                    <div className="text-slate-600 capitalize">{founder.personalityProfile?.communicationStyle}</div>
                   </div>
                   <div className="bg-white/60 backdrop-blur-sm rounded-xl p-4 border border-slate-200/50">
                     <div className="font-bold text-slate-700 mb-1">Stress Handling</div>
-                    <div className="text-slate-600 capitalize">{founder.personalityProfile.stressHandling}</div>
+                    <div className="text-slate-600 capitalize">{founder.personalityProfile?.stressHandling}</div>
                   </div>
                 </div>
               </div>
