@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import type { Session } from 'next-auth';
 
 // GET /api/profile - Fetch user profile
 export async function GET() {
@@ -166,7 +165,7 @@ export async function PATCH(request: NextRequest) {
     console.error('Profile update error:', error);
     return NextResponse.json({ 
       message: 'Internal server error',
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 }
