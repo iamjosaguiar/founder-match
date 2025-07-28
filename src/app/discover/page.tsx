@@ -110,31 +110,6 @@ export default function Discover() {
       return true;
     });
   }, [filters]);
-  
-  useEffect(() => {
-    let isMounted = true;
-    
-    const loadData = async () => {
-      if (isMounted) {
-        await fetchFounders();
-        await fetchCurrentUserProfile();
-      }
-    };
-    
-    loadData();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, [session, fetchFounders, fetchCurrentUserProfile]);
-
-  useEffect(() => {
-    if (allFounders.length > 0) {
-      const filtered = applyFilters(allFounders);
-      setFounders(filtered);
-      setCurrentIndex(0);
-    }
-  }, [filters, allFounders, applyFilters]);
 
   const fetchFounders = useCallback(async () => {
     try {
@@ -179,6 +154,31 @@ export default function Discover() {
       console.error('Error fetching current user profile:', error);
     }
   }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    
+    const loadData = async () => {
+      if (isMounted) {
+        await fetchFounders();
+        await fetchCurrentUserProfile();
+      }
+    };
+    
+    loadData();
+    
+    return () => {
+      isMounted = false;
+    };
+  }, [session, fetchFounders, fetchCurrentUserProfile]);
+
+  useEffect(() => {
+    if (allFounders.length > 0) {
+      const filtered = applyFilters(allFounders);
+      setFounders(filtered);
+      setCurrentIndex(0);
+    }
+  }, [filters, allFounders, applyFilters]);
   
   const currentFounder = founders[currentIndex];
 
