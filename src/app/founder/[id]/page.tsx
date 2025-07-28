@@ -100,7 +100,7 @@ const mockFounders = {
 export default function FounderProfile() {
   const params = useParams();
   const router = useRouter();
-  const [founder, setFounder] = useState<any>(null);
+  const [founder, setFounder] = useState<Founder | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function FounderProfile() {
         const response = await fetch('/api/users');
         if (response.ok) {
           const users = await response.json();
-          const founderData = users.find((user: any) => user.id === founderId);
+          const founderData = users.find((user: Founder) => user.id === founderId);
           
           if (founderData) {
             setFounder(founderData);
@@ -272,7 +272,7 @@ export default function FounderProfile() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {founder.projectLinks.map((project: any) => (
+                  {founder.projectLinks.map((project: { id: string; title: string; url: string; description: string }) => (
                     <div key={project.id} className="bg-gradient-to-r from-slate-50 to-blue-50/30 border border-slate-200 rounded-2xl p-5 hover:shadow-md transition-all duration-200">
                       <div className="flex items-start justify-between">
                         <div className="flex-1">

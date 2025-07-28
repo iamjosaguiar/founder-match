@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create the match record
-    const match = await prisma.match.create({
+    await prisma.match.create({
       data: {
         senderId,
         receiverId: targetUserId,

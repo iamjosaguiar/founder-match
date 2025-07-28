@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -96,7 +96,7 @@ export default function Discover() {
     workStyle: ['Structured', 'Flexible', 'Fast-paced', 'Methodical']
   };
 
-  const applyFilters = (foundersList: Founder[]) => {
+  const applyFilters = useCallback((foundersList: Founder[]) => {
     return foundersList.filter(founder => {
       if (filters.industry.length > 0 && !filters.industry.includes(founder.industry || '')) return false;
       if (filters.stage.length > 0 && !filters.stage.includes(founder.stage || '')) return false;
@@ -109,7 +109,7 @@ export default function Discover() {
       
       return true;
     });
-  };
+  }, [filters]);
   
   useEffect(() => {
     let isMounted = true;
@@ -134,7 +134,7 @@ export default function Discover() {
       setFounders(filtered);
       setCurrentIndex(0);
     }
-  }, [filters, allFounders]);
+  }, [filters, allFounders, applyFilters]);
 
   const fetchFounders = async () => {
     try {

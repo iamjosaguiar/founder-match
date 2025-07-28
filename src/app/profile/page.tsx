@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -108,9 +108,9 @@ export default function Profile() {
       return;
     }
     fetchProfile();
-  }, [session, status, router]);
+  }, [session, status, router, fetchProfile]);
 
-  const fetchProfile = async () => {
+  const fetchProfile = useCallback(async () => {
     try {
       const response = await fetch("/api/profile");
       if (response.ok) {
@@ -139,7 +139,7 @@ export default function Profile() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [reset]);
 
   const addSkill = () => {
     if (currentSkill.trim() && !watchedValues.skills?.includes(currentSkill.trim())) {
