@@ -151,11 +151,26 @@ export default function Discover() {
       if (response.ok) {
         const profile = await response.json();
         
+        // Debug profile data
+        console.log('Discover page - profile check:', {
+          title: profile.title,
+          bio: profile.bio,
+          experience: profile.experience,
+          lookingFor: profile.lookingFor,
+          quizCompleted: profile.quizCompleted,
+          hasBasicProfile: !!(profile.title && profile.bio && profile.experience && profile.lookingFor),
+          hasQuizCompleted: !!profile.quizCompleted
+        });
+        
         // Check if user has completed onboarding
         const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
         const hasQuizCompleted = profile.quizCompleted;
         
         if (!hasBasicProfile || !hasQuizCompleted) {
+          console.log('Redirecting to onboarding - missing:', {
+            hasBasicProfile,
+            hasQuizCompleted
+          });
           router.push('/onboarding');
           return;
         }
