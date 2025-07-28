@@ -18,32 +18,36 @@ export async function POST(request: NextRequest) {
       fundingStatus, companyGoals, workStyle 
     } = await request.json();
 
-    // Validate required fields
-    if (!title || !bio || !skills || !experience || !lookingFor) {
+    // Validate that at least some data is provided
+    if (!title && !bio && !skills && !experience && !lookingFor && !industry) {
       return NextResponse.json({ 
-        message: 'Basic profile fields are required' 
+        message: 'At least one field must be provided' 
       }, { status: 400 });
     }
+
+    // Build update data object with only provided fields
+    const updateData: any = {
+      updatedAt: new Date(),
+    };
+    
+    if (title !== undefined) updateData.title = title;
+    if (bio !== undefined) updateData.bio = bio;
+    if (skills !== undefined) updateData.skills = skills;
+    if (experience !== undefined) updateData.experience = experience;
+    if (lookingFor !== undefined) updateData.lookingFor = lookingFor;
+    if (industry !== undefined) updateData.industry = industry;
+    if (stage !== undefined) updateData.stage = stage;
+    if (location !== undefined) updateData.location = location;
+    if (remoteOk !== undefined) updateData.remoteOk = remoteOk;
+    if (timeCommitment !== undefined) updateData.timeCommitment = timeCommitment;
+    if (fundingStatus !== undefined) updateData.fundingStatus = fundingStatus;
+    if (companyGoals !== undefined) updateData.companyGoals = companyGoals;
+    if (workStyle !== undefined) updateData.workStyle = workStyle;
 
     // Update user profile
     const updatedUser = await prisma.user.update({
       where: { email: session.user.email },
-      data: {
-        title,
-        bio,
-        skills, // Store as string (comma-separated from frontend)
-        experience,
-        lookingFor,
-        industry,
-        stage,
-        location,
-        remoteOk: remoteOk || false,
-        timeCommitment,
-        fundingStatus,
-        companyGoals,
-        workStyle,
-        updatedAt: new Date(),
-      },
+      data: updateData,
     });
 
     return NextResponse.json({ 

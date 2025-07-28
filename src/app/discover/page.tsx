@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -68,6 +69,7 @@ type FilterCriteria = {
 
 export default function Discover() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [allFounders, setAllFounders] = useState<Founder[]>([]);
   const [founders, setFounders] = useState<Founder[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -148,12 +150,22 @@ export default function Discover() {
       const response = await fetch('/api/profile');
       if (response.ok) {
         const profile = await response.json();
+        
+        // Check if user has completed onboarding
+        const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
+        const hasQuizCompleted = profile.quizCompleted;
+        
+        if (!hasBasicProfile || !hasQuizCompleted) {
+          router.push('/onboarding');
+          return;
+        }
+        
         setCurrentUserProfile(profile);
       }
     } catch (error) {
       console.error('Error fetching current user profile:', error);
     }
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     let isMounted = true;

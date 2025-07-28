@@ -211,8 +211,58 @@ export default function Onboarding() {
     }
   };
 
-  const nextStep = () => {
+  const saveCurrentStep = async () => {
+    const currentData = getValues();
+    let dataToSave: any = {};
+    
+    if (step === 1) {
+      dataToSave = {
+        title: currentData.title,
+        bio: currentData.bio
+      };
+    } else if (step === 2) {
+      dataToSave = {
+        skills: currentData.skills?.join(',') || '',
+        experience: currentData.experience
+      };
+    } else if (step === 3) {
+      dataToSave = {
+        industry: currentData.industry,
+        stage: currentData.stage,
+        location: currentData.location,
+        remoteOk: currentData.remoteOk,
+        timeCommitment: currentData.timeCommitment,
+        fundingStatus: currentData.fundingStatus,
+        companyGoals: currentData.companyGoals,
+        workStyle: currentData.workStyle
+      };
+    } else if (step === 4) {
+      dataToSave = {
+        lookingFor: currentData.lookingFor
+      };
+    }
+    
+    // Only save if there's data to save
+    if (Object.keys(dataToSave).length > 0) {
+      try {
+        const response = await fetch('/api/update-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(dataToSave),
+        });
+        
+        if (!response.ok) {
+          console.error('Failed to save step data');
+        }
+      } catch (error) {
+        console.error('Error saving step:', error);
+      }
+    }
+  };
+
+  const nextStep = async () => {
     if (step < 3 + totalPsychPages) {
+      await saveCurrentStep();
       setStep(step + 1);
     }
   };
