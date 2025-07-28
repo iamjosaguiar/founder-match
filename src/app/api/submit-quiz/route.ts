@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import type { Session } from 'next-auth';
 
 type QuizData = {
   openness1: number;
@@ -108,7 +109,7 @@ function getFounderType(scores: ReturnType<typeof calculatePersonalityScores>): 
 export async function POST(req: Request) {
   try {
     // Check if user is authenticated
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(authOptions) as Session | null;
     if (!session || !session.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },
