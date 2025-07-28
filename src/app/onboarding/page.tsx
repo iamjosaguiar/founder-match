@@ -133,6 +133,7 @@ export default function Onboarding() {
       experience: watchedValues.experience,
       experienceValue: JSON.stringify(watchedValues.experience),
       isStep2Complete,
+      isCurrentStepComplete: step === 2 ? isStep2Complete : false,
       watchedValues: JSON.stringify(watchedValues)
     });
   }
@@ -158,6 +159,11 @@ export default function Onboarding() {
     isCurrentStepComplete = currentPsychQuestions.every(q => 
       watchedValues[q.key as keyof CompleteOnboardingData]
     );
+  }
+  
+  // Debug the final isCurrentStepComplete value
+  if (step === 2) {
+    console.log('Final validation:', { isCurrentStepComplete, isStep2Complete, step });
   }
 
   const onSubmit = async (data: CompleteOnboardingData) => {
