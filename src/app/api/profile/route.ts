@@ -24,6 +24,7 @@ export async function GET() {
         skills: true,
         experience: true,
         lookingFor: true,
+        quizCompleted: true,
         quizScores: true,
         personalityProfile: true,
         projectLinks: true,
