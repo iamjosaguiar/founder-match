@@ -255,7 +255,7 @@ export default function Profile() {
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert(`Error updating profile: ${error.message}`);
+      alert(`Error updating profile: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
