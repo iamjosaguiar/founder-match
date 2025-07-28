@@ -120,9 +120,9 @@ export default function Onboarding() {
     (step - 4) * questionsPerPage
   );
 
-  const isStep1Complete = watchedValues.title && watchedValues.bio;
-  const isStep2Complete = skills.length > 0 && watchedValues.experience;
-  const isStep3Complete = watchedValues.lookingFor;
+  const isStep1Complete = !!(watchedValues.title && watchedValues.bio);
+  const isStep2Complete = !!(skills.length > 0 && watchedValues.experience);
+  const isStep3Complete = !!watchedValues.lookingFor;
   
   // Step validation for business information
   const isStep3BusinessComplete = !!(
