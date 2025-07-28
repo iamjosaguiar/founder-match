@@ -124,20 +124,6 @@ export default function Onboarding() {
   const isStep2Complete = !!(skills.length > 0 && watchedValues.experience);
   const isStep3Complete = !!watchedValues.lookingFor;
   
-  // Debug step 2 specifically
-  if (step === 2) {
-    console.log('Step 2 Debug:', {
-      step,
-      skills,
-      skillsLength: skills.length,
-      experience: watchedValues.experience,
-      experienceValue: JSON.stringify(watchedValues.experience),
-      isStep2Complete,
-      isCurrentStepComplete: step === 2 ? isStep2Complete : false,
-      watchedValues: JSON.stringify(watchedValues)
-    });
-  }
-  
   // Step validation for business information
   const isStep3BusinessComplete = !!(
     watchedValues.industry && 
@@ -159,11 +145,6 @@ export default function Onboarding() {
     isCurrentStepComplete = currentPsychQuestions.every(q => 
       watchedValues[q.key as keyof CompleteOnboardingData]
     );
-  }
-  
-  // Debug the final isCurrentStepComplete value
-  if (step === 2) {
-    console.log('Final validation:', { isCurrentStepComplete, isStep2Complete, step });
   }
 
   const onSubmit = async (data: CompleteOnboardingData) => {
@@ -231,6 +212,7 @@ export default function Onboarding() {
   };
 
   const saveCurrentStep = async () => {
+    console.log('saveCurrentStep called for step:', step);
     const currentData = getValues();
     let dataToSave: any = {};
     
@@ -261,28 +243,46 @@ export default function Onboarding() {
       };
     }
     
+    console.log('Data to save:', dataToSave);
+    
     // Only save if there's data to save
     if (Object.keys(dataToSave).length > 0) {
       try {
+        console.log('Making API call...');
         const response = await fetch('/api/update-profile', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(dataToSave),
         });
         
+        console.log('API response status:', response.status);
         if (!response.ok) {
-          console.error('Failed to save step data');
+          const errorText = await response.text();
+          console.error('Failed to save step data:', errorText);
+          throw new Error(`API error: ${response.status}`);
+        } else {
+          console.log('Step data saved successfully');
         }
       } catch (error) {
         console.error('Error saving step:', error);
+        throw error; // Re-throw to be caught by nextStep
       }
     }
   };
 
   const nextStep = async () => {
+    console.log('nextStep clicked, current step:', step);
     if (step < 3 + totalPsychPages) {
-      await saveCurrentStep();
-      setStep(step + 1);
+      try {
+        console.log('About to save current step...');
+        await saveCurrentStep();
+        console.log('Step saved successfully, moving to next step');
+        setStep(step + 1);
+      } catch (error) {
+        console.error('Error in nextStep:', error);
+        // Still proceed to next step even if save fails
+        setStep(step + 1);
+      }
     }
   };
 
