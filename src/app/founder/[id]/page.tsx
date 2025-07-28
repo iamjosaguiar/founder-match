@@ -9,6 +9,51 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, ExternalLink, Heart, X, Award, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
+type Founder = {
+  id: string;
+  name: string;
+  email?: string;
+  title: string;
+  bio: string;
+  skills: string[];
+  experience: string;
+  lookingFor: string;
+  avatar: string;
+  profileImage?: string;
+  industry?: string;
+  stage?: string;
+  location?: string;
+  remoteOk?: boolean;
+  timeCommitment?: string;
+  fundingStatus?: string;
+  companyGoals?: string;
+  workStyle?: string;
+  projectLinks?: Array<{
+    id: string;
+    title: string;
+    url: string;
+    description: string;
+  }>;
+  quizScores?: {
+    openness: number;
+    conscientiousness: number;
+    extraversion: number;
+    agreeableness: number;
+    neuroticism: number;
+    emotionalStability: number;
+    riskTolerance: number;
+  };
+  personalityProfile?: {
+    leadershipStyle: string;
+    innovationPreference: string;
+    riskProfile: string;
+    communicationStyle: string;
+    workStyle: string;
+    stressHandling: string;
+    founderType: string;
+  };
+};
+
 // Mock founder data - in real app this would come from API
 const mockFounders = {
   "1": {
