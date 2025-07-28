@@ -143,7 +143,7 @@ export async function POST(req: Request) {
     
     // Update the authenticated user with quiz results
     const user = await prisma.user.update({
-      where: { id: (session.user as any).id },
+      where: { id: session.user.id },
       data: {
         quizCompleted: true,
         quizScores: personalityScores,

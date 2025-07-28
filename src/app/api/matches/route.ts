@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user || !('id' in session.user)) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const senderId = (session.user as any).id;
+    const senderId = session.user.id;
 
     // Check if match already exists
     const existingMatch = await prisma.match.findUnique({
@@ -97,11 +97,11 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user || !('id' in session.user)) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = (session.user as any).id;
+    const userId = session.user.id;
 
     // Get all mutual matches
     const matches = await prisma.match.findMany({
