@@ -9,6 +9,10 @@ export async function POST(request: NextRequest) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const session = await getServerSession(authOptions) as any;
     
+    console.log('Match API session:', JSON.stringify(session));
+    console.log('Session user ID:', session?.user?.id);
+    console.log('Session user email:', session?.user?.email);
+    
     if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
