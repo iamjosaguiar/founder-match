@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FounderMatch - Find Your Perfect Co-Founder",
-  description: "Connect with like-minded entrepreneurs and build the next big thing together. Swipe through potential co-founders based on skills, experience, and vision.",
+  title: "CoLaunchr - Don't Go It Alone. CoLaunch It.",
+  description: "Your startup's ultimate sidekick. From co-founder matching to expert advisory pods and execution teams—get the support you need to build, launch, and scale.",
 };
 
 export default function RootLayout({

@@ -8,12 +8,12 @@ export default function TermsOfService() {
           <div className="prose max-w-none">
             <h2 className="text-2xl font-semibold mt-8 mb-4">1. Acceptance of Terms</h2>
             <p className="mb-4">
-              By accessing and using Founder Match, you accept and agree to be bound by the terms and provision of this agreement.
+              By accessing and using CoLaunchr, you accept and agree to be bound by the terms and provision of this agreement.
             </p>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">2. Purpose of Service</h2>
             <p className="mb-4">
-              Founder Match is a platform designed to help entrepreneurs find business co-founders and build professional relationships for startup ventures.
+              CoLaunchr is a platform designed to help entrepreneurs find business co-founders and build professional relationships for startup ventures.
             </p>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">3. User Responsibilities</h2>
@@ -31,7 +31,7 @@ export default function TermsOfService() {
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">5. Limitation of Liability</h2>
             <p className="mb-4">
-              Founder Match is a platform for connecting entrepreneurs. We are not responsible for the success or failure of any business relationships formed through our service.
+              CoLaunchr is a platform for connecting entrepreneurs. We are not responsible for the success or failure of any business relationships formed through our service.
             </p>
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">6. Changes to Terms</h2>
@@ -41,7 +41,7 @@ export default function TermsOfService() {
 
             <h2 className="text-2xl font-semibold mt-8 mb-4">7. Contact Information</h2>
             <p className="mb-4">
-              If you have any questions about these Terms of Service, please contact us at legal@foundermatch.com.
+              If you have any questions about these Terms of Service, please contact us at legal@colaunchr.com.
             </p>
 
             <p className="text-sm text-gray-600 mt-8">

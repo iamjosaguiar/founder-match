@@ -376,7 +376,7 @@ export default function Onboarding() {
               {/* Step 0: Founder Journey & Agreements */}
               {step === 0 && (
                 <div className="space-y-6">
-                  <h3 className="text-xl font-semibold text-center">Welcome to Founder Match</h3>
+                  <h3 className="text-xl font-semibold text-center">Welcome to CoLaunchr</h3>
                   
                   <div className="space-y-4">
                     <div>
@@ -409,7 +409,7 @@ export default function Onboarding() {
                             className="w-4 h-4 text-blue-600 mt-0.5"
                           />
                           <span className="text-sm">
-                            I agree to Founder Match's{" "}
+                            I agree to CoLaunchr's{" "}
                             <a href="/terms" target="_blank" className="text-blue-600 underline">
                               Terms of Service
                             </a>
@@ -423,7 +423,7 @@ export default function Onboarding() {
                             className="w-4 h-4 text-blue-600 mt-0.5"
                           />
                           <span className="text-sm">
-                            I agree to Founder Match's{" "}
+                            I agree to CoLaunchr's{" "}
                             <a href="/privacy" target="_blank" className="text-blue-600 underline">
                               Privacy Policy
                             </a>
