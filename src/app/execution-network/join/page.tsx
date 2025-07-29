@@ -110,7 +110,7 @@ export default function JoinExecutionNetwork() {
   useEffect(() => {
     if (status === "loading") return; // Still loading
     if (!session) {
-      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/join"));
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/join"));
       return;
     }
   }, [session, status, router]);
@@ -188,7 +188,7 @@ export default function JoinExecutionNetwork() {
 
   const onSubmit = async (data: ServiceProviderData) => {
     if (!session) {
-      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/join"));
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/join"));
       return;
     }
 

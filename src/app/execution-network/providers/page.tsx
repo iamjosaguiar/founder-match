@@ -86,7 +86,7 @@ export default function ServiceProvidersPage() {
   useEffect(() => {
     if (status === "loading") return;
     if (!session) {
-      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/providers"));
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/providers"));
       return;
     }
     fetchProviders();
@@ -119,7 +119,7 @@ export default function ServiceProvidersPage() {
         setProviders(data);
       } else if (response.status === 401) {
         // Authentication required - redirect to sign in
-        router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/providers"));
+        router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/providers"));
         return;
       }
     } catch (error) {

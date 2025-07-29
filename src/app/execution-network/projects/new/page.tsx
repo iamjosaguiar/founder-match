@@ -96,7 +96,7 @@ export default function PostProject() {
   useEffect(() => {
     if (status === "loading") return;
     if (!session) {
-      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects/new"));
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/projects/new"));
       return;
     }
   }, [session, status, router]);
@@ -133,7 +133,7 @@ export default function PostProject() {
 
   const onSubmit = async (data: ProjectData) => {
     if (!session) {
-      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects/new"));
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/projects/new"));
       return;
     }
 

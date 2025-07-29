@@ -11,7 +11,7 @@ export default function Home() {
   const { data: session } = useSession();
 
   const getExecutionNetworkUrl = (path: string) => {
-    return session ? path : `/auth/signin?callbackUrl=${encodeURIComponent(path)}`;
+    return session ? path : `/auth/signup?callbackUrl=${encodeURIComponent(path)}`;
   };
 
   return (

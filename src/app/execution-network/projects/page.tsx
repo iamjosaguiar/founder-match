@@ -79,7 +79,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     if (status === "loading") return; // Still checking session
     if (!session) {
-      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects"));
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/projects"));
       return;
     }
     fetchUserProfile();
@@ -119,7 +119,7 @@ export default function ProjectsPage() {
         setProjects(data);
       } else if (response.status === 401) {
         // Authentication required - redirect to sign in
-        router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects"));
+        router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/projects"));
         return;
       }
     } catch (error) {
