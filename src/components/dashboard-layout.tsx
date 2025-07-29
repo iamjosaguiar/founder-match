@@ -18,7 +18,8 @@ import {
   Search,
   FolderOpen,
   UserCheck,
-  Briefcase
+  Briefcase,
+  Brain
 } from "lucide-react";
 
 type DashboardLayoutProps = {
@@ -33,8 +34,24 @@ const navigation = [
   },
   {
     name: "Co-Founder Matching",
-    href: "/founder-matching",
-    icon: Users
+    icon: Users,
+    children: [
+      {
+        name: "Discover Founders",
+        href: "/founder-matching/discover",
+        icon: Search
+      },
+      {
+        name: "My Matches", 
+        href: "/founder-matching/matches",
+        icon: Users
+      },
+      {
+        name: "Complete Assessment",
+        href: "/founder-matching/assessment",
+        icon: Brain
+      }
+    ]
   },
   {
     name: "Execution Network",
