@@ -43,14 +43,8 @@ export default function Home() {
             </Button>
           </div>
 
-          {/* User Faces Showcase */}
-          <div className="flex flex-col items-center gap-4 mb-8">
-            <div className="text-sm text-slate-600 font-medium">Join founders from top companies</div>
-            <UserFacesShowcase variant="row" size="md" />
-          </div>
-
           {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
+          <div className="flex items-center justify-center gap-8 text-sm text-slate-500 mb-16">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span>500+ Active Founders</span>
@@ -67,7 +61,7 @@ export default function Home() {
         </div>
 
         {/* How It Works Section */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-10 mb-20 border border-slate-200/50 shadow-xl">
+        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-10 mb-24 border border-slate-200/50 shadow-xl">
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Brain className="w-3 h-3 mr-1" />
@@ -205,32 +199,23 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Community Section */}
-        <div className="text-center mb-20">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
-              Meet Our Founder Community
+        {/* Simplified Community Preview */}
+        <div className="text-center mb-16">
+          <div className="max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
+              Join Entrepreneurs Worldwide
             </h2>
-            <p className="text-lg text-slate-600 mb-12">
-              Connect with entrepreneurs from diverse backgrounds, industries, and expertise levels. 
-              From AI pioneers to climate tech innovators, find your perfect co-founder match.
+            <div className="flex justify-center mb-6">
+              <UserFacesShowcase variant="row" size="md" />
+            </div>
+            <p className="text-slate-600">
+              Connect with founders from AI, fintech, healthcare, and beyond
             </p>
-            <div className="flex justify-center">
-              <UserFacesShowcase variant="grid" size="lg" />
-            </div>
-            <div className="mt-8">
-              <Button asChild variant="outline" className="group">
-                <Link href="/auth/signup" className="flex items-center gap-2">
-                  Browse All Founders
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </div>
           </div>
         </div>
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-8 mb-20">
           <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30 backdrop-blur-sm">
             <CardHeader className="text-center pb-4">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -281,7 +266,7 @@ export default function Home() {
         </div>
 
         {/* CTA Section */}
-        <div className="text-center mt-20 mb-10">
+        <div className="text-center mb-10">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-12 text-white">
             <h3 className="text-3xl font-bold mb-4">Ready to Find Your Co-Founder?</h3>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
