@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import UserAvatar from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import { 
   User, 
@@ -80,15 +80,9 @@ export default function SettingsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <Avatar className="w-24 h-24 mx-auto mb-4">
-                  {session.user?.image ? (
-                    <img src={session.user.image} alt={session.user.name || ''} className="w-full h-full object-cover" />
-                  ) : (
-                    <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-indigo-500 text-white">
-                      {session.user?.name?.charAt(0) || session.user?.email?.charAt(0) || 'U'}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
+                <div className="mb-4">
+                  <UserAvatar size="xl" className="mx-auto" />
+                </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-1">
                   {session.user?.name || 'User'}
                 </h3>

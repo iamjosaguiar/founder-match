@@ -29,6 +29,7 @@ export async function GET() {
         personalityProfile: true,
         projectLinks: true,
         image: true,
+        profileImage: true,
         industry: true,
         stage: true,
         location: true,
@@ -82,7 +83,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const { 
-      name, title, bio, skills, experience, lookingFor, projectLinks, avatar,
+      name, title, bio, skills, experience, lookingFor, projectLinks, avatar, profileImage,
       industry, stage, location, remoteOk, timeCommitment, fundingStatus, companyGoals, workStyle, isTechnical 
     } = await request.json();
 
@@ -111,6 +112,7 @@ export async function PATCH(request: NextRequest) {
         lookingFor,
         projectLinks, // Store as JSON string
         image: avatar, // Store avatar URL in image field
+        profileImage: profileImage || avatar, // Professional profile photo
         industry,
         stage,
         location,
@@ -135,6 +137,7 @@ export async function PATCH(request: NextRequest) {
         personalityProfile: true,
         projectLinks: true,
         image: true,
+        profileImage: true,
         industry: true,
         stage: true,
         location: true,

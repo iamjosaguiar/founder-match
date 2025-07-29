@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import UserAvatar from "@/components/user-avatar";
 import { Search, MapPin, DollarSign, Clock, Star, CheckCircle, Code, Palette, Megaphone, Scale, FileText, Camera, Monitor, ExternalLink, User } from "lucide-react";
 import Link from "next/link";
 
@@ -302,15 +302,15 @@ export default function ServiceProvidersPage() {
               <Card key={provider.id} className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardHeader className="pb-4">
                   <div className="flex items-start gap-4">
-                    <Avatar className="w-16 h-16">
-                      {provider.profileImage ? (
-                        <img src={provider.profileImage} alt={provider.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <AvatarFallback className="text-lg font-bold bg-gradient-to-br from-purple-500 to-indigo-500 text-white">
-                          {provider.name?.charAt(0) || "U"}
-                        </AvatarFallback>
-                      )}
-                    </Avatar>
+                    <UserAvatar 
+                      size="lg" 
+                      user={{
+                        name: provider.name,
+                        email: null,
+                        image: null,
+                        profileImage: provider.profileImage
+                      }} 
+                    />
                     <div className="flex-1">
                       <div className="flex items-start justify-between">
                         <div>

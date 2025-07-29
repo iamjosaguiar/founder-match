@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import UserAvatar from "@/components/user-avatar";
 import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, 
@@ -83,7 +83,47 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [expandedSections, setExpandedSections] = useState<string[]>(['Execution Network']);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
+
+  // Persist sidebar state in localStorage
+  useEffect(() => {
+    try {
+      const savedCollapsed = localStorage.getItem('dashboard-sidebar-collapsed');
+      const savedExpanded = localStorage.getItem('dashboard-expanded-sections');
+      
+      if (savedCollapsed !== null) {
+        setSidebarCollapsed(JSON.parse(savedCollapsed));
+      }
+      
+      if (savedExpanded) {
+        setExpandedSections(JSON.parse(savedExpanded));
+      } else {
+        // Default expanded sections
+        setExpandedSections(['Execution Network']);
+      }
+    } catch (error) {
+      console.warn('Failed to load dashboard state from localStorage:', error);
+      // Set defaults if localStorage fails
+      setExpandedSections(['Execution Network']);
+    }
+  }, []);
+
+  // Save sidebar state when it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem('dashboard-sidebar-collapsed', JSON.stringify(sidebarCollapsed));
+    } catch (error) {
+      console.warn('Failed to save sidebar state to localStorage:', error);
+    }
+  }, [sidebarCollapsed]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dashboard-expanded-sections', JSON.stringify(expandedSections));
+    } catch (error) {
+      console.warn('Failed to save expanded sections to localStorage:', error);  
+    }
+  }, [expandedSections]);
 
   const toggleSection = (sectionName: string) => {
     setExpandedSections(prev => 
@@ -132,15 +172,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* User Profile */}
         <div className="p-4 border-b border-slate-200">
           <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10">
-              {session?.user?.image ? (
-                <img src={session.user.image} alt={session.user.name || ''} className="w-full h-full object-cover" />
-              ) : (
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-medium">
-                  {session?.user?.name?.charAt(0) || session?.user?.email?.charAt(0) || 'U'}
-                </AvatarFallback>
-              )}
-            </Avatar>
+            <UserAvatar size="md" />
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-slate-900 truncate">
