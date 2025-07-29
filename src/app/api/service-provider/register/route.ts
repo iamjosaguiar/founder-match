@@ -1,0 +1,82 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
+
+export async function POST(request: NextRequest) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions) as any;
+    
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { 
+      name, title, bio, location, serviceTypes, skills, experience,
+      hourlyRate, availability, remoteOk, portfolio 
+    } = await request.json();
+
+    // Validate required fields
+    if (!name || !title || !bio || !serviceTypes || serviceTypes.length === 0 || 
+        !skills || !experience || !hourlyRate || !availability) {
+      return NextResponse.json({ 
+        message: 'All required fields must be provided' 
+      }, { status: 400 });
+    }
+
+    // Get current user to check existing roles
+    const currentUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { roles: true }
+    });
+
+    if (!currentUser) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    // Add service_provider to roles if not already present
+    const updatedRoles = currentUser.roles.includes('service_provider') 
+      ? currentUser.roles 
+      : [...currentUser.roles, 'service_provider'];
+
+    // Update user with service provider data
+    const updatedUser = await prisma.user.update({
+      where: { email: session.user.email },
+      data: {
+        name,
+        title,
+        bio,
+        location,
+        roles: updatedRoles,
+        serviceTypes: serviceTypes,
+        skills: skills, // Already comma-separated from frontend
+        experience,
+        hourlyRate: parseInt(hourlyRate),
+        availability,
+        remoteOk: remoteOk || false,
+        portfolio: portfolio, // JSON string from frontend
+        updatedAt: new Date(),
+      },
+      select: {
+        id: true,
+        name: true,
+        title: true,
+        roles: true,
+        serviceTypes: true,
+      }
+    });
+
+    return NextResponse.json({ 
+      message: 'Service provider profile created successfully',
+      user: updatedUser
+    });
+
+  } catch (error) {
+    console.error('Service provider registration error:', error);
+    return NextResponse.json({ 
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
+  }
+}

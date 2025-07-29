@@ -132,9 +132,28 @@ export default function Home() {
                 <p className="text-slate-600 leading-relaxed mb-4">
                   Vetted technical teams, designers, and marketers. Build MVPs, run campaigns, and execute fast.
                 </p>
-                <Badge className="bg-purple-100 text-purple-700 border-purple-200">
-                  Coming Soon
-                </Badge>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
+                      <Link href="/execution-network/join">
+                        Join Network
+                        <ArrowRight className="w-4 h-4 ml-1" />
+                      </Link>
+                    </Button>
+                    <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
+                      <Link href="/execution-network/providers">
+                        Find Providers
+                        <ArrowRight className="w-4 h-4 ml-1" />
+                      </Link>
+                    </Button>
+                  </div>
+                  <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300 w-full">
+                    <Link href="/execution-network/projects/new">
+                      Post Project
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </Link>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
 

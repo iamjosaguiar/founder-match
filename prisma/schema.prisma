@@ -15,6 +15,11 @@ model User {
   image             String?
   profileImage      String?  // Professional profile photo URL
   password          String?  // For credentials login
+  
+  // User role - can be multiple
+  roles             String[] @default(["founder"]) // ["founder", "service_provider"]
+  
+  // Founder-specific fields
   founderJourney    String?  // Founder journey stage from onboarding
   title             String?
   bio               String?
@@ -37,6 +42,12 @@ model User {
   workStyle         String?  // Structured, Flexible, Fast-paced
   isTechnical       Boolean?  // Can build product without outside assistance
   
+  // Service Provider fields
+  serviceTypes      String[] @default([]) // ["development", "design", "marketing", "legal"]
+  portfolio         String?  // JSON string of portfolio items
+  hourlyRate        Int?     // Rate in USD
+  availability      String?  // "immediate", "within_week", "within_month"
+  
   // Filter preferences for discovery
   filterPreferences Json?    // Store discovery filter preferences
   
@@ -50,6 +61,10 @@ model User {
   // Matching relationships
   sentMatches       Match[] @relation("MatchSender")
   receivedMatches   Match[] @relation("MatchReceiver")
+  
+  // Project relationships
+  projects          Project[] @relation("ProjectOwner")
+  projectMatches    ProjectMatch[] @relation("ServiceProvider")
   
   @@map("users")
 }
@@ -106,4 +121,53 @@ model Match {
   
   @@unique([senderId, receiverId])
   @@map("matches")
+}
+
+model Project {
+  id              String    @id @default(uuid())
+  title           String
+  description     String
+  ownerId         String
+  
+  // Project requirements
+  serviceType     String    // "development", "design", "marketing", "legal"
+  budget          Int?      // Budget in USD
+  timeline        String?   // "asap", "within_week", "within_month", "flexible"
+  complexity      String?   // "simple", "medium", "complex"
+  
+  // Project details
+  requirements    String?   // Detailed requirements
+  techStack       String[]  @default([]) // For development projects
+  deliverables    String?   // JSON string of expected deliverables
+  
+  // Status
+  status          String    @default("open") // "open", "in_progress", "completed", "cancelled"
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  // Relationships
+  owner           User @relation("ProjectOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  matches         ProjectMatch[]
+  
+  @@map("projects")
+}
+
+model ProjectMatch {
+  id                String    @id @default(uuid())
+  projectId         String
+  serviceProviderId String
+  status            String    @default("pending") // "pending", "accepted", "declined", "completed"
+  proposal          String?   // Service provider's proposal
+  proposedRate      Int?      // Proposed hourly rate
+  proposedTimeline  String?   // Proposed timeline
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Relationships
+  project           Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  serviceProvider   User @relation("ServiceProvider", fields: [serviceProviderId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, serviceProviderId])
+  @@map("project_matches")
 }
