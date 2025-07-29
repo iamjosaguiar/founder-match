@@ -35,6 +35,7 @@ type CompleteOnboardingData = {
   fundingStatus: string;
   companyGoals: string;
   workStyle: string;
+  isTechnical: boolean;
   
   // Psychological Assessment
   openness1: number;
@@ -158,7 +159,8 @@ export default function Onboarding() {
     watchedValues.timeCommitment && 
     watchedValues.fundingStatus && 
     watchedValues.companyGoals && 
-    watchedValues.workStyle
+    watchedValues.workStyle &&
+    watchedValues.isTechnical !== undefined
   );
 
   let isCurrentStepComplete = false;
@@ -210,6 +212,7 @@ export default function Onboarding() {
           fundingStatus: data.fundingStatus,
           companyGoals: data.companyGoals,
           workStyle: data.workStyle,
+          isTechnical: data.isTechnical === 'true' || data.isTechnical === true,
         }),
       });
 
@@ -285,7 +288,8 @@ export default function Onboarding() {
         timeCommitment: currentData.timeCommitment,
         fundingStatus: currentData.fundingStatus,
         companyGoals: currentData.companyGoals,
-        workStyle: currentData.workStyle
+        workStyle: currentData.workStyle,
+        isTechnical: currentData.isTechnical === 'true' || currentData.isTechnical === true
       };
     } else if (step === 4) {
       dataToSave = {
@@ -613,6 +617,31 @@ export default function Onboarding() {
                         <option key={option} value={option}>{option}</option>
                       ))}
                     </select>
+                  </div>
+
+                  <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                    <label className="block text-sm font-medium mb-3">Are you technical? *</label>
+                    <p className="text-xs text-slate-600 mb-4">You are a programmer, scientist or engineer who can build the product without outside assistance.</p>
+                    <div className="space-y-3">
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          value="true"
+                          {...register("isTechnical", { required: "Please select if you are technical" })}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <span className="text-sm">Yes</span>
+                      </label>
+                      <label className="flex items-center space-x-3 cursor-pointer">
+                        <input
+                          type="radio"
+                          value="false"
+                          {...register("isTechnical", { required: "Please select if you are technical" })}
+                          className="w-4 h-4 text-blue-600"
+                        />
+                        <span className="text-sm">No</span>
+                      </label>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2">

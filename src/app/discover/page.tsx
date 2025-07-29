@@ -30,6 +30,7 @@ type Founder = {
   fundingStatus?: string;
   companyGoals?: string;
   workStyle?: string;
+  isTechnical?: boolean;
   projectLinks?: Array<{
     id: string;
     title: string;
@@ -65,6 +66,7 @@ type FilterCriteria = {
   fundingStatus: string[];
   companyGoals: string[];
   workStyle: string[];
+  isTechnical: boolean | null;
 };
 
 export default function Discover() {
@@ -86,6 +88,7 @@ export default function Discover() {
     fundingStatus: [],
     companyGoals: [],
     workStyle: [],
+    isTechnical: null,
   });
   const [currentUserProfile, setCurrentUserProfile] = useState<Founder | null>(null);
 
@@ -108,6 +111,7 @@ export default function Discover() {
       if (filters.workStyle.length > 0 && !filters.workStyle.includes(founder.workStyle || '')) return false;
       if (filters.remoteOk !== null && founder.remoteOk !== filters.remoteOk) return false;
       if (filters.location.length > 0 && !filters.location.includes(founder.location || '')) return false;
+      if (filters.isTechnical !== null && founder.isTechnical !== filters.isTechnical) return false;
       
       return true;
     });
@@ -467,6 +471,30 @@ export default function Discover() {
                 </div>
               </div>
 
+              {/* Technical Filter */}
+              <div>
+                <label className="text-sm font-medium mb-2 flex items-center gap-2">
+                  <Building className="w-4 h-4" />
+                  Technical Background
+                </label>
+                <div className="flex gap-2">
+                  <Button
+                    variant={filters.isTechnical === true ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilters(prev => ({ ...prev, isTechnical: prev.isTechnical === true ? null : true }))}
+                  >
+                    Technical
+                  </Button>
+                  <Button
+                    variant={filters.isTechnical === false ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilters(prev => ({ ...prev, isTechnical: prev.isTechnical === false ? null : false }))}
+                  >
+                    Non-Technical
+                  </Button>
+                </div>
+              </div>
+
               {/* Clear Filters Button */}
               <div className="md:col-span-2 lg:col-span-1 flex items-end">
                 <Button
@@ -480,6 +508,7 @@ export default function Discover() {
                     fundingStatus: [],
                     companyGoals: [],
                     workStyle: [],
+                    isTechnical: null,
                   })}
                   className="w-full"
                 >
@@ -596,12 +625,20 @@ export default function Discover() {
                         </div>
                       </div>
 
-                      {/* Experience Level */}
+                      {/* Experience Level & Technical Status */}
                       <div>
-                        <h3 className="font-bold text-gray-900 mb-2">Experience Level</h3>
-                        <Badge variant="outline" className="capitalize">
-                          {currentFounder.experience?.replace("-", " ")}
-                        </Badge>
+                        <h3 className="font-bold text-gray-900 mb-2">Experience & Background</h3>
+                        <div className="flex gap-2 flex-wrap">
+                          <Badge variant="outline" className="capitalize">
+                            {currentFounder.experience?.replace("-", " ")}
+                          </Badge>
+                          <Badge 
+                            variant={currentFounder.isTechnical ? "default" : "secondary"}
+                            className={currentFounder.isTechnical ? "bg-blue-600 text-white" : ""}
+                          >
+                            {currentFounder.isTechnical ? "Technical" : "Non-Technical"}
+                          </Badge>
+                        </div>
                       </div>
 
                       {/* Looking For */}

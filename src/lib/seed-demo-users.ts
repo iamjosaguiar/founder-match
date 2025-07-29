@@ -18,6 +18,7 @@ const demoUsers = [
     fundingStatus: 'Seeking Seed',
     companyGoals: 'Scale Nationally',
     workStyle: 'Somewhat Structured',
+    isTechnical: false,
     quizCompleted: true,
     quizScores: {
       openness: 4.5,
@@ -55,6 +56,7 @@ const demoUsers = [
     fundingStatus: 'Bootstrapped',
     companyGoals: 'Regional Success',
     workStyle: 'Flexible',
+    isTechnical: true,
     quizCompleted: true,
     quizScores: {
       openness: 3.8,
@@ -92,6 +94,7 @@ const demoUsers = [
     fundingStatus: 'Series A+',
     companyGoals: 'Global Unicorn',
     workStyle: 'Somewhat Structured',
+    isTechnical: false,
     quizCompleted: true,
     quizScores: {
       openness: 4.1,
@@ -129,6 +132,7 @@ const demoUsers = [
     fundingStatus: 'Seeking Pre-seed',
     companyGoals: 'Scale Nationally',
     workStyle: 'Flexible',
+    isTechnical: false,
     quizCompleted: true,
     quizScores: {
       openness: 4.7,
@@ -166,6 +170,7 @@ const demoUsers = [
     fundingStatus: 'Seeking Seed',
     companyGoals: 'Global Unicorn',
     workStyle: 'Highly Structured',
+    isTechnical: true,
     quizCompleted: true,
     quizScores: {
       openness: 4.2,
@@ -203,6 +208,7 @@ const demoUsers = [
     fundingStatus: 'Series A+',
     companyGoals: 'Global Unicorn',
     workStyle: 'Somewhat Structured',
+    isTechnical: true,
     quizCompleted: true,
     quizScores: {
       openness: 4.6,

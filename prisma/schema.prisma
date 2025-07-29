@@ -35,6 +35,7 @@ model User {
   fundingStatus     String?  // Bootstrapped, Seeking, Funded
   companyGoals      String?  // Lifestyle, Scale, Unicorn
   workStyle         String?  // Structured, Flexible, Fast-paced
+  isTechnical       Boolean?  // Can build product without outside assistance
   
   // Filter preferences for discovery
   filterPreferences Json?    // Store discovery filter preferences

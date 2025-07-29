@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const { 
       founderJourney, title, bio, skills, experience, lookingFor,
       industry, stage, location, remoteOk, timeCommitment, 
-      fundingStatus, companyGoals, workStyle 
+      fundingStatus, companyGoals, workStyle, isTechnical 
     } = await request.json();
 
     // Validate that at least some data is provided
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
     if (fundingStatus !== undefined) updateData.fundingStatus = fundingStatus;
     if (companyGoals !== undefined) updateData.companyGoals = companyGoals;
     if (workStyle !== undefined) updateData.workStyle = workStyle;
+    if (isTechnical !== undefined) updateData.isTechnical = isTechnical;
 
     // Update user profile
     const updatedUser = await prisma.user.update({
