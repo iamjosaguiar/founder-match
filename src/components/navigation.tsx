@@ -3,7 +3,7 @@
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Users, User, LogOut, Heart } from "lucide-react";
+import { Users, User, LogOut, LayoutDashboard, Settings } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import UserAvatar from "@/components/user-avatar";
 
 export function Navigation() {
   const { data: session, status } = useSession();
@@ -39,13 +39,13 @@ export function Navigation() {
               <>
                 <div className="hidden md:flex items-center gap-3">
                   <Button variant="ghost" asChild>
-                    <Link href="/founder-matching">Find Co-Founders</Link>
+                    <Link href="/dashboard">
+                      <LayoutDashboard className="w-4 h-4 mr-2" />
+                      Dashboard
+                    </Link>
                   </Button>
                   <Button variant="ghost" asChild>
-                    <Link href="/discover">Discover</Link>
-                  </Button>
-                  <Button variant="ghost" asChild>
-                    <Link href="/matches">Connections</Link>
+                    <Link href="/community">Community</Link>
                   </Button>
                 </div>
 
@@ -53,11 +53,7 @@ export function Navigation() {
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="flex items-center gap-2 hover:bg-slate-100">
-                      <Avatar className="w-8 h-8">
-                        <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-500 text-white text-sm">
-                          {session.user?.name?.charAt(0) || "U"}
-                        </AvatarFallback>
-                      </Avatar>
+                      <UserAvatar size="sm" />
                       <span className="font-medium text-slate-700">
                         {session.user?.name || "Profile"}
                       </span>
@@ -74,27 +70,21 @@ export function Navigation() {
                     </div>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
+                      <Link href="/dashboard" className="flex items-center gap-2 cursor-pointer">
+                        <LayoutDashboard className="w-4 h-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
                         <User className="w-4 h-4" />
                         Profile
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/founder-matching" className="flex items-center gap-2 cursor-pointer">
-                        <Users className="w-4 h-4" />
-                        Find Co-Founders
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/discover" className="flex items-center gap-2 cursor-pointer">
-                        <Users className="w-4 h-4" />
-                        Discover
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/matches" className="flex items-center gap-2 cursor-pointer">
-                        <Heart className="w-4 h-4" />
-                        Connections
+                      <Link href="/settings" className="flex items-center gap-2 cursor-pointer">
+                        <Settings className="w-4 h-4" />
+                        Settings
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -111,11 +101,6 @@ export function Navigation() {
             ) : (
               // Unauthenticated Navigation
               <>
-                <div className="hidden md:flex items-center gap-3">
-                  <Button variant="ghost" asChild>
-                    <Link href="/founder-matching">Find Co-Founders</Link>
-                  </Button>
-                </div>
                 <Button variant="ghost" asChild>
                   <Link href="/auth/signin">Sign In</Link>
                 </Button>
