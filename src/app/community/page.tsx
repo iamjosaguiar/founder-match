@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import DashboardLayout from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Plus, Search, MessageCircle, Heart, Users, TrendingUp, Lightbulb, Target, Code, Briefcase, Scale, Globe } from "lucide-react";
+import { Plus, Search, MessageCircle, Heart, Users, TrendingUp, Lightbulb, Target, Code, Briefcase, Scale, Globe } from "lucide-react";
 import Link from "next/link";
 
 type ForumCategory = {
@@ -143,36 +144,8 @@ export default function CommunityPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50">
-      {/* Header */}
-      <div className="border-b border-slate-200/60 bg-white/70 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-6 max-w-6xl">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" asChild>
-                <Link href="/" className="flex items-center gap-2">
-                  <ArrowLeft className="w-4 h-4" />
-                  Back to Home
-                </Link>
-              </Button>
-              <div>
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                  CoLaunchr Community
-                </h1>
-                <p className="text-slate-600">Connect, learn, and grow with fellow founders</p>
-              </div>
-            </div>
-            <Button asChild className="bg-gradient-to-r from-purple-600 to-indigo-600">
-              <Link href="/community/new" className="flex items-center gap-2">
-                <Plus className="w-4 h-4" />
-                New Post
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <DashboardLayout>
+      <div className="p-6 max-w-6xl mx-auto">
         {/* Search and Stats */}
         <div className="mb-8">
           <div className="grid md:grid-cols-4 gap-4 mb-6">
@@ -353,6 +326,6 @@ export default function CommunityPage() {
           )}
         </div>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
