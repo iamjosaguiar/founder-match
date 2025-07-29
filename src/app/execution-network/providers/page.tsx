@@ -99,6 +99,11 @@ export default function ServiceProvidersPage() {
   }, [selectedServiceType, selectedExperience, selectedAvailability, remoteOnly, minRate, maxRate, session]);
 
   const fetchProviders = async () => {
+    if (!session) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       const params = new URLSearchParams();
       if (selectedServiceType !== 'all') params.append('serviceType', selectedServiceType);
@@ -112,6 +117,10 @@ export default function ServiceProvidersPage() {
       if (response.ok) {
         const data = await response.json();
         setProviders(data);
+      } else if (response.status === 401) {
+        // Authentication required - redirect to sign in
+        router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/providers"));
+        return;
       }
     } catch (error) {
       console.error('Error fetching service providers:', error);

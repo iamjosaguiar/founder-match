@@ -5,6 +5,13 @@ import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
   try {
+    // Check authentication
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions) as any;
+    
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
+    }
     const { searchParams } = new URL(request.url);
     const serviceType = searchParams.get('serviceType');
     const budget = searchParams.get('budget');

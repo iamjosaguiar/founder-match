@@ -103,6 +103,11 @@ export default function ProjectsPage() {
   };
 
   const fetchProjects = async () => {
+    if (!session) {
+      setLoading(false);
+      return;
+    }
+    
     try {
       const params = new URLSearchParams();
       if (selectedServiceType) params.append('serviceType', selectedServiceType);
@@ -112,6 +117,10 @@ export default function ProjectsPage() {
       if (response.ok) {
         const data = await response.json();
         setProjects(data);
+      } else if (response.status === 401) {
+        // Authentication required - redirect to sign in
+        router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects"));
+        return;
       }
     } catch (error) {
       console.error('Error fetching projects:', error);
