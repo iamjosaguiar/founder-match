@@ -26,7 +26,7 @@ export function Navigation() {
               <Users className="w-6 h-6 text-white" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              FounderMatch
+              CoLaunchr
             </span>
           </Link>
 
@@ -38,6 +38,9 @@ export function Navigation() {
               // Authenticated Navigation
               <>
                 <div className="hidden md:flex items-center gap-3">
+                  <Button variant="ghost" asChild>
+                    <Link href="/founder-matching">Find Co-Founders</Link>
+                  </Button>
                   <Button variant="ghost" asChild>
                     <Link href="/discover">Discover</Link>
                   </Button>
@@ -77,6 +80,12 @@ export function Navigation() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link href="/founder-matching" className="flex items-center gap-2 cursor-pointer">
+                        <Users className="w-4 h-4" />
+                        Find Co-Founders
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/discover" className="flex items-center gap-2 cursor-pointer">
                         <Users className="w-4 h-4" />
                         Discover
@@ -102,6 +111,11 @@ export function Navigation() {
             ) : (
               // Unauthenticated Navigation
               <>
+                <div className="hidden md:flex items-center gap-3">
+                  <Button variant="ghost" asChild>
+                    <Link href="/founder-matching">Find Co-Founders</Link>
+                  </Button>
+                </div>
                 <Button variant="ghost" asChild>
                   <Link href="/auth/signin">Sign In</Link>
                 </Button>
