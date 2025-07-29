@@ -1,10 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Zap, Users, Brain, Rocket, Target, TrendingUp, Code, Briefcase, Lightbulb, Shield, Star, CheckCircle } from "lucide-react";
 
 export default function Home() {
+  const { data: session } = useSession();
+
+  const getExecutionNetworkUrl = (path: string) => {
+    return session ? path : `/auth/signin?callbackUrl=${encodeURIComponent(path)}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="container mx-auto px-4 py-16">
@@ -135,20 +144,20 @@ export default function Home() {
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2">
                     <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
-                      <Link href="/execution-network/join">
+                      <Link href={getExecutionNetworkUrl("/execution-network/join")}>
                         Join Network
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </Link>
                     </Button>
                     <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
-                      <Link href="/execution-network/providers">
+                      <Link href={getExecutionNetworkUrl("/execution-network/providers")}>
                         Find Providers
                         <ArrowRight className="w-4 h-4 ml-1" />
                       </Link>
                     </Button>
                   </div>
                   <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300 w-full">
-                    <Link href="/execution-network/projects/new">
+                    <Link href={getExecutionNetworkUrl("/execution-network/projects/new")}>
                       Post Project
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Link>

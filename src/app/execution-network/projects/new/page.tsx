@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -90,8 +90,16 @@ const complexityOptions = [
 ];
 
 export default function PostProject() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects/new"));
+      return;
+    }
+  }, [session, status, router]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentTech, setCurrentTech] = useState("");
 
@@ -125,7 +133,7 @@ export default function PostProject() {
 
   const onSubmit = async (data: ProjectData) => {
     if (!session) {
-      alert("Please sign in to continue");
+      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects/new"));
       return;
     }
 
@@ -150,6 +158,22 @@ export default function PostProject() {
       setIsSubmitting(false);
     }
   };
+
+  // Show loading state while checking authentication
+  if (status === "loading") {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+        <Card className="p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
+        </Card>
+      </div>
+    );
+  }
+
+  // Don't render the form if not authenticated (redirect will happen)
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 py-8">

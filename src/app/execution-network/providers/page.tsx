@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -70,7 +71,8 @@ const availabilityOptions = [
 ];
 
 export default function ServiceProvidersPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [providers, setProviders] = useState<ServiceProvider[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -82,8 +84,19 @@ export default function ServiceProvidersPage() {
   const [maxRate, setMaxRate] = useState("");
 
   useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/providers"));
+      return;
+    }
     fetchProviders();
-  }, [selectedServiceType, selectedExperience, selectedAvailability, remoteOnly, minRate, maxRate]);
+  }, [session, status, router]);
+
+  useEffect(() => {
+    if (session) {
+      fetchProviders();
+    }
+  }, [selectedServiceType, selectedExperience, selectedAvailability, remoteOnly, minRate, maxRate, session]);
 
   const fetchProviders = async () => {
     try {
@@ -149,14 +162,20 @@ export default function ServiceProvidersPage() {
     }
   };
 
-  if (loading) {
+  // Show loading state while checking authentication or loading data
+  if (status === "loading" || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading service providers...</h2>
+          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
         </Card>
       </div>
     );
+  }
+
+  // Don't render if not authenticated (redirect will happen)
+  if (!session) {
+    return null;
   }
 
   return (

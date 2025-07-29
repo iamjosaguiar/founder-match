@@ -67,7 +67,7 @@ const budgetRanges = [
 ];
 
 export default function ProjectsPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -77,11 +77,14 @@ export default function ProjectsPage() {
   const [selectedBudget, setSelectedBudget] = useState("");
 
   useEffect(() => {
-    if (session) {
-      fetchUserProfile();
-      fetchProjects();
+    if (status === "loading") return; // Still checking session
+    if (!session) {
+      router.push("/auth/signin?callbackUrl=" + encodeURIComponent("/execution-network/projects"));
+      return;
     }
-  }, [session]);
+    fetchUserProfile();
+    fetchProjects();
+  }, [session, status, router]);
 
   useEffect(() => {
     fetchProjects();
@@ -158,14 +161,20 @@ export default function ProjectsPage() {
   const isServiceProvider = userProfile?.roles?.includes('service_provider');
   const isFounder = userProfile?.roles?.includes('founder');
 
-  if (loading) {
+  // Show loading state while checking authentication or loading data
+  if (status === "loading" || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
         <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading projects...</h2>
+          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
         </Card>
       </div>
     );
+  }
+
+  // Don't render if not authenticated (redirect will happen)
+  if (!session) {
+    return null;
   }
 
   return (
