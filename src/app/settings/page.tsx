@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import DashboardLayout from "@/components/dashboard-layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,9 @@ import {
   Bell,
   Shield,
   Palette,
-  Save
+  Save,
+  Camera,
+  Upload
 } from "lucide-react";
 
 export default function SettingsPage() {
@@ -27,6 +30,9 @@ export default function SettingsPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -37,11 +43,75 @@ export default function SettingsPage() {
     setLoading(false);
   }, [session, status, router]);
 
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setAvatarFile(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatarPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadAvatar = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+    const response = await fetch("/api/upload-avatar", {
+      method: "POST",
+      body: formData,
+    });
+    if (!response.ok) {
+      throw new Error("Failed to upload avatar");
+    }
+    const data = await response.json();
+    return data.avatarUrl;
+  };
+
   const handleSave = async () => {
-    setSaving(true);
-    // Simulate save operation
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setSaving(false);
+    if (!avatarFile) return;
+    
+    setUploading(true);
+    try {
+      const avatarUrl = await uploadAvatar(avatarFile);
+      
+      // Update profile with new avatar
+      const response = await fetch('/api/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: session?.user?.name || '',
+          title: '',
+          bio: '',
+          skills: '',
+          experience: '',
+          lookingFor: '',
+          projectLinks: '',
+          avatar: avatarUrl,
+          profileImage: avatarUrl
+        }),
+      });
+
+      if (response.ok) {
+        setAvatarFile(null);
+        setAvatarPreview('');
+        alert('Profile photo updated successfully!');
+        // Force page reload to update avatar everywhere
+        window.location.reload();
+      } else {
+        throw new Error('Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+      alert('Failed to update profile photo. Please try again.');
+    } finally {
+      setUploading(false);
+    }
   };
 
   if (status === "loading" || loading) {
@@ -80,8 +150,27 @@ export default function SettingsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <div className="mb-4">
-                  <UserAvatar size="xl" className="mx-auto" />
+                <div className="relative mb-4 inline-block">
+                  {avatarPreview ? (
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                      <img src={avatarPreview} alt="Avatar preview" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <UserAvatar size="xl" className="mx-auto" />
+                  )}
+                  
+                  {/* Camera overlay button */}
+                  <label className="absolute bottom-0 right-0 cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleAvatarChange}
+                      className="hidden"
+                    />
+                    <div className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full p-2 shadow-lg hover:shadow-xl transition-all duration-200">
+                      <Camera className="w-4 h-4" />
+                    </div>
+                  </label>
                 </div>
                 <h3 className="text-xl font-semibold text-slate-900 mb-1">
                   {session.user?.name || 'User'}
@@ -97,9 +186,49 @@ export default function SettingsPage() {
                   </Badge>
                 </div>
 
-                <Button variant="outline" className="w-full mt-4">
-                  Change Avatar
-                </Button>
+                {avatarFile && (
+                  <div className="flex items-center gap-2 text-sm bg-green-50 text-green-700 p-3 rounded-xl border border-green-200 mb-4">
+                    <Upload className="w-4 h-4" />
+                    New photo selected: {avatarFile.name}
+                  </div>
+                )}
+                
+                {avatarFile ? (
+                  <div className="flex gap-2 mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="flex-1" 
+                      onClick={() => {
+                        setAvatarFile(null);
+                        setAvatarPreview('');
+                      }}
+                      disabled={uploading}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700" 
+                      onClick={handleSave}
+                      disabled={uploading}
+                    >
+                      {uploading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Saving...
+                        </>
+                      ) : (
+                        <>
+                          <Save className="w-4 h-4 mr-2" />
+                          Save Photo
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-500 mt-4">
+                    Click the camera icon to change your profile photo
+                  </p>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -224,26 +353,18 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            {/* Save Button */}
-            <div className="flex justify-end">
-              <Button 
-                onClick={handleSave}
-                disabled={saving}
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-              >
-                {saving ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
-                  </>
-                )}
-              </Button>
-            </div>
+            {/* Note about profile updates */}
+            <Card className="border-0 bg-blue-50 shadow-lg">
+              <CardContent className="p-4 text-center">
+                <p className="text-sm text-blue-700">
+                  💡 Profile information and other settings can be updated from the full profile page.
+                  <br />
+                  <Link href="/profile" className="underline hover:text-blue-800 transition-colors">
+                    Go to Profile Page
+                  </Link>
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
