@@ -540,19 +540,22 @@ export default function Discover() {
                     {/* Header with Photo and Basic Info */}
                     <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white">
                       <div className="flex items-center gap-4">
-                        {currentFounder.profileImage ? (
-                          <img 
-                            src={currentFounder.profileImage} 
-                            alt={currentFounder.name}
-                            className="w-20 h-20 rounded-full object-cover border-4 border-white/50"
-                          />
-                        ) : (
-                          <Avatar className="w-20 h-20 border-4 border-white/50">
-                            <AvatarFallback className="text-2xl font-bold bg-white/20 text-white">
-                              {currentFounder.avatar}
-                            </AvatarFallback>
-                          </Avatar>
-                        )}
+                        <div className="relative">
+                          {currentFounder.profileImage ? (
+                            <img 
+                              src={currentFounder.profileImage} 
+                              alt={currentFounder.name}
+                              className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-xl ring-4 ring-white/20"
+                            />
+                          ) : (
+                            <Avatar className="w-24 h-24 border-4 border-white shadow-xl ring-4 ring-white/20">
+                              <AvatarFallback className="text-2xl font-bold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
+                                {currentFounder.avatar}
+                              </AvatarFallback>
+                            </Avatar>
+                          )}
+                          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white shadow-sm"></div>
+                        </div>
                         <div className="flex-1">
                           <h2 className="text-2xl font-bold mb-1">{currentFounder.name}</h2>
                           <p className="text-lg opacity-90">{currentFounder.title}</p>

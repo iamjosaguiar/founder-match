@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Brain, Users, Zap, Target, TrendingUp, Rocket } from "lucide-react";
+import { UserFacesShowcase } from "@/components/UserFacesShowcase";
 
 export default function Home() {
   return (
@@ -40,6 +41,12 @@ export default function Home() {
             <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4 border-slate-300 hover:bg-slate-50">
               <Link href="/auth/signin">Sign In</Link>
             </Button>
+          </div>
+
+          {/* User Faces Showcase */}
+          <div className="flex flex-col items-center gap-4 mb-8">
+            <div className="text-sm text-slate-600 font-medium">Join founders from top companies</div>
+            <UserFacesShowcase variant="row" size="md" />
           </div>
 
           {/* Social Proof */}
@@ -194,6 +201,30 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Community Section */}
+        <div className="text-center mb-20">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-slate-900 to-blue-900 bg-clip-text text-transparent">
+              Meet Our Founder Community
+            </h2>
+            <p className="text-lg text-slate-600 mb-12">
+              Connect with entrepreneurs from diverse backgrounds, industries, and expertise levels. 
+              From AI pioneers to climate tech innovators, find your perfect co-founder match.
+            </p>
+            <div className="flex justify-center">
+              <UserFacesShowcase variant="grid" size="lg" />
+            </div>
+            <div className="mt-8">
+              <Button asChild variant="outline" className="group">
+                <Link href="/auth/signup" className="flex items-center gap-2">
+                  Browse All Founders
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
