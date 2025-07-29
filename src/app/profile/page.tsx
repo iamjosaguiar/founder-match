@@ -39,6 +39,7 @@ type ProfileData = {
   fundingStatus?: string;
   companyGoals?: string;
   workStyle?: string;
+  isTechnical?: boolean;
   quizScores?: {
     openness: number;
     conscientiousness: number;
@@ -232,6 +233,7 @@ export default function Profile() {
         fundingStatus: data.fundingStatus || "",
         companyGoals: data.companyGoals || "",
         workStyle: data.workStyle || "",
+        isTechnical: data.isTechnical === 'true' || data.isTechnical === true,
       };
 
       console.log('Request body:', requestBody);
@@ -649,7 +651,7 @@ export default function Profile() {
             </CardContent>
           </Card>
 
-          {/* Experience & Looking For */}
+          {/* Experience & Technical Background */}
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-shadow duration-300">
               <CardHeader className="pb-4">
@@ -657,25 +659,68 @@ export default function Profile() {
                   <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
                     <Briefcase className="w-5 h-5 text-white" />
                   </div>
-                  Experience Level
+                  Experience & Background
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {isEditing ? (
-                  <select
-                    {...register("experience", { required: "Experience is required" })}
-                    className="w-full p-3 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 bg-white"
-                  >
-                    <option value="">Select experience level</option>
-                    <option value="first-time">First-time Founder</option>
-                    <option value="experienced">Experienced Entrepreneur</option>
-                    <option value="serial">Serial Entrepreneur</option>
-                    <option value="corporate">Corporate Executive</option>
-                  </select>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-slate-700">Experience Level</label>
+                      <select
+                        {...register("experience", { required: "Experience is required" })}
+                        className="w-full p-3 border border-slate-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 bg-white"
+                      >
+                        <option value="">Select experience level</option>
+                        <option value="first-time">First-time Founder</option>
+                        <option value="experienced">Experienced Entrepreneur</option>
+                        <option value="serial">Serial Entrepreneur</option>
+                        <option value="corporate">Corporate Executive</option>
+                      </select>
+                    </div>
+                    <div className="border border-slate-200 rounded-xl p-4 bg-slate-50">
+                      <label className="block text-sm font-medium mb-3">Are you technical? *</label>
+                      <p className="text-xs text-slate-600 mb-4">You are a programmer, scientist or engineer who can build the product without outside assistance.</p>
+                      <div className="space-y-3">
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            value="true"
+                            {...register("isTechnical", { required: "Please select if you are technical" })}
+                            className="w-4 h-4 text-blue-600"
+                          />
+                          <span className="text-sm">Yes</span>
+                        </label>
+                        <label className="flex items-center space-x-3 cursor-pointer">
+                          <input
+                            type="radio"
+                            value="false"
+                            {...register("isTechnical", { required: "Please select if you are technical" })}
+                            className="w-4 h-4 text-blue-600"
+                          />
+                          <span className="text-sm">No</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                  <Badge className="bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 border-orange-200 px-4 py-2 text-sm font-medium">
-                    {profileData.experience?.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
-                  </Badge>
+                  <div className="space-y-3">
+                    <Badge className="bg-gradient-to-r from-orange-100 to-red-100 text-orange-700 border-orange-200 px-4 py-2 text-sm font-medium">
+                      {profileData.experience?.replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
+                    </Badge>
+                    <div>
+                      <Badge 
+                        variant={profileData.isTechnical ? "default" : "secondary"}
+                        className={`px-4 py-2 text-sm font-medium ${
+                          profileData.isTechnical 
+                            ? "bg-blue-600 text-white hover:bg-blue-700" 
+                            : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                        }`}
+                      >
+                        {profileData.isTechnical ? "Technical" : "Non-Technical"}
+                      </Badge>
+                    </div>
+                  </div>
                 )}
               </CardContent>
             </Card>

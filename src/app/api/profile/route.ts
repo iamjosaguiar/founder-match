@@ -37,6 +37,7 @@ export async function GET() {
         fundingStatus: true,
         companyGoals: true,
         workStyle: true,
+        isTechnical: true,
       },
     });
 
@@ -82,7 +83,7 @@ export async function PATCH(request: NextRequest) {
 
     const { 
       name, title, bio, skills, experience, lookingFor, projectLinks, avatar,
-      industry, stage, location, remoteOk, timeCommitment, fundingStatus, companyGoals, workStyle 
+      industry, stage, location, remoteOk, timeCommitment, fundingStatus, companyGoals, workStyle, isTechnical 
     } = await request.json();
 
     // Validate required fields
@@ -94,7 +95,7 @@ export async function PATCH(request: NextRequest) {
 
     console.log('Profile update request:', { 
       name, title, bio, skills, experience, lookingFor,
-      industry, stage, location, remoteOk, timeCommitment, fundingStatus, companyGoals, workStyle 
+      industry, stage, location, remoteOk, timeCommitment, fundingStatus, companyGoals, workStyle, isTechnical 
     });
 
     // Update user profile
@@ -118,6 +119,7 @@ export async function PATCH(request: NextRequest) {
         fundingStatus,
         companyGoals,
         workStyle,
+        isTechnical,
         updatedAt: new Date(),
       },
       select: {
@@ -141,6 +143,7 @@ export async function PATCH(request: NextRequest) {
         fundingStatus: true,
         companyGoals: true,
         workStyle: true,
+        isTechnical: true,
       },
     });
 
