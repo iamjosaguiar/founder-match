@@ -52,6 +52,11 @@ function NewPostForm() {
     }
   });
 
+  // Register categoryId for form validation
+  useEffect(() => {
+    register('categoryId', { required: 'Please select a category' });
+  }, [register]);
+
   const selectedCategoryId = watch('categoryId');
   const selectedCategory = categories.find(cat => cat.id === selectedCategoryId);
 
@@ -178,7 +183,7 @@ function NewPostForm() {
                             ? 'border-purple-300 bg-purple-50' 
                             : 'border-slate-200 hover:border-slate-300'
                         }`}
-                        onClick={() => setValue("categoryId", category.id)}
+                        onClick={() => setValue("categoryId", category.id, { shouldValidate: true })}
                       >
                         <div className="flex items-center gap-3">
                           <div 

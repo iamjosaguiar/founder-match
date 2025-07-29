@@ -35,6 +35,14 @@ type ForumCategory = {
   };
 };
 
+type CommunityStats = {
+  totalPosts: number;
+  totalCategories: number;
+  totalMembers: number;
+  onlineNow: number;
+  recentPosts: number;
+};
+
 const categoryIcons = {
   general: MessageCircle,
   introductions: Users,
@@ -51,6 +59,13 @@ export default function CommunityPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [categories, setCategories] = useState<ForumCategory[]>([]);
+  const [stats, setStats] = useState<CommunityStats>({
+    totalPosts: 0,
+    totalCategories: 0,
+    totalMembers: 0,
+    onlineNow: 0,
+    recentPosts: 0
+  });
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -60,26 +75,35 @@ export default function CommunityPage() {
       router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/community"));
       return;
     }
-    fetchCategories();
+    fetchData();
   }, [session, status, router]);
 
-  const fetchCategories = async () => {
+  const fetchData = async () => {
     if (!session) {
       setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch('/api/forum/categories');
-      if (response.ok) {
-        const data = await response.json();
-        setCategories(data);
-      } else if (response.status === 401) {
+      const [categoriesResponse, statsResponse] = await Promise.all([
+        fetch('/api/forum/categories'),
+        fetch('/api/forum/stats')
+      ]);
+
+      if (categoriesResponse.ok) {
+        const categoriesData = await categoriesResponse.json();
+        setCategories(categoriesData);
+      } else if (categoriesResponse.status === 401) {
         router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/community"));
         return;
       }
+
+      if (statsResponse.ok) {
+        const statsData = await statsResponse.json();
+        setStats(statsData);
+      }
     } catch (error) {
-      console.error('Error fetching categories:', error);
+      console.error('Error fetching community data:', error);
     } finally {
       setLoading(false);
     }
@@ -156,7 +180,7 @@ export default function CommunityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-2xl font-bold text-slate-900">{categories.reduce((sum, cat) => sum + cat._count.posts, 0)}</p>
+                    <p className="text-2xl font-bold text-slate-900">{stats.totalPosts}</p>
                     <p className="text-sm text-slate-600">Total Posts</p>
                   </div>
                   <MessageCircle className="w-8 h-8 text-purple-500" />
@@ -168,7 +192,7 @@ export default function CommunityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-2xl font-bold text-slate-900">{categories.length}</p>
+                    <p className="text-2xl font-bold text-slate-900">{stats.totalCategories}</p>
                     <p className="text-sm text-slate-600">Categories</p>
                   </div>
                   <Target className="w-8 h-8 text-blue-500" />
@@ -180,7 +204,7 @@ export default function CommunityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-2xl font-bold text-slate-900">1.2K</p>
+                    <p className="text-2xl font-bold text-slate-900">{stats.totalMembers}</p>
                     <p className="text-sm text-slate-600">Members</p>
                   </div>
                   <Users className="w-8 h-8 text-green-500" />
@@ -192,8 +216,8 @@ export default function CommunityPage() {
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-2xl font-bold text-slate-900">24</p>
-                    <p className="text-sm text-slate-600">Online Now</p>
+                    <p className="text-2xl font-bold text-slate-900">{stats.onlineNow}</p>
+                    <p className="text-sm text-slate-600">Active Recent</p>
                   </div>
                   <TrendingUp className="w-8 h-8 text-orange-500" />
                 </div>
