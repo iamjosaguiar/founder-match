@@ -66,6 +66,12 @@ model User {
   projects          Project[] @relation("ProjectOwner")
   projectMatches    ProjectMatch[] @relation("ServiceProvider")
   
+  // Community relationships
+  forumPosts        ForumPost[] @relation("PostAuthor")
+  forumComments     ForumComment[] @relation("CommentAuthor")
+  postLikes         PostLike[]
+  commentLikes      CommentLike[]
+  
   @@map("users")
 }
 
@@ -170,4 +176,104 @@ model ProjectMatch {
   
   @@unique([projectId, serviceProviderId])
   @@map("project_matches")
+}
+
+model ForumCategory {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  color       String    @default("#6366f1") // Hex color for category
+  icon        String?   // Icon name for category
+  order       Int       @default(0) // Display order
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  // Relationships
+  posts       ForumPost[]
+  
+  @@map("forum_categories")
+}
+
+model ForumPost {
+  id            String    @id @default(uuid())
+  title         String
+  content       String    // Main post content
+  slug          String    @unique // URL-friendly slug
+  authorId      String
+  categoryId    String
+  
+  // Post metadata
+  isPinned      Boolean   @default(false)
+  isLocked      Boolean   @default(false)
+  views         Int       @default(0)
+  
+  // Engagement
+  likesCount    Int       @default(0)
+  commentsCount Int       @default(0)
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relationships
+  author        User @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  category      ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  comments      ForumComment[]
+  likes         PostLike[]
+  
+  @@map("forum_posts")
+}
+
+model ForumComment {
+  id        String    @id @default(uuid())
+  content   String
+  authorId  String
+  postId    String
+  parentId  String?   // For nested replies
+  
+  // Engagement
+  likesCount Int      @default(0)
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  // Relationships
+  author    User @relation("CommentAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parent    ForumComment? @relation("CommentThread", fields: [parentId], references: [id])
+  replies   ForumComment[] @relation("CommentThread")
+  likes     CommentLike[]
+  
+  @@map("forum_comments")
+}
+
+model PostLike {
+  id     String @id @default(uuid())
+  userId String
+  postId String
+  
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, postId])
+  @@map("post_likes")
+}
+
+model CommentLike {
+  id        String @id @default(uuid())
+  userId    String
+  commentId String
+  
+  createdAt DateTime @default(now())
+  
+  // Relationships
+  user    User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comment ForumComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, commentId])
+  @@map("comment_likes")
 }

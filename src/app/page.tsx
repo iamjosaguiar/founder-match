@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Zap, Users, Brain, Rocket, Target, TrendingUp, Code, Briefcase, Lightbulb, Shield, Star, CheckCircle } from "lucide-react";
+import { ArrowRight, Zap, Users, Brain, Rocket, Target, TrendingUp, Code, Briefcase, Lightbulb, Shield, Star, CheckCircle, MessageCircle } from "lucide-react";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -83,7 +83,7 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid lg:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid lg:grid-cols-2 xl:grid-cols-5 gap-6">
             {/* Founder Matching */}
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30 backdrop-blur-sm">
               <CardHeader className="text-center pb-4">
@@ -163,6 +163,29 @@ export default function Home() {
                     </Link>
                   </Button>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Community */}
+            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/30 backdrop-blur-sm">
+              <CardHeader className="text-center pb-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <MessageCircle className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">
+                  Community
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-slate-600 leading-relaxed mb-4">
+                  Connect with fellow founders, share insights, and learn from the community's collective wisdom.
+                </p>
+                <Button asChild variant="outline" size="sm" className="group-hover:bg-emerald-50 group-hover:border-emerald-300">
+                  <Link href={getExecutionNetworkUrl("/community")}>
+                    Join Discussion
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
 

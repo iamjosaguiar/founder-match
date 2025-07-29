@@ -1,0 +1,334 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ArrowLeft, Plus, Search, MessageCircle, Heart, Users, TrendingUp, Lightbulb, Target, Code, Briefcase, Scale, Globe } from "lucide-react";
+import Link from "next/link";
+
+type ForumCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  color: string;
+  icon?: string;
+  order: number;
+  posts: Array<{
+    id: string;
+    title: string;
+    createdAt: string;
+    author: {
+      name: string;
+      profileImage?: string;
+    };
+    commentsCount: number;
+    likesCount: number;
+  }>;
+  _count: {
+    posts: number;
+  };
+};
+
+const categoryIcons = {
+  general: MessageCircle,
+  introductions: Users,
+  'idea-validation': Lightbulb,
+  'co-founder-search': Target,
+  technical: Code,
+  business: Briefcase,
+  legal: Scale,
+  marketing: TrendingUp,
+  global: Globe
+};
+
+export default function CommunityPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [categories, setCategories] = useState<ForumCategory[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session) {
+      router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/community"));
+      return;
+    }
+    fetchCategories();
+  }, [session, status, router]);
+
+  const fetchCategories = async () => {
+    if (!session) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/forum/categories');
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data);
+      } else if (response.status === 401) {
+        router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/community"));
+        return;
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    return date.toLocaleDateString();
+  };
+
+  const filteredCategories = categories.filter(category =>
+    category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    category.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Show loading state while checking authentication or loading data
+  if (status === "loading" || loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
+        <Card className="p-8 text-center">
+          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
+        </Card>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated (redirect will happen)
+  if (!session) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50">
+      {/* Header */}
+      <div className="border-b border-slate-200/60 bg-white/70 backdrop-blur-md">
+        <div className="container mx-auto px-4 py-6 max-w-6xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" asChild>
+                <Link href="/" className="flex items-center gap-2">
+                  <ArrowLeft className="w-4 h-4" />
+                  Back to Home
+                </Link>
+              </Button>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  CoLaunchr Community
+                </h1>
+                <p className="text-slate-600">Connect, learn, and grow with fellow founders</p>
+              </div>
+            </div>
+            <Button asChild className="bg-gradient-to-r from-purple-600 to-indigo-600">
+              <Link href="/community/new" className="flex items-center gap-2">
+                <Plus className="w-4 h-4" />
+                New Post
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Search and Stats */}
+        <div className="mb-8">
+          <div className="grid md:grid-cols-4 gap-4 mb-6">
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold text-slate-900">{categories.reduce((sum, cat) => sum + cat._count.posts, 0)}</p>
+                    <p className="text-sm text-slate-600">Total Posts</p>
+                  </div>
+                  <MessageCircle className="w-8 h-8 text-purple-500" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold text-slate-900">{categories.length}</p>
+                    <p className="text-sm text-slate-600">Categories</p>
+                  </div>
+                  <Target className="w-8 h-8 text-blue-500" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold text-slate-900">1.2K</p>
+                    <p className="text-sm text-slate-600">Members</p>
+                  </div>
+                  <Users className="w-8 h-8 text-green-500" />
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-2xl font-bold text-slate-900">24</p>
+                    <p className="text-sm text-slate-600">Online Now</p>
+                  </div>
+                  <TrendingUp className="w-8 h-8 text-orange-500" />
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Search */}
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-4 h-4" />
+            <Input
+              placeholder="Search categories..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 bg-white/80 backdrop-blur-sm"
+            />
+          </div>
+        </div>
+
+        {/* Categories */}
+        <div className="space-y-6">
+          {filteredCategories.length === 0 ? (
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg">
+              <CardContent className="p-12 text-center">
+                <h3 className="text-xl font-semibold mb-4">No categories found</h3>
+                <p className="text-slate-600 mb-6">
+                  {categories.length === 0 
+                    ? "The community is just getting started!" 
+                    : "Try adjusting your search criteria."}
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            filteredCategories.map((category) => {
+              const IconComponent = categoryIcons[category.slug as keyof typeof categoryIcons] || MessageCircle;
+              
+              return (
+                <Card key={category.id} className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+                  <CardHeader className="pb-4">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-4">
+                        <div 
+                          className="p-3 rounded-xl"
+                          style={{ backgroundColor: `${category.color}20` }}
+                        >
+                          <IconComponent 
+                            className="w-6 h-6" 
+                            style={{ color: category.color }}
+                          />
+                        </div>
+                        <div>
+                          <CardTitle className="text-xl">
+                            <Link 
+                              href={`/community/category/${category.slug}`}
+                              className="hover:text-purple-600 transition-colors"
+                            >
+                              {category.name}
+                            </Link>
+                          </CardTitle>
+                          {category.description && (
+                            <p className="text-slate-600 mt-1">{category.description}</p>
+                          )}
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="bg-slate-50">
+                        {category._count.posts} posts
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    {category.posts.length > 0 ? (
+                      <div className="space-y-3">
+                        <h4 className="font-semibold text-sm text-slate-700 mb-3">Recent Posts</h4>
+                        {category.posts.map((post) => (
+                          <div key={post.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                            <div className="flex items-center gap-3 flex-1">
+                              <Avatar className="w-8 h-8">
+                                {post.author.profileImage ? (
+                                  <img src={post.author.profileImage} alt={post.author.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <AvatarFallback className="text-xs font-bold bg-gradient-to-br from-purple-500 to-indigo-500 text-white">
+                                    {post.author.name?.charAt(0) || "U"}
+                                  </AvatarFallback>
+                                )}
+                              </Avatar>
+                              <div className="flex-1 min-w-0">
+                                <Link 
+                                  href={`/community/post/${post.id}`}
+                                  className="font-medium text-slate-900 hover:text-purple-600 transition-colors line-clamp-1"
+                                >
+                                  {post.title}
+                                </Link>
+                                <p className="text-xs text-slate-500">
+                                  by {post.author.name} • {formatTimeAgo(post.createdAt)}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-3 text-xs text-slate-500 ml-4">
+                              <div className="flex items-center gap-1">
+                                <MessageCircle className="w-3 h-3" />
+                                {post.commentsCount}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Heart className="w-3 h-3" />
+                                {post.likesCount}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                        <div className="pt-2">
+                          <Button variant="outline" size="sm" asChild className="w-full">
+                            <Link href={`/community/category/${category.slug}`}>
+                              View All Posts in {category.name}
+                            </Link>
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-6">
+                        <p className="text-slate-500 text-sm">No posts yet in this category</p>
+                        <Button variant="outline" size="sm" asChild className="mt-2">
+                          <Link href={`/community/new?category=${category.id}`}>
+                            Start the conversation
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
