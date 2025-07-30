@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { 
   User, Settings, DollarSign, Clock, MapPin, Star, 
-  FileText, TrendingUp, Users, CheckCircle 
+  FileText, TrendingUp, Users, CheckCircle, Plus, Search, FolderOpen
 } from "lucide-react";
 import Link from "next/link";
 
