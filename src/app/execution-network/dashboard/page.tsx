@@ -91,9 +91,10 @@ export default function ServiceProviderDashboard() {
     );
   }
 
-  const formatRate = (rate: number) => `$${rate}/hour`;
+  const formatRate = (rate?: number) => rate ? `$${rate}/hour` : "Rate not set";
   
-  const formatAvailability = (availability: string) => {
+  const formatAvailability = (availability?: string) => {
+    if (!availability) return "Not specified";
     const map: Record<string, string> = {
       immediate: "Available immediately",
       within_week: "Available within a week", 
@@ -103,7 +104,8 @@ export default function ServiceProviderDashboard() {
     return map[availability] || availability;
   };
 
-  const formatExperience = (exp: string) => {
+  const formatExperience = (exp?: string) => {
+    if (!exp) return "Not specified";
     const map: Record<string, string> = {
       "entry-level": "Entry Level",
       "intermediate": "Intermediate", 
@@ -241,10 +243,12 @@ export default function ServiceProviderDashboard() {
                         {profile.location}
                       </div>
                     )}
-                    <div className="flex items-center gap-1">
-                      <DollarSign className="w-4 h-4" />
-                      {formatRate(profile.hourlyRate)}
-                    </div>
+                    {profile.hourlyRate && (
+                      <div className="flex items-center gap-1">
+                        <DollarSign className="w-4 h-4" />
+                        {formatRate(profile.hourlyRate)}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -252,7 +256,7 @@ export default function ServiceProviderDashboard() {
               <div className="flex-1">
                 <p className="text-slate-700 leading-relaxed mb-4">{profile.bio}</p>
                 <div className="flex flex-wrap gap-2">
-                  {profile.serviceTypes.map((service) => (
+                  {profile.serviceTypes?.map((service) => (
                     <Badge key={service} className="bg-purple-100 text-purple-700 border-purple-200 capitalize">
                       {service.replace('_', ' ')}
                     </Badge>
@@ -312,7 +316,7 @@ export default function ServiceProviderDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-sm font-semibold text-green-600">{formatAvailability(profile.availability)}</div>
+              <div className="text-sm font-semibold text-green-600">{formatAvailability(profile?.availability)}</div>
               <p className="text-sm text-slate-500">Current status</p>
             </CardContent>
           </Card>
@@ -329,7 +333,7 @@ export default function ServiceProviderDashboard() {
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
-                {profile.skills.map((skill) => (
+                {profile?.skills?.map((skill) => (
                   <Badge key={skill} variant="secondary" className="bg-slate-100 text-slate-700">
                     {skill}
                   </Badge>
@@ -347,10 +351,10 @@ export default function ServiceProviderDashboard() {
             </CardHeader>
             <CardContent>
               <Badge className="bg-blue-100 text-blue-700 border-blue-200">
-                {formatExperience(profile.experience)}
+                {formatExperience(profile?.experience)}
               </Badge>
               <p className="text-sm text-slate-500 mt-2">
-                {profile.remoteOk ? "Open to remote work" : "In-person only"}
+                {profile?.remoteOk ? "Open to remote work" : "In-person preferred"}
               </p>
             </CardContent>
           </Card>
