@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MessageCircle, Users, Code, Brain, TrendingUp, Mail, MapPin, Twitter, Linkedin, Github } from "lucide-react";
+import { MessageCircle, Users, Code, Brain, TrendingUp, DollarSign, Mail, MapPin, Twitter, Linkedin, Github } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -55,20 +55,20 @@ export default function Footer() {
             <h4 className="font-semibold text-white mb-4">Services</h4>
             <ul className="space-y-3">
               <li>
-                <Link href="/founder-matching" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
+                <Link href="/co-founder-matching" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
                   <Users className="w-3 h-3" />
                   Co-Founder Matching
                 </Link>
               </li>
               <li>
-                <div className="text-sm text-slate-500 flex items-center gap-2">
+                <Link href="/colaunch-pods" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
                   <Brain className="w-3 h-3" />
                   CoLaunch Pods
-                  <span className="text-xs bg-slate-700 px-2 py-1 rounded">Soon</span>
-                </div>
+                  <span className="text-xs bg-slate-700 px-2 py-1 rounded ml-2">Soon</span>
+                </Link>
               </li>
               <li>
-                <Link href="/execution-network/providers" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
+                <Link href="/execution-network" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
                   <Code className="w-3 h-3" />
                   Execution Network
                 </Link>
@@ -81,9 +81,15 @@ export default function Footer() {
                 </div>
               </li>
               <li>
-                <Link href="/community" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
+                <Link href="/community-hub" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
                   <MessageCircle className="w-3 h-3" />
                   Community
+                </Link>
+              </li>
+              <li>
+                <Link href="/financing-hub" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
+                  <DollarSign className="w-3 h-3" />
+                  Financing Hub
                 </Link>
               </li>
             </ul>
