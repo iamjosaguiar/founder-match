@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard-layout";
 import { FinancingDisclaimer } from "@/components/financing-disclaimer";
+import IntroductionRequestModal from "@/components/introduction-request-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -107,6 +108,8 @@ export default function InvestorNetworkPage() {
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
   const [selectedStage, setSelectedStage] = useState("All Stages");
   const [investors, setInvestors] = useState(sampleInvestors);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedInvestor, setSelectedInvestor] = useState(null);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -132,9 +135,15 @@ export default function InvestorNetworkPage() {
     return matchesSearch && matchesType && matchesIndustry && matchesStage;
   });
 
-  const handleConnect = (investorId: string, investorName: string) => {
-    // This would open a modal or navigate to a connection form
-    alert(`Connection request to ${investorName}. This would open a professional introduction form.`);
+  const handleConnect = (investor: any) => {
+    setSelectedInvestor({
+      id: investor.id,
+      name: investor.name,
+      title: investor.title,
+      organization: investor.organization,
+      profileType: investor.profileType
+    });
+    setModalOpen(true);
   };
 
   if (status === "loading") {
@@ -396,7 +405,7 @@ export default function InvestorNetworkPage() {
                     {investor.openToContact ? (
                       <Button 
                         size="sm"
-                        onClick={() => handleConnect(investor.id, investor.name)}
+                        onClick={() => handleConnect(investor)}
                         className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                       >
                         <MessageCircle className="w-4 h-4 mr-2" />
@@ -434,6 +443,17 @@ export default function InvestorNetworkPage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Introduction Request Modal */}
+        <IntroductionRequestModal
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedInvestor(null);
+          }}
+          recipient={selectedInvestor || {}}
+          context="investor"
+        />
       </div>
     </DashboardLayout>
   );

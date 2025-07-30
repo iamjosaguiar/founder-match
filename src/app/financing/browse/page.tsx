@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard-layout";
 import { FinancingDisclaimer } from "@/components/financing-disclaimer";
+import IntroductionRequestModal from "@/components/introduction-request-modal";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -100,6 +101,8 @@ export default function BrowseCompaniesPage() {
   const [selectedIndustry, setSelectedIndustry] = useState("All Industries");
   const [selectedStage, setSelectedStage] = useState("All Stages");
   const [companies, setCompanies] = useState(sampleCompanies);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCompany, setSelectedCompany] = useState(null);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -121,9 +124,14 @@ export default function BrowseCompaniesPage() {
     return matchesSearch && matchesIndustry && matchesStage;
   });
 
-  const handleExpressInterest = (companyId: string) => {
-    // This would open a modal or navigate to an interest form
-    alert(`Interest expressed in company ${companyId}. This would send a message to the founder.`);
+  const handleExpressInterest = (company: any) => {
+    setSelectedCompany({
+      id: company.id,
+      name: company.companyName,
+      companyName: company.companyName,
+      tagline: company.tagline
+    });
+    setModalOpen(true);
   };
 
   if (status === "loading") {
@@ -315,7 +323,7 @@ export default function BrowseCompaniesPage() {
                     )}
                     <Button 
                       size="sm" 
-                      onClick={() => handleExpressInterest(company.id)}
+                      onClick={() => handleExpressInterest(company)}
                       className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                     >
                       <MessageCircle className="w-4 h-4 mr-2" />
@@ -347,6 +355,17 @@ export default function BrowseCompaniesPage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Introduction Request Modal */}
+        <IntroductionRequestModal
+          isOpen={modalOpen}
+          onClose={() => {
+            setModalOpen(false);
+            setSelectedCompany(null);
+          }}
+          recipient={selectedCompany || {}}
+          context="company"
+        />
       </div>
     </DashboardLayout>
   );
