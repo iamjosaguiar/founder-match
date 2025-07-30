@@ -21,7 +21,6 @@ export function Navigation() {
   // Pages that should have navigation visible for authenticated users
   const publicPages = [
     '/',
-    '/founder-matching', // old marketing page
     '/discover', // landing page
     '/matches', // landing page
     '/co-founder-matching', // Co-Founder Matching landing page

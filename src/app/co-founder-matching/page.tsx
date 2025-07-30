@@ -118,7 +118,7 @@ const personalityTraits = [
 export default function CoFounderMatchingLanding() {
   const { data: session } = useSession();
   
-  const getStartedUrl = session ? "/founder-matching" : "/auth/signup?callbackUrl=" + encodeURIComponent("/founder-matching");
+  const getStartedUrl = session ? "/founder-matching/discover" : "/auth/signup?callbackUrl=" + encodeURIComponent("/founder-matching/discover");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
