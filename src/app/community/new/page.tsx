@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
+import DashboardLayout from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -79,10 +80,13 @@ function NewPostForm() {
       const response = await fetch('/api/forum/categories');
       if (response.ok) {
         const data = await response.json();
+        console.log('Fetched categories:', data); // Debug log
         setCategories(data);
       } else if (response.status === 401) {
         router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/community/new"));
         return;
+      } else {
+        console.error('Failed to fetch categories:', response.status, response.statusText);
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -123,11 +127,14 @@ function NewPostForm() {
   // Show loading state while checking authentication
   if (status === "loading" || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
-        </Card>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-slate-600">Loading categories...</p>
+          </div>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -137,28 +144,26 @@ function NewPostForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <DashboardLayout>
+      <div className="p-6 max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button variant="ghost" asChild>
-            <Link href="/community" className="flex items-center gap-2">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Community
-            </Link>
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              Create New Post
-            </h1>
-            <p className="text-slate-600">Share your thoughts with the CoLaunchr community</p>
+        <div className="mb-8">
+          <div className="flex items-center gap-4 mb-4">
+            <Button variant="ghost" asChild>
+              <Link href="/community" className="flex items-center gap-2">
+                <ArrowLeft className="w-4 h-4" />
+                Back to Community
+              </Link>
+            </Button>
           </div>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Create New Post</h1>
+          <p className="text-slate-600">Share your thoughts with the CoLaunchr community</p>
         </div>
 
-        <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl">
+        <Card className="border-0 bg-white shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl text-center">New Community Post</CardTitle>
-            <p className="text-center text-slate-600">
+            <CardTitle className="text-xl">New Community Post</CardTitle>
+            <p className="text-slate-600">
               Connect with fellow founders and share your insights
             </p>
           </CardHeader>
@@ -170,8 +175,18 @@ function NewPostForm() {
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Select Category</h3>
                 
-                <div className="grid md:grid-cols-2 gap-3">
-                  {categories.map((category) => {
+                {categories.length === 0 ? (
+                  <div className="p-8 text-center border-2 border-dashed border-slate-300 rounded-xl">
+                    <MessageCircle className="w-12 h-12 mx-auto mb-4 text-slate-400" />
+                    <h4 className="text-lg font-semibold text-slate-700 mb-2">No Categories Available</h4>
+                    <p className="text-slate-500 mb-4">Categories are being set up. Please try again later.</p>
+                    <Button variant="outline" onClick={fetchCategories}>
+                      Retry
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {categories.map((category) => {
                     const IconComponent = categoryIcons[category.slug as keyof typeof categoryIcons] || MessageCircle;
                     const isSelected = selectedCategoryId === category.id;
                     
@@ -180,14 +195,14 @@ function NewPostForm() {
                         key={category.id}
                         className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
                           isSelected 
-                            ? 'border-purple-300 bg-purple-50' 
+                            ? 'border-blue-300 bg-blue-50' 
                             : 'border-slate-200 hover:border-slate-300'
                         }`}
                         onClick={() => setValue("categoryId", category.id, { shouldValidate: true })}
                       >
                         <div className="flex items-center gap-3">
                           <div 
-                            className={`p-2 rounded-lg ${isSelected ? 'bg-purple-500' : 'bg-slate-100'}`}
+                            className={`p-2 rounded-lg ${isSelected ? 'bg-blue-500' : 'bg-slate-100'}`}
                             style={isSelected ? {} : { backgroundColor: `${category.color}20` }}
                           >
                             <IconComponent 
@@ -205,7 +220,8 @@ function NewPostForm() {
                       </div>
                     );
                   })}
-                </div>
+                  </div>
+                )}
                 {errors.categoryId && <p className="text-red-500 text-sm">Please select a category</p>}
               </div>
 
@@ -268,7 +284,7 @@ function NewPostForm() {
                   type="submit" 
                   size="lg"
                   disabled={isSubmitting || !selectedCategoryId}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 px-8"
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-8"
                 >
                   {isSubmitting ? "Creating Post..." : "Create Post"}
                 </Button>
@@ -277,18 +293,21 @@ function NewPostForm() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
 
 export default function NewPostPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
-        </Card>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="mt-4 text-slate-600">Loading...</p>
+          </div>
+        </div>
+      </DashboardLayout>
     }>
       <NewPostForm />
     </Suspense>

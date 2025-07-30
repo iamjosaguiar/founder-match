@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
     }
 
-    const categories = await prisma.forumCategory.findMany({
+    let categories = await prisma.forumCategory.findMany({
       where: { isActive: true },
       orderBy: { order: 'asc' },
       include: {
@@ -41,6 +41,99 @@ export async function GET(request: NextRequest) {
         }
       }
     });
+
+    // If no categories exist, create default ones
+    if (categories.length === 0) {
+      console.log('No categories found, creating default categories...');
+      
+      const defaultCategories = [
+        {
+          name: 'General Discussion',
+          slug: 'general',
+          description: 'General discussions about startups and entrepreneurship',
+          color: '#6366f1',
+          icon: 'MessageCircle',
+          order: 1
+        },
+        {
+          name: 'Introductions',
+          slug: 'introductions',
+          description: 'Introduce yourself to the community',
+          color: '#10b981',
+          icon: 'Users',
+          order: 2
+        },
+        {
+          name: 'Idea Validation',
+          slug: 'idea-validation',
+          description: 'Get feedback on your startup ideas',
+          color: '#f59e0b',
+          icon: 'Lightbulb',
+          order: 3
+        },
+        {
+          name: 'Co-founder Search',
+          slug: 'co-founder-search',
+          description: 'Looking for co-founders or team members',
+          color: '#ef4444',
+          icon: 'Target',
+          order: 4
+        },
+        {
+          name: 'Technical Discussion',
+          slug: 'technical',
+          description: 'Technical questions and development discussions',
+          color: '#8b5cf6',
+          icon: 'Code',
+          order: 5
+        },
+        {
+          name: 'Business & Strategy',
+          slug: 'business',
+          description: 'Business strategy, operations, and growth',
+          color: '#0ea5e9',
+          icon: 'Briefcase',
+          order: 6
+        }
+      ];
+
+      // Create default categories
+      for (const category of defaultCategories) {
+        await prisma.forumCategory.create({
+          data: category
+        });
+      }
+
+      // Fetch categories again
+      categories = await prisma.forumCategory.findMany({
+        where: { isActive: true },
+        orderBy: { order: 'asc' },
+        include: {
+          posts: {
+            select: {
+              id: true,
+              title: true,
+              createdAt: true,
+              author: {
+                select: {
+                  name: true,
+                  profileImage: true
+                }
+              },
+              commentsCount: true,
+              likesCount: true
+            },
+            orderBy: { createdAt: 'desc' },
+            take: 3 // Latest 3 posts per category
+          },
+          _count: {
+            select: {
+              posts: true
+            }
+          }
+        }
+      });
+    }
 
     return NextResponse.json(categories);
   } catch (error) {
