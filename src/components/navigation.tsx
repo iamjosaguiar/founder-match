@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Users, User, LogOut, LayoutDashboard, Settings } from "lucide-react";
@@ -15,6 +16,23 @@ import UserAvatar from "@/components/user-avatar";
 
 export function Navigation() {
   const { data: session, status } = useSession();
+  const pathname = usePathname();
+
+  // Pages that should have navigation visible for authenticated users
+  const publicPages = [
+    '/',
+    '/founder-matching', // old marketing page
+    '/discover', // landing page
+    '/matches' // landing page
+  ];
+
+  // Don't show navigation on dashboard pages for authenticated users
+  const isDashboardPage = session && !publicPages.includes(pathname) && !pathname.startsWith('/auth');
+
+  // Hide navigation completely on dashboard pages
+  if (isDashboardPage) {
+    return null;
+  }
 
   return (
     <nav className="border-b border-slate-200/60 bg-white/70 backdrop-blur-md sticky top-0 z-50">
@@ -35,17 +53,14 @@ export function Navigation() {
             {status === "loading" ? (
               <div className="w-8 h-8 bg-slate-200 rounded-full animate-pulse" />
             ) : session ? (
-              // Authenticated Navigation
+              // Authenticated Navigation (only on public pages)
               <>
                 <div className="hidden md:flex items-center gap-3">
-                  <Button variant="ghost" asChild>
+                  <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
                     <Link href="/dashboard">
                       <LayoutDashboard className="w-4 h-4 mr-2" />
-                      Dashboard
+                      Go to Dashboard
                     </Link>
-                  </Button>
-                  <Button variant="ghost" asChild>
-                    <Link href="/community">Community</Link>
                   </Button>
                 </div>
 
@@ -72,19 +87,7 @@ export function Navigation() {
                     <DropdownMenuItem asChild>
                       <Link href="/dashboard" className="flex items-center gap-2 cursor-pointer">
                         <LayoutDashboard className="w-4 h-4" />
-                        Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="flex items-center gap-2 cursor-pointer">
-                        <User className="w-4 h-4" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/settings" className="flex items-center gap-2 cursor-pointer">
-                        <Settings className="w-4 h-4" />
-                        Settings
+                        Go to Dashboard
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

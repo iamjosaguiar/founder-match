@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import UserAvatar from "@/components/user-avatar";
@@ -19,7 +19,8 @@ import {
   FolderOpen,
   UserCheck,
   Briefcase,
-  Brain
+  Brain,
+  LogOut
 } from "lucide-react";
 
 type DashboardLayoutProps = {
@@ -271,12 +272,21 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* Bottom Actions */}
         {!sidebarCollapsed && (
-          <div className="p-4 border-t border-slate-200">
+          <div className="p-4 border-t border-slate-200 space-y-3">
             <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
               <Link href="/community/new">
                 <Plus className="w-4 h-4 mr-2" />
                 New Post
               </Link>
+            </Button>
+            
+            <Button 
+              variant="ghost" 
+              className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
+              onClick={() => signOut({ callbackUrl: "/" })}
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Sign Out
             </Button>
           </div>
         )}
