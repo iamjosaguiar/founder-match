@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import DashboardLayout from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -68,24 +69,28 @@ export default function ServiceProviderDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading dashboard...</h2>
-        </Card>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-12">
+          <Card className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Loading dashboard...</h2>
+          </Card>
+        </div>
+      </DashboardLayout>
     );
   }
 
   if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Profile not found</h2>
-          <Button asChild>
-            <Link href="/execution-network/join">Complete Setup</Link>
-          </Button>
-        </Card>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-12">
+          <Card className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Profile not found</h2>
+            <Button asChild>
+              <Link href="/execution-network/join">Complete Setup</Link>
+            </Button>
+          </Card>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -112,7 +117,7 @@ export default function ServiceProviderDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50">
+    <DashboardLayout>
       {/* Header */}
       <div className="border-b border-slate-200/60 bg-white/70 backdrop-blur-md">
         <div className="container mx-auto px-4 py-6 max-w-6xl">
@@ -332,6 +337,6 @@ export default function ServiceProviderDashboard() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }

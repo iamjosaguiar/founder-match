@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import DashboardLayout from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -222,11 +223,13 @@ export default function JoinExecutionNetwork() {
   // Show loading state while checking authentication
   if (status === "loading") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 flex items-center justify-center">
-        <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading...</h2>
-        </Card>
-      </div>
+      <DashboardLayout>
+        <div className="flex items-center justify-center py-12">
+          <Card className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Loading...</h2>
+          </Card>
+        </div>
+      </DashboardLayout>
     );
   }
 
@@ -236,8 +239,8 @@ export default function JoinExecutionNetwork() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <DashboardLayout>
+      <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <Button variant="ghost" asChild>
@@ -550,6 +553,6 @@ export default function JoinExecutionNetwork() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </DashboardLayout>
   );
 }
