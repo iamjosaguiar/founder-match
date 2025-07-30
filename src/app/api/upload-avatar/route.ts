@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,42 +23,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'File must be an image' }, { status: 400 });
     }
 
-    // Validate file size (5MB limit)
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ message: 'File size must be less than 5MB' }, { status: 400 });
+    // Validate file size (2MB limit for base64 storage)
+    if (file.size > 2 * 1024 * 1024) {
+      return NextResponse.json({ message: 'File size must be less than 2MB' }, { status: 400 });
     }
 
+    // Convert file to base64 data URL
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-
-    // Create unique filename
-    const fileExtension = file.name.split('.').pop();
-    const fileName = `${uuidv4()}.${fileExtension}`;
-    
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads', 'avatars');
-    try {
-      await mkdir(uploadsDir, { recursive: true });
-    } catch {
-      // Directory already exists, ignore error
-    }
-
-    // Save file
-    const filePath = join(uploadsDir, fileName);
-    await writeFile(filePath, buffer);
-
-    // Return the public URL
-    const avatarUrl = `/uploads/avatars/${fileName}`;
+    const base64 = buffer.toString('base64');
+    const dataUrl = `data:${file.type};base64,${base64}`;
 
     return NextResponse.json({ 
       message: 'Avatar uploaded successfully',
-      avatarUrl 
+      avatarUrl: dataUrl
     });
 
   } catch (error) {
     console.error('Avatar upload error:', error);
     return NextResponse.json({ 
-      message: 'Internal server error' 
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 }

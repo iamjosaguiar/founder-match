@@ -65,9 +65,12 @@ export default function SettingsPage() {
       body: formData,
     });
     if (!response.ok) {
-      throw new Error("Failed to upload avatar");
+      const errorData = await response.json();
+      console.error('Avatar upload failed:', errorData);
+      throw new Error(errorData.message || `HTTP ${response.status}: Failed to upload avatar`);
     }
     const data = await response.json();
+    console.log('Avatar uploaded successfully:', data);
     return data.avatarUrl;
   };
 
@@ -98,11 +101,13 @@ export default function SettingsPage() {
         // Force page reload to update avatar everywhere
         window.location.reload();
       } else {
-        throw new Error('Failed to update profile');
+        const errorData = await response.json();
+        console.error('Profile update failed:', errorData);
+        throw new Error(errorData.message || `HTTP ${response.status}: Failed to update profile`);
       }
     } catch (error) {
       console.error('Error updating avatar:', error);
-      alert('Failed to update profile photo. Please try again.');
+      alert(`Failed to update profile photo: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setUploading(false);
     }
