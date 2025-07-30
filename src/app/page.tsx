@@ -47,7 +47,7 @@ export default function Home() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4 border-slate-300 hover:bg-slate-50">
-              <Link href="/founder-matching">Find Co-Founders</Link>
+              <Link href="/co-founder-matching">Find Co-Founders</Link>
             </Button>
           </div>
 
@@ -99,7 +99,7 @@ export default function Home() {
                   AI-powered personality matching to find your perfect co-founder based on skills, values, and working style.
                 </p>
                 <Button asChild variant="outline" size="sm" className="group-hover:bg-blue-50 group-hover:border-blue-300">
-                  <Link href="/founder-matching">
+                  <Link href="/co-founder-matching">
                     Explore Matching
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
@@ -121,9 +121,12 @@ export default function Home() {
                 <p className="text-slate-600 leading-relaxed mb-4">
                   Curated advisory pods with experts in marketing, tech, legal, and finance. Your dream team on-demand.
                 </p>
-                <Badge className="bg-green-100 text-green-700 border-green-200">
-                  Coming Soon
-                </Badge>
+                <Button asChild variant="outline" size="sm" className="group-hover:bg-green-50 group-hover:border-green-300">
+                  <Link href="/colaunch-pods">
+                    Join Waitlist
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
 
@@ -142,23 +145,9 @@ export default function Home() {
                   Vetted technical teams, designers, and marketers. Build MVPs, run campaigns, and execute fast.
                 </p>
                 <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
-                    <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
-                      <Link href={getExecutionNetworkUrl("/execution-network/join")}>
-                        Join Network
-                        <ArrowRight className="w-4 h-4 ml-1" />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
-                      <Link href={getExecutionNetworkUrl("/execution-network/providers")}>
-                        Find Providers
-                        <ArrowRight className="w-4 h-4 ml-1" />
-                      </Link>
-                    </Button>
-                  </div>
-                  <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300 w-full">
-                    <Link href={getExecutionNetworkUrl("/execution-network/projects/new")}>
-                      Post Project
+                  <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
+                    <Link href="/execution-network">
+                      Learn More
                       <ArrowRight className="w-4 h-4 ml-1" />
                     </Link>
                   </Button>
@@ -181,8 +170,8 @@ export default function Home() {
                   Connect with fellow founders, share insights, and learn from the community's collective wisdom.
                 </p>
                 <Button asChild variant="outline" size="sm" className="group-hover:bg-emerald-50 group-hover:border-emerald-300">
-                  <Link href={getExecutionNetworkUrl("/community")}>
-                    Join Discussion
+                  <Link href="/community-hub">
+                    Learn More
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
                 </Button>
@@ -312,7 +301,7 @@ export default function Home() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-4">
-                <Link href="/founder-matching">
+                <Link href="/co-founder-matching">
                   Find Co-Founders
                 </Link>
               </Button>

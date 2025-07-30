@@ -48,6 +48,27 @@ export function Navigation() {
             </span>
           </Link>
 
+          {/* Navigation Links - only show on homepage and landing pages */}
+          {(pathname === '/' || pathname.includes('co-founder-matching') || pathname.includes('execution-network') || pathname.includes('community-hub') || pathname.includes('financing-hub') || pathname.includes('colaunch-pods')) && !session && (
+            <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
+              <Link href="/co-founder-matching" className="text-slate-600 hover:text-blue-600 transition-colors">
+                Co-Founder Matching
+              </Link>
+              <Link href="/execution-network" className="text-slate-600 hover:text-purple-600 transition-colors">
+                Execution Network
+              </Link>
+              <Link href="/community-hub" className="text-slate-600 hover:text-green-600 transition-colors">
+                Community
+              </Link>
+              <Link href="/financing-hub" className="text-slate-600 hover:text-indigo-600 transition-colors">
+                Financing
+              </Link>
+              <Link href="/colaunch-pods" className="text-slate-600 hover:text-orange-600 transition-colors">
+                Advisory Pods
+              </Link>
+            </div>
+          )}
+
           {/* Navigation Items */}
           <div className="flex items-center gap-4">
             {status === "loading" ? (
