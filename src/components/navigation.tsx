@@ -49,7 +49,7 @@ export function Navigation() {
           </Link>
 
           {/* Navigation Links - only show on homepage and landing pages */}
-          {(pathname === '/' || pathname.includes('co-founder-matching') || pathname.includes('execution-network') || pathname.includes('community-hub') || pathname.includes('financing-hub') || pathname.includes('colaunch-pods')) && !session && (
+          {(pathname === '/' || pathname.includes('co-founder-matching') || pathname.includes('execution-network') || pathname.includes('community-hub') || pathname.includes('financing-hub') || pathname.includes('colaunch-pods') || pathname.includes('growth-tracks')) && !session && (
             <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
               <Link href="/co-founder-matching" className="text-slate-600 hover:text-blue-600 transition-colors">
                 Co-Founder Matching
@@ -65,6 +65,9 @@ export function Navigation() {
               </Link>
               <Link href="/colaunch-pods" className="text-slate-600 hover:text-orange-600 transition-colors">
                 Advisory Pods
+              </Link>
+              <Link href="/growth-tracks" className="text-slate-600 hover:text-red-600 transition-colors">
+                Growth Tracks
               </Link>
             </div>
           )}

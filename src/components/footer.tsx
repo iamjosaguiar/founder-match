@@ -74,11 +74,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <div className="text-sm text-slate-500 flex items-center gap-2">
+                <Link href="/growth-tracks" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">
                   <TrendingUp className="w-3 h-3" />
                   Growth Tracks
-                  <span className="text-xs bg-slate-700 px-2 py-1 rounded">Soon</span>
-                </div>
+                  <span className="text-xs bg-slate-700 px-2 py-1 rounded ml-2">Soon</span>
+                </Link>
               </li>
               <li>
                 <Link href="/community-hub" className="text-sm hover:text-blue-400 transition-colors flex items-center gap-2">

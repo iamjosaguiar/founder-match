@@ -192,9 +192,12 @@ export default function Home() {
                 <p className="text-slate-600 leading-relaxed mb-4">
                   Structured programs from MVP to market. 1:1 coaching, group mentorship, and accountability.
                 </p>
-                <Badge className="bg-orange-100 text-orange-700 border-orange-200">
-                  Coming Soon
-                </Badge>
+                <Button asChild variant="outline" size="sm" className="group-hover:bg-orange-50 group-hover:border-orange-300">
+                  <Link href="/growth-tracks">
+                    Join Waitlist
+                    <ArrowRight className="w-4 h-4 ml-1" />
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
           </div>
