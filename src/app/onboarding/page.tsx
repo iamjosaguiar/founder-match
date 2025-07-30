@@ -11,6 +11,9 @@ import { Badge } from "@/components/ui/badge";
 // Using regular select elements instead of custom Select component
 
 type CompleteOnboardingData = {
+  // User Role Selection
+  userRoles: string[];
+  
   // Founder Journey & Agreements
   founderJourney: string;
   agreeTerms: boolean;
@@ -79,6 +82,14 @@ const workStyleOptions = [
   "Highly Structured", "Somewhat Structured", "Flexible", "Very Flexible"
 ];
 
+// User Role options
+const userRoleOptions = [
+  { value: "founder", label: "👤 Founder", description: "I'm building or want to build a startup" },
+  { value: "investor", label: "💰 Investor/Mentor", description: "I invest in or mentor startups" },
+  { value: "service_provider", label: "🛠️ Service Provider", description: "I provide services to startups (dev, design, marketing, etc.)" },
+  { value: "general", label: "🌐 Community Member", description: "I want to connect with the startup ecosystem" },
+];
+
 // Founder Journey options
 const founderJourneyOptions = [
   { value: "idea-cofounder", label: "I have an idea and want to find a co-founder" },
@@ -110,12 +121,29 @@ export default function Onboarding() {
   
   const { register, handleSubmit, formState: { errors }, watch, setValue, getValues } = useForm<CompleteOnboardingData>({
     defaultValues: {
+      userRoles: [],
       skills: []
     }
   });
 
   const watchedValues = watch();
   const skills = watchedValues.skills || [];
+  const userRoles = watchedValues.userRoles || [];
+
+  // Helper functions for role-based logic
+  const isFounder = userRoles.includes('founder');
+  const isInvestor = userRoles.includes('investor');
+  const isServiceProvider = userRoles.includes('service_provider');
+  const isGeneral = userRoles.includes('general');
+
+  // Role selection helpers
+  const toggleRole = (role: string) => {
+    const currentRoles = userRoles || [];
+    const newRoles = currentRoles.includes(role)
+      ? currentRoles.filter(r => r !== role)
+      : [...currentRoles, role];
+    setValue("userRoles", newRoles);
+  };
 
   const addSkill = () => {
     if (currentSkill.trim() && !skills.includes(currentSkill.trim())) {
@@ -137,8 +165,11 @@ export default function Onboarding() {
     (step - 4) * questionsPerPage
   );
 
-  // Step 0: Founder Journey & Agreements
-  const isStep0Complete = !!(
+  // Step 0: Role Selection
+  const isStep0Complete = userRoles.length > 0;
+  
+  // Step 1: Founder Journey & Agreements (only for founders)
+  const isStep1Complete = !isFounder || !!(
     watchedValues.founderJourney &&
     watchedValues.agreeTerms &&
     watchedValues.agreePrivacy &&
@@ -147,12 +178,17 @@ export default function Onboarding() {
     watchedValues.agreeAge
   );
   
-  const isStep1Complete = !!(watchedValues.title && watchedValues.bio);
-  const isStep2Complete = !!(skills.length > 0 && watchedValues.experience);
-  const isStep3Complete = !!watchedValues.lookingFor;
+  // Step 2: Basic Profile Information
+  const isStep2Complete = !!(watchedValues.title && watchedValues.bio);
   
-  // Step validation for business information
-  const isStep3BusinessComplete = !!(
+  // Step 3: Skills & Experience (mainly for founders and service providers)
+  const isStep3Complete = (!isFounder && !isServiceProvider) || !!(skills.length > 0 && watchedValues.experience);
+  
+  // Step 4: What You're Looking For (only for founders seeking co-founders)
+  const isStep4Complete = !isFounder || !!watchedValues.lookingFor;
+  
+  // Step 5: Business Information (only for founders)
+  const isStep5Complete = !isFounder || !!(
     watchedValues.industry && 
     watchedValues.stage && 
     watchedValues.location && 
@@ -163,96 +199,110 @@ export default function Onboarding() {
     watchedValues.isTechnical !== undefined
   );
 
+  // Calculate total steps based on user roles
+  const getStepCount = () => {
+    let stepCount = 3; // Role selection + Basic profile + Skills (if needed)
+    if (isFounder) {
+      stepCount += 3; // Founder journey + What you're looking for + Business info
+      stepCount += totalPsychPages; // Psychology assessment
+    }
+    return stepCount;
+  };
+
+  const totalSteps = getStepCount();
+
+  // Dynamic step completion logic
   let isCurrentStepComplete = false;
   if (step === 0) isCurrentStepComplete = isStep0Complete;
   else if (step === 1) isCurrentStepComplete = isStep1Complete;
   else if (step === 2) isCurrentStepComplete = isStep2Complete;
-  else if (step === 3) isCurrentStepComplete = isStep3BusinessComplete;
-  else if (step === 4) isCurrentStepComplete = isStep3Complete;
-  else if (step >= 5) {
-    // For psychology questions (steps 5+)
-    isCurrentStepComplete = currentPsychQuestions.every(q => 
+  else if (step === 3) isCurrentStepComplete = isStep3Complete;
+  else if (step === 4) isCurrentStepComplete = isStep4Complete;
+  else if (step === 5) isCurrentStepComplete = isStep5Complete;
+  else if (step >= 6 && isFounder) {
+    // For psychology questions (only for founders)
+    const psychStep = step - 6;
+    const currentPsychQs = psychQuestions.slice(
+      psychStep * questionsPerPage,
+      (psychStep + 1) * questionsPerPage
+    );
+    isCurrentStepComplete = currentPsychQs.every(q => 
       watchedValues[q.key as keyof CompleteOnboardingData]
     );
-    
-    // Debug psychology questions
-    if (step === 6) {
-      console.log('Step 6 Psychology Debug:', {
-        step,
-        currentPsychQuestions: currentPsychQuestions.map(q => q.key),
-        questionValues: currentPsychQuestions.map(q => ({
-          key: q.key,
-          value: watchedValues[q.key as keyof CompleteOnboardingData],
-          hasValue: !!watchedValues[q.key as keyof CompleteOnboardingData]
-        })),
-        isCurrentStepComplete,
-        watchedValues: JSON.stringify(watchedValues)
-      });
-    }
   }
 
   const onSubmit = async (data: CompleteOnboardingData) => {
     setIsSubmitting(true);
     try {
       // First submit profile data
+      const profileData: any = {
+        roles: data.userRoles, // Save user roles
+        title: data.title,
+        bio: data.bio,
+        skills: data.skills?.join(',') || '',
+        experience: data.experience,
+      };
+
+      // Add founder-specific data if user is a founder
+      if (data.userRoles.includes('founder')) {
+        profileData.founderJourney = data.founderJourney;
+        profileData.lookingFor = data.lookingFor;
+        profileData.industry = data.industry;
+        profileData.stage = data.stage;
+        profileData.location = data.location;
+        profileData.remoteOk = data.remoteOk;
+        profileData.timeCommitment = data.timeCommitment;
+        profileData.fundingStatus = data.fundingStatus;
+        profileData.companyGoals = data.companyGoals;
+        profileData.workStyle = data.workStyle;
+        profileData.isTechnical = data.isTechnical === 'true' || data.isTechnical === true;
+      }
+
       const profileResponse = await fetch('/api/update-profile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          title: data.title,
-          bio: data.bio,
-          skills: data.skills.join(','),
-          experience: data.experience,
-          lookingFor: data.lookingFor,
-          industry: data.industry,
-          stage: data.stage,
-          location: data.location,
-          remoteOk: data.remoteOk,
-          timeCommitment: data.timeCommitment,
-          fundingStatus: data.fundingStatus,
-          companyGoals: data.companyGoals,
-          workStyle: data.workStyle,
-          isTechnical: data.isTechnical === 'true' || data.isTechnical === true,
-        }),
+        body: JSON.stringify(profileData),
       });
 
       if (!profileResponse.ok) {
         throw new Error('Failed to update profile');
       }
 
-      // Then submit psychology quiz - ensure all values are numbers
-      const quizData = {
-        openness1: Number(data.openness1),
-        openness2: Number(data.openness2),
-        conscientiousness1: Number(data.conscientiousness1),
-        conscientiousness2: Number(data.conscientiousness2),
-        extraversion1: Number(data.extraversion1),
-        extraversion2: Number(data.extraversion2),
-        agreeableness1: Number(data.agreeableness1),
-        agreeableness2: Number(data.agreeableness2),
-        neuroticism1: Number(data.neuroticism1),
-        neuroticism2: Number(data.neuroticism2),
-        riskTolerance1: Number(data.riskTolerance1),
-        riskTolerance2: Number(data.riskTolerance2),
-      };
+      // Submit psychology quiz only for founders
+      if (data.userRoles.includes('founder')) {
+        const quizData = {
+          openness1: Number(data.openness1),
+          openness2: Number(data.openness2),
+          conscientiousness1: Number(data.conscientiousness1),
+          conscientiousness2: Number(data.conscientiousness2),
+          extraversion1: Number(data.extraversion1),
+          extraversion2: Number(data.extraversion2),
+          agreeableness1: Number(data.agreeableness1),
+          agreeableness2: Number(data.agreeableness2),
+          neuroticism1: Number(data.neuroticism1),
+          neuroticism2: Number(data.neuroticism2),
+          riskTolerance1: Number(data.riskTolerance1),
+          riskTolerance2: Number(data.riskTolerance2),
+        };
 
-      console.log('Submitting quiz data:', quizData);
-      const quizResponse = await fetch('/api/submit-quiz', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(quizData),
-      });
-      
-      console.log('Quiz response status:', quizResponse.status);
-      if (quizResponse.ok) {
-        const quizResult = await quizResponse.json();
-        console.log('Quiz submitted successfully:', quizResult);
-        router.push('/discover');
-      } else {
-        const error = await quizResponse.json();
-        console.error('Quiz submission failed:', error);
-        alert(`Error: ${error.message || 'Failed to submit assessment'}`);
+        console.log('Submitting quiz data:', quizData);
+        const quizResponse = await fetch('/api/submit-quiz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(quizData),
+        });
+        
+        console.log('Quiz response status:', quizResponse.status);
+        if (!quizResponse.ok) {
+          const error = await quizResponse.json();
+          console.error('Quiz submission failed:', error);
+          alert(`Error: ${error.message || 'Failed to submit assessment'}`);
+          return;
+        }
       }
+      
+      // Redirect to dashboard on success
+      router.push('/dashboard');
     } catch (error) {
       console.error('Onboarding error:', error);
       alert('An error occurred. Please try again.');
@@ -267,19 +317,27 @@ export default function Onboarding() {
     
     if (step === 0) {
       dataToSave = {
+        roles: currentData.userRoles
+      };
+    } else if (step === 1 && currentData.userRoles?.includes('founder')) {
+      dataToSave = {
         founderJourney: currentData.founderJourney
       };
-    } else if (step === 1) {
+    } else if (step === 2) {
       dataToSave = {
         title: currentData.title,
         bio: currentData.bio
       };
-    } else if (step === 2) {
+    } else if (step === 3 && (currentData.userRoles?.includes('founder') || currentData.userRoles?.includes('service_provider'))) {
       dataToSave = {
         skills: currentData.skills?.join(',') || '',
         experience: currentData.experience
       };
-    } else if (step === 3) {
+    } else if (step === 4 && currentData.userRoles?.includes('founder')) {
+      dataToSave = {
+        lookingFor: currentData.lookingFor
+      };
+    } else if (step === 5 && currentData.userRoles?.includes('founder')) {
       dataToSave = {
         industry: currentData.industry,
         stage: currentData.stage,
@@ -290,10 +348,6 @@ export default function Onboarding() {
         companyGoals: currentData.companyGoals,
         workStyle: currentData.workStyle,
         isTechnical: currentData.isTechnical === 'true' || currentData.isTechnical === true
-      };
-    } else if (step === 4) {
-      dataToSave = {
-        lookingFor: currentData.lookingFor
       };
     }
     
@@ -343,7 +397,6 @@ export default function Onboarding() {
     }
   };
 
-  const totalSteps = 5 + totalPsychPages; // Founder Journey + Profile + Business + Psychology + Summary
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-8">
@@ -373,8 +426,43 @@ export default function Onboarding() {
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               
-              {/* Step 0: Founder Journey & Agreements */}
+              {/* Step 0: Role Selection */}
               {step === 0 && (
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-center">Choose Your Role(s)</h3>
+                  <p className="text-center text-gray-600">Select all that apply to you:</p>
+                  
+                  <div className="grid gap-4">
+                    {userRoleOptions.map((role) => (
+                      <div
+                        key={role.value}
+                        className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                          userRoles.includes(role.value)
+                            ? 'border-blue-300 bg-blue-50'
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => toggleRole(role.value)}
+                      >
+                        <div className="flex items-start gap-3">
+                          <input
+                            type="checkbox"
+                            checked={userRoles.includes(role.value)}
+                            onChange={() => toggleRole(role.value)}
+                            className="w-5 h-5 text-blue-600 mt-1"
+                          />
+                          <div>
+                            <h4 className="font-medium text-gray-900">{role.label}</h4>
+                            <p className="text-sm text-gray-600 mt-1">{role.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 1: Founder Journey & Agreements (only for founders) */}
+              {step === 1 && isFounder && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold text-center">Welcome to CoLaunchr</h3>
                   
@@ -468,8 +556,8 @@ export default function Onboarding() {
                 </div>
               )}
 
-              {/* Step 1: Basic Information */}
-              {step === 1 && (
+              {/* Step 2: Basic Information */}
+              {step === 2 && (
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold">Basic Information</h3>
                   <div>
@@ -496,8 +584,8 @@ export default function Onboarding() {
                 </div>
               )}
 
-              {/* Step 2: Skills & Experience */}
-              {step === 2 && (
+              {/* Step 3: Skills & Experience */}
+              {(step === 3 && (isFounder || isServiceProvider)) && (
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold">Skills & Experience</h3>
                   <div>
@@ -538,8 +626,26 @@ export default function Onboarding() {
                 </div>
               )}
 
-              {/* Step 3: Business Information */}
-              {step === 3 && (
+              {/* Step 4: What You're Looking For (only for founders) */}
+              {step === 4 && isFounder && (
+                <div className="space-y-4">
+                  <h3 className="text-xl font-semibold">What You&apos;re Looking For</h3>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Ideal Co-Founder</label>
+                    <Textarea
+                      {...register("lookingFor", { required: "Please describe your ideal co-founder" })}
+                      placeholder="Describe your ideal co-founder: skills, experience, personality traits..."
+                      rows={4}
+                    />
+                    {errors.lookingFor && (
+                      <p className="text-red-500 text-sm mt-1">{errors.lookingFor.message}</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Step 5: Business Information (only for founders) */}
+              {step === 5 && isFounder && (
                 <div className="space-y-4">
                   <h3 className="text-xl font-semibold">Business Information</h3>
                   
@@ -656,29 +762,12 @@ export default function Onboarding() {
                 </div>
               )}
 
-              {/* Step 4: What You're Looking For */}
-              {step === 4 && (
-                <div className="space-y-4">
-                  <h3 className="text-xl font-semibold">What You&apos;re Looking For</h3>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Ideal Co-Founder</label>
-                    <Textarea
-                      {...register("lookingFor", { required: "Please describe your ideal co-founder" })}
-                      placeholder="Describe your ideal co-founder: skills, experience, personality traits..."
-                      rows={4}
-                    />
-                    {errors.lookingFor && (
-                      <p className="text-red-500 text-sm mt-1">{errors.lookingFor.message}</p>
-                    )}
-                  </div>
-                </div>
-              )}
 
-              {/* Steps 5+: Psychology Questions */}
-              {step >= 5 && (
+              {/* Steps 6+: Psychology Questions (only for founders) */}
+              {step >= 6 && isFounder && (
                 <div className="space-y-6">
                   <h3 className="text-xl font-semibold">
-                    Personality Assessment - Part {step - 4} of {totalPsychPages}
+                    Personality Assessment - Part {step - 5} of {totalPsychPages}
                   </h3>
                   <p className="text-gray-600 text-center mb-6">
                     Rate each statement from 1 (Strongly Disagree) to 5 (Strongly Agree)

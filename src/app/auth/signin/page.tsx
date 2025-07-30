@@ -34,21 +34,10 @@ export default function SignIn() {
       if (result?.error) {
         setError("Invalid email or password");
       } else {
-        // Get the updated session to check quiz completion
+        // Get the updated session and redirect to dashboard
         const session = await getSession();
         if (session) {
-          // Check if user has completed quiz
-          const response = await fetch(`/api/user-status`);
-          if (response.ok) {
-            const userStatus = await response.json();
-            if (userStatus.quizCompleted) {
-              router.push("/discover");
-            } else {
-              router.push("/onboarding");
-            }
-          } else {
-            router.push("/onboarding");
-          }
+          router.push("/dashboard");
         }
       }
     } catch {

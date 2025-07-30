@@ -19,10 +19,9 @@ export async function GET() {
       where: { id: session.user.id },
       select: {
         id: true,
-        email: true,
-        name: true,
         quizCompleted: true,
-        personalityProfile: true,
+        roles: true,
+        createdAt: true,
       },
     });
 
@@ -34,8 +33,9 @@ export async function GET() {
     }
 
     return NextResponse.json({
-      user,
       quizCompleted: user.quizCompleted,
+      roles: user.roles,
+      isNewUser: Date.now() - user.createdAt.getTime() < 24 * 60 * 60 * 1000, // Less than 24 hours old
     });
 
   } catch (error) {

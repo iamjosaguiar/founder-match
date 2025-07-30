@@ -13,21 +13,52 @@ type SignUpForm = {
   email: string;
   password: string;
   confirmPassword: string;
+  profileImage?: File;
 };
 
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const router = useRouter();
   const { register, handleSubmit, formState: { errors }, watch } = useForm<SignUpForm>();
 
   const password = watch("password");
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        setError('Please select a valid image file');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setError('Image size must be less than 5MB');
+        return;
+      }
+      
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+      setError(''); // Clear any previous errors
+    }
+  };
 
   const onSubmit = async (data: SignUpForm) => {
     setIsLoading(true);
     setError("");
 
     try {
+      // First create the user account
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -41,6 +72,41 @@ export default function SignUp() {
       });
 
       if (response.ok) {
+        // If image was selected, upload it after account creation
+        if (selectedImage) {
+          try {
+            const formData = new FormData();
+            formData.append('image', selectedImage);
+            
+            // First sign in to get authenticated
+            const signInResponse = await fetch('/api/auth/signin', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: data.email,
+                password: data.password,
+              }),
+            });
+
+            if (signInResponse.ok) {
+              // Now upload the avatar
+              const avatarResponse = await fetch("/api/upload-avatar", {
+                method: "POST",
+                body: formData,
+              });
+              
+              if (!avatarResponse.ok) {
+                console.error('Failed to upload profile image, but account was created');
+              }
+            }
+          } catch (imageError) {
+            console.error('Failed to upload profile image:', imageError);
+            // Don't fail the signup process if image upload fails
+          }
+        }
+        
         router.push("/auth/signin?message=Account created successfully");
       } else {
         const errorData = await response.json();
@@ -86,6 +152,44 @@ export default function SignUp() {
                 {errors.name && (
                   <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
                 )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">Profile Photo (Optional)</label>
+                <div className="flex items-center gap-4">
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img 
+                        src={imagePreview} 
+                        alt="Profile preview" 
+                        className="w-16 h-16 rounded-full object-cover border-2 border-gray-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImagePreview(null);
+                          setSelectedImage(null);
+                        }}
+                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center">
+                      <span className="text-gray-400 text-xs">Photo</span>
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="cursor-pointer"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">JPG, PNG or GIF. Max 5MB.</p>
+                  </div>
+                </div>
               </div>
 
               <div>
