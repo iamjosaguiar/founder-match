@@ -2,17 +2,25 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import DashboardLayout from "@/components/dashboard-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Brain, Users, Zap, Target, TrendingUp, Rocket, Search, Heart } from "lucide-react";
+import { ArrowRight, Brain, Users, Zap, Target, TrendingUp, Rocket, Search, Heart, CheckCircle } from "lucide-react";
+
+type UserProfile = {
+  quizCompleted: boolean;
+  quizScores?: any;
+  personalityProfile?: any;
+};
 
 export default function FounderMatchingPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -20,9 +28,24 @@ export default function FounderMatchingPage() {
       router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/founder-matching"));
       return;
     }
+    fetchUserProfile();
   }, [session, status, router]);
 
-  if (status === "loading") {
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      if (response.ok) {
+        const data = await response.json();
+        setUserProfile(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (status === "loading" || loading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-full">
@@ -83,15 +106,29 @@ export default function FounderMatchingPage() {
           <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg">
             <CardContent className="p-6 text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <Brain className="w-8 h-8 text-white" />
+                {userProfile?.quizCompleted ? (
+                  <CheckCircle className="w-8 h-8 text-white" />
+                ) : (
+                  <Brain className="w-8 h-8 text-white" />
+                )}
               </div>
               <h3 className="text-xl font-bold text-purple-900 mb-2">Assessment</h3>
-              <p className="text-purple-700 text-sm mb-4">Complete your personality assessment</p>
+              <p className="text-purple-700 text-sm mb-4">
+                {userProfile?.quizCompleted ? 
+                  "View your completed personality assessment" : 
+                  "Complete your personality assessment"
+                }
+              </p>
               <Button asChild className="w-full bg-purple-600 hover:bg-purple-700">
                 <Link href="/founder-matching/assessment">
-                  Take Assessment
+                  {userProfile?.quizCompleted ? "View Assessment" : "Take Assessment"}
                 </Link>
               </Button>
+              {userProfile?.quizCompleted && (
+                <Badge className="mt-2 bg-green-100 text-green-800 border-green-200">
+                  ✅ Completed
+                </Badge>
+              )}
             </CardContent>
           </Card>
         </div>
