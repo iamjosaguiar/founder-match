@@ -22,8 +22,7 @@ import {
   Brain,
   LogOut,
   TrendingUp,
-  Building2,
-  BookOpen
+  Building2
 } from "lucide-react";
 
 type DashboardLayoutProps = {
@@ -106,11 +105,6 @@ const navigation = [
         name: "Investor Network",
         href: "/financing/investors",
         icon: Users
-      },
-      {
-        name: "Learning Hub",
-        href: "/financing/learn",
-        icon: BookOpen
       }
     ]
   },

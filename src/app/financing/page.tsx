@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { 
   Building2, 
   Users, 
-  BookOpen, 
   TrendingUp, 
   Search, 
   Plus,
@@ -80,7 +79,7 @@ export default function FinancingPage() {
         </Card>
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-4 gap-6 mb-12">
+        <div className="grid md:grid-cols-3 gap-6 mb-12">
           <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg">
             <CardContent className="p-6 text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -126,20 +125,6 @@ export default function FinancingPage() {
             </CardContent>
           </Card>
 
-          <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-orange-50 to-orange-100 shadow-lg">
-            <CardContent className="p-6 text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <BookOpen className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold text-orange-900 mb-2">Learning Hub</h3>
-              <p className="text-orange-700 text-sm mb-4">Guides, resources, and best practices</p>
-              <Button asChild className="w-full bg-orange-600 hover:bg-orange-700">
-                <Link href="/financing/learn">
-                  Start Learning
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Search Bar */}
@@ -236,26 +221,6 @@ export default function FinancingPage() {
               </CardContent>
             </Card>
 
-            {/* Quick Resources */}
-            <Card className="border-0 bg-white shadow-lg">
-              <CardHeader>
-                <CardTitle className="text-lg">Quick Resources</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <Link href="/financing/learn/fundraising-basics" className="block p-3 hover:bg-slate-50 rounded-lg transition-colors">
-                  <h4 className="font-medium text-sm">Fundraising Basics</h4>
-                  <p className="text-xs text-slate-600">Essential guide for first-time founders</p>
-                </Link>
-                <Link href="/financing/learn/pitch-deck-guide" className="block p-3 hover:bg-slate-50 rounded-lg transition-colors">
-                  <h4 className="font-medium text-sm">Pitch Deck Guide</h4>
-                  <p className="text-xs text-slate-600">Create compelling investor presentations</p>
-                </Link>
-                <Link href="/financing/learn/valuation-methods" className="block p-3 hover:bg-slate-50 rounded-lg transition-colors">
-                  <h4 className="font-medium text-sm">Valuation Methods</h4>
-                  <p className="text-xs text-slate-600">Understanding startup valuations</p>
-                </Link>
-              </CardContent>
-            </Card>
 
             {/* Success Story Highlight */}
             <Card className="border-0 bg-gradient-to-br from-green-50 to-emerald-50 shadow-lg">
