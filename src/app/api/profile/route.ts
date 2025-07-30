@@ -87,8 +87,12 @@ export async function PATCH(request: NextRequest) {
       industry, stage, location, remoteOk, timeCommitment, fundingStatus, companyGoals, workStyle, isTechnical 
     } = await request.json();
 
-    // Validate required fields
-    if (!name || !title || !bio || !experience || !lookingFor) {
+    // For avatar-only updates, we don't require all fields
+    const isAvatarOnlyUpdate = (avatar || profileImage) && 
+      (!title && !bio && !experience && !lookingFor);
+
+    // Validate required fields only for full profile updates
+    if (!isAvatarOnlyUpdate && (!name || !title || !bio || !experience || !lookingFor)) {
       return NextResponse.json({ 
         message: 'Basic profile fields are required' 
       }, { status: 400 });
@@ -101,29 +105,41 @@ export async function PATCH(request: NextRequest) {
 
     // Update user profile
     console.log('Attempting to update user profile...');
+    
+    // Build update data object, only including provided fields
+    const updateData: any = {
+      updatedAt: new Date(),
+    };
+
+    // Always update name if provided
+    if (name) updateData.name = name;
+    
+    // For avatar updates
+    if (avatar) updateData.image = avatar;
+    if (profileImage || avatar) updateData.profileImage = profileImage || avatar;
+    
+    // For full profile updates
+    if (!isAvatarOnlyUpdate) {
+      if (title) updateData.title = title;
+      if (bio) updateData.bio = bio;
+      if (skills) updateData.skills = skills;
+      if (experience) updateData.experience = experience;
+      if (lookingFor) updateData.lookingFor = lookingFor;
+      if (projectLinks) updateData.projectLinks = projectLinks;
+      if (industry) updateData.industry = industry;
+      if (stage) updateData.stage = stage;
+      if (location) updateData.location = location;
+      if (remoteOk !== undefined) updateData.remoteOk = remoteOk;
+      if (timeCommitment) updateData.timeCommitment = timeCommitment;
+      if (fundingStatus) updateData.fundingStatus = fundingStatus;
+      if (companyGoals) updateData.companyGoals = companyGoals;
+      if (workStyle) updateData.workStyle = workStyle;
+      if (isTechnical !== undefined) updateData.isTechnical = isTechnical;
+    }
+
     const updatedUser = await prisma.user.update({
       where: { email: session.user.email },
-      data: {
-        name,
-        title,
-        bio,
-        skills, // Store as comma-separated string
-        experience,
-        lookingFor,
-        projectLinks, // Store as JSON string
-        image: avatar, // Store avatar URL in image field
-        profileImage: profileImage || avatar, // Professional profile photo
-        industry,
-        stage,
-        location,
-        remoteOk: remoteOk || false,
-        timeCommitment,
-        fundingStatus,
-        companyGoals,
-        workStyle,
-        isTechnical,
-        updatedAt: new Date(),
-      },
+      data: updateData,
       select: {
         id: true,
         name: true,

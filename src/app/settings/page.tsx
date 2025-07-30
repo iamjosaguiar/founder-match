@@ -78,7 +78,7 @@ export default function SettingsPage() {
     try {
       const avatarUrl = await uploadAvatar(avatarFile);
       
-      // Update profile with new avatar
+      // Update profile with new avatar (send only necessary fields)
       const response = await fetch('/api/profile', {
         method: 'PATCH',
         headers: {
@@ -86,12 +86,6 @@ export default function SettingsPage() {
         },
         body: JSON.stringify({
           name: session?.user?.name || '',
-          title: '',
-          bio: '',
-          skills: '',
-          experience: '',
-          lookingFor: '',
-          projectLinks: '',
           avatar: avatarUrl,
           profileImage: avatarUrl
         }),
