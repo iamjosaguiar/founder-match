@@ -75,8 +75,10 @@ export default function JoinInvestorNetworkPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<InvestorProfileData>({
+  const { register, handleSubmit, formState: { errors }, watch, setValue, reset } = useForm<InvestorProfileData>({
     defaultValues: {
       expertise: [],
       interestedIn: [],
@@ -98,7 +100,42 @@ export default function JoinInvestorNetworkPage() {
       router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/financing/investors/join"));
       return;
     }
+    fetchUserProfile();
   }, [session, status, router]);
+
+  const fetchUserProfile = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      if (response.ok) {
+        const profile = await response.json();
+        setUserProfile(profile);
+        
+        // Pre-populate form with existing profile data
+        const existingData = {
+          organization: "", // Will be filled manually
+          title: profile.title || "",
+          bio: profile.bio || "",
+          website: "", // These fields don't exist in current user profile
+          linkedin: "",
+          calendlyUrl: "",
+          expertise: Array.isArray(profile.skills) ? profile.skills : [],
+          interestedIn: profile.industry ? [profile.industry] : [],
+          stageInterest: profile.stage ? [profile.stage] : [],
+          geographic: profile.location ? [profile.location] : [],
+          profileType: "investor", // Default
+          publicProfile: true,
+          openToContact: true
+        };
+        
+        // Update form with existing data
+        reset(existingData);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const onSubmit = async (data: InvestorProfileData) => {
     setIsSubmitting(true);
@@ -126,13 +163,13 @@ export default function JoinInvestorNetworkPage() {
     setValue(fieldName, newArray);
   };
 
-  if (status === "loading") {
+  if (status === "loading" || loading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-slate-600">Loading...</p>
+            <p className="mt-4 text-slate-600">Loading your profile...</p>
           </div>
         </div>
       </DashboardLayout>
@@ -162,6 +199,24 @@ export default function JoinInvestorNetworkPage() {
 
         {/* Legal Disclaimer */}
         <FinancingDisclaimer className="mb-6" />
+
+        {/* Profile Sync Indicator */}
+        {userProfile && (
+          <Card className="border-0 bg-green-50 shadow-sm mb-6">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm">
+                  <p className="font-medium text-green-800 mb-1">Profile Information Synced</p>
+                  <p className="text-green-700">
+                    We've pre-filled some fields with information from your existing profile. 
+                    Please review and update as needed for your investor profile.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Network Benefits */}
         <Card className="border-0 bg-gradient-to-br from-blue-50 to-indigo-50 shadow-lg mb-6">
@@ -235,7 +290,10 @@ export default function JoinInvestorNetworkPage() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-2">Title *</label>
+                  <label className="block text-sm font-medium mb-2">
+                    Title * 
+                    {userProfile?.title && <span className="text-green-600 text-xs ml-1">(synced from profile)</span>}
+                  </label>
                   <Input
                     {...register("title", { required: "Title is required" })}
                     placeholder="Partner, Angel Investor, Former CEO, etc."
@@ -247,7 +305,10 @@ export default function JoinInvestorNetworkPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">Professional Bio *</label>
+                <label className="block text-sm font-medium mb-2">
+                  Professional Bio *
+                  {userProfile?.bio && <span className="text-green-600 text-xs ml-1">(synced from profile)</span>}
+                </label>
                 <Textarea
                   {...register("bio", { required: "Bio is required" })}
                   placeholder="Describe your background, investment experience, and what you bring to founders..."
@@ -263,7 +324,12 @@ export default function JoinInvestorNetworkPage() {
           {/* Expertise */}
           <Card className="border-0 bg-white shadow-lg">
             <CardHeader>
-              <CardTitle>Areas of Expertise</CardTitle>
+              <CardTitle>
+                Areas of Expertise
+                {userProfile?.skills && Array.isArray(userProfile.skills) && userProfile.skills.length > 0 && (
+                  <span className="text-green-600 text-xs ml-2">(skills synced from profile)</span>
+                )}
+              </CardTitle>
               <p className="text-sm text-slate-600">Select your key areas of expertise (max 6)</p>
             </CardHeader>
             <CardContent>
@@ -300,7 +366,12 @@ export default function JoinInvestorNetworkPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div>
-                <label className="block text-sm font-medium mb-3">Industries</label>
+                <label className="block text-sm font-medium mb-3">
+                  Industries
+                  {userProfile?.industry && (
+                    <span className="text-green-600 text-xs ml-2">(industry synced from profile)</span>
+                  )}
+                </label>
                 <div className="grid md:grid-cols-4 gap-3">
                   {industryOptions.map((industry) => (
                     <div
@@ -319,7 +390,12 @@ export default function JoinInvestorNetworkPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3">Stages</label>
+                <label className="block text-sm font-medium mb-3">
+                  Stages
+                  {userProfile?.stage && (
+                    <span className="text-green-600 text-xs ml-2">(stage synced from profile)</span>
+                  )}
+                </label>
                 <div className="grid md:grid-cols-5 gap-3">
                   {stageOptions.map((stage) => (
                     <div
@@ -338,7 +414,12 @@ export default function JoinInvestorNetworkPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3">Geographic Preferences</label>
+                <label className="block text-sm font-medium mb-3">
+                  Geographic Preferences
+                  {userProfile?.location && (
+                    <span className="text-green-600 text-xs ml-2">(location synced from profile)</span>
+                  )}
+                </label>
                 <div className="grid md:grid-cols-4 gap-3">
                   {geographicOptions.map((geo) => (
                     <div
