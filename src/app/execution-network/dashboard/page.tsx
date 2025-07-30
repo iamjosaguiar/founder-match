@@ -52,11 +52,8 @@ export default function ServiceProviderDashboard() {
       if (response.ok) {
         const data = await response.json();
         
-        // Check if user has service_provider role
-        if (!data.roles?.includes('service_provider')) {
-          router.push('/execution-network/join');
-          return;
-        }
+        // Set profile regardless of role - we'll show different dashboards
+        // No redirect needed - we'll show appropriate content based on role
         
         setProfile(data);
       }
@@ -116,6 +113,9 @@ export default function ServiceProviderDashboard() {
     return map[exp] || exp;
   };
 
+  const isServiceProvider = profile?.roles?.includes('service_provider');
+  const isFounder = !isServiceProvider; // Default to founder if not service provider
+
   return (
     <DashboardLayout>
       {/* Header */}
@@ -124,9 +124,11 @@ export default function ServiceProviderDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                Service Provider Dashboard
+                {isServiceProvider ? "Service Provider Dashboard" : "Execution Network Dashboard"}
               </h1>
-              <p className="text-slate-600">Manage your execution network profile</p>
+              <p className="text-slate-600">
+                {isServiceProvider ? "Manage your execution network profile" : "Manage your projects and find expert providers"}
+              </p>
             </div>
             <div className="flex items-center gap-3">
               <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
@@ -146,8 +148,77 @@ export default function ServiceProviderDashboard() {
 
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         
-        {/* Profile Overview */}
-        <Card className="mb-8 border-0 bg-white/80 backdrop-blur-sm shadow-xl">
+        {isFounder ? (
+          // Founder Dashboard Content
+          <div className="space-y-8">
+            {/* Quick Actions */}
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                    <Plus className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Post New Project</h3>
+                  <p className="text-slate-600 text-sm mb-4">Get expert help for your startup</p>
+                  <Button asChild className="w-full">
+                    <Link href="/execution-network/projects/new">Post Project</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                    <Search className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">Find Providers</h3>
+                  <p className="text-slate-600 text-sm mb-4">Browse vetted service providers</p>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link href="/execution-network/providers">Browse Providers</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
+                    <FolderOpen className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="font-bold text-lg mb-2">My Projects</h3>
+                  <p className="text-slate-600 text-sm mb-4">Manage your active projects</p>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link href="/execution-network/projects">View Projects</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Recent Activity */}
+            <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium">Welcome to Execution Network!</p>
+                      <p className="text-xs text-slate-500">Start by posting your first project or browsing providers</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        ) : (
+          // Service Provider Dashboard Content
+          <div className="space-y-8">
+            {/* Profile Overview */}
+            <Card className="mb-8 border-0 bg-white/80 backdrop-blur-sm shadow-xl">
           <CardContent className="p-8">
             <div className="flex flex-col md:flex-row items-start gap-6">
               <div className="flex items-center gap-4">
@@ -336,6 +407,8 @@ export default function ServiceProviderDashboard() {
             </div>
           </CardContent>
         </Card>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );

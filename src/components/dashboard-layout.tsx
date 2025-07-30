@@ -125,6 +125,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   // Persist sidebar state in localStorage
   useEffect(() => {
