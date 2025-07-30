@@ -23,7 +23,13 @@ export function Navigation() {
     '/',
     '/founder-matching', // old marketing page
     '/discover', // landing page
-    '/matches' // landing page
+    '/matches', // landing page
+    '/co-founder-matching', // Co-Founder Matching landing page
+    '/execution-network', // Execution Network landing page
+    '/community-hub', // Community Hub landing page
+    '/financing-hub', // Financing Hub landing page
+    '/colaunch-pods', // CoLaunch Pods landing page
+    '/growth-tracks' // Growth Tracks landing page
   ];
 
   // Don't show navigation on dashboard pages for authenticated users
