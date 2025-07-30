@@ -20,7 +20,10 @@ import {
   UserCheck,
   Briefcase,
   Brain,
-  LogOut
+  LogOut,
+  TrendingUp,
+  Building2,
+  BookOpen
 } from "lucide-react";
 
 type DashboardLayoutProps = {
@@ -82,6 +85,32 @@ const navigation = [
         name: "My Dashboard",
         href: "/execution-network/dashboard",
         icon: Briefcase
+      }
+    ]
+  },
+  {
+    name: "Financing Hub",
+    icon: TrendingUp,
+    children: [
+      {
+        name: "Browse Companies",
+        href: "/financing/browse",
+        icon: Search
+      },
+      {
+        name: "Create Showcase", 
+        href: "/financing/showcase/create",
+        icon: Building2
+      },
+      {
+        name: "Investor Network",
+        href: "/financing/investors",
+        icon: Users
+      },
+      {
+        name: "Learning Hub",
+        href: "/financing/learn",
+        icon: BookOpen
       }
     ]
   },
