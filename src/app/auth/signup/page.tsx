@@ -35,9 +35,9 @@ export default function SignUp() {
         return;
       }
       
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setError('Image size must be less than 5MB');
+      // Validate file size (max 1MB to prevent header size issues)
+      if (file.size > 1 * 1024 * 1024) {
+        setError('Image size must be less than 1MB');
         return;
       }
       
@@ -78,19 +78,15 @@ export default function SignUp() {
             const formData = new FormData();
             formData.append('image', selectedImage);
             
-            // First sign in to get authenticated
-            const signInResponse = await fetch('/api/auth/signin', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                email: data.email,
-                password: data.password,
-              }),
+            // Use NextAuth signIn instead of fetch to properly handle session
+            const { signIn } = await import('next-auth/react');
+            const signInResult = await signIn('credentials', {
+              email: data.email,
+              password: data.password,
+              redirect: false,
             });
 
-            if (signInResponse.ok) {
+            if (signInResult && !signInResult.error) {
               // Now upload the avatar
               const avatarResponse = await fetch("/api/upload-avatar", {
                 method: "POST",
@@ -187,7 +183,7 @@ export default function SignUp() {
                       onChange={handleImageChange}
                       className="cursor-pointer"
                     />
-                    <p className="text-xs text-gray-500 mt-1">JPG, PNG or GIF. Max 5MB.</p>
+                    <p className="text-xs text-gray-500 mt-1">JPG, PNG or GIF. Max 1MB.</p>
                   </div>
                 </div>
               </div>

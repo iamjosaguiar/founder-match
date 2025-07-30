@@ -19,6 +19,13 @@ export const authOptions: AuthOptions = {
         const user = await prisma.user.findUnique({
           where: {
             email: credentials.email
+          },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
+            password: true
           }
         });
 
@@ -35,17 +42,21 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
+        // Return minimal user data to reduce JWT size (exclude image to prevent large headers)
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          image: user.image,
         };
       }
     })
   ],
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+    maxAge: 24 * 60 * 60, // 24 hours
+  },
+  jwt: {
+    maxAge: 24 * 60 * 60, // 24 hours
   },
   pages: {
     signIn: "/auth/signin",
@@ -53,6 +64,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        // Only store essential data in JWT to minimize size
         token.id = user.id;
       }
       return token;

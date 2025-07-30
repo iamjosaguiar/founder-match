@@ -24,9 +24,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
   
-  // Redirect to discover page if accessing auth routes while authenticated
+  // Redirect to dashboard if accessing auth routes while authenticated
   if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL('/discover', request.url));
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
   
   // Special handling for profile setup - redirect to onboarding instead
