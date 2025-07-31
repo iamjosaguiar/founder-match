@@ -35,7 +35,7 @@ export default function Home() {
           </h1>
           
           <div className="text-xl text-slate-700 mb-16 leading-relaxed max-w-4xl mx-auto space-y-4">
-            <p className="font-medium">Most founders burn out not from building—<br />but from building everything alone.</p>
+            <p className="font-medium">Most founders burn out not from building<br />but from building everything alone.</p>
             
             <div className="text-lg text-slate-600 space-y-2">
               <p>The wrong co-founder wastes 18 months.</p>
