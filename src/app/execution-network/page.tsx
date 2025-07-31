@@ -142,14 +142,14 @@ export default function ExecutionNetworkLanding() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-16 pb-24">
-        <div className="text-center max-w-4xl mx-auto mb-16">
+      <div className="container mx-auto px-6 py-20">
+        <div className="text-center max-w-4xl mx-auto mb-32">
           <Badge variant="secondary" className="mb-6 bg-purple-100 text-purple-700 border-purple-200">
             <Code className="w-3 h-3 mr-1" />
             Vetted Professional Network
           </Badge>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Your Startup's
             </span>
@@ -159,12 +159,12 @@ export default function ExecutionNetworkLanding() {
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
             Access world-class developers, designers, marketers, and experts without the overhead. 
             Build faster, launch sooner, and scale smarter with our curated network of startup specialists.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
             <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Post a Project
@@ -177,7 +177,7 @@ export default function ExecutionNetworkLanding() {
           </div>
 
           {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
+          <div className="flex items-center justify-center gap-12 text-sm text-slate-500">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span>850+ Vetted Experts</span>
@@ -194,27 +194,27 @@ export default function ExecutionNetworkLanding() {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-4 gap-8 mb-24">
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-purple-600 mb-1">850+</div>
               <div className="text-sm text-slate-600">Expert Providers</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-green-600 mb-1">2.4k</div>
               <div className="text-sm text-slate-600">Projects Completed</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-blue-600 mb-1">24hr</div>
               <div className="text-sm text-slate-600">Avg Match Time</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-orange-600 mb-1">95%</div>
               <div className="text-sm text-slate-600">Satisfaction Rate</div>
             </CardContent>
@@ -223,9 +223,9 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* Service Categories */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Briefcase className="w-3 h-3 mr-1" />
               Expert Service Categories
@@ -238,12 +238,12 @@ export default function ExecutionNetworkLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {serviceCategories.map((category, index) => {
               const IconComponent = category.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-6">
+                  <CardContent className="p-8">
                     <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                       <IconComponent className="w-6 h-6 text-white" />
                     </div>
@@ -271,9 +271,9 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* How It Works */}
-      <div className="bg-gradient-to-br from-slate-50 to-purple-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-purple-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <Rocket className="w-3 h-3 mr-1" />
               Simple Process
@@ -286,12 +286,12 @@ export default function ExecutionNetworkLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-12 mb-24">
             {howItWorks.map((step, index) => {
               const IconComponent = step.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-8 text-center">
+                  <CardContent className="p-10 text-center">
                     <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <IconComponent className="w-10 h-10 text-white" />
                     </div>
@@ -307,9 +307,9 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* Features */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Star className="w-3 h-3 mr-1" />
               Why Choose Our Network
@@ -322,12 +322,12 @@ export default function ExecutionNetworkLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => {
               const IconComponent = feature.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-6">
+                  <CardContent className="p-8">
                     <div className="flex items-start gap-4">
                       <div className="p-3 rounded-xl bg-purple-50 group-hover:scale-110 transition-transform duration-300">
                         <IconComponent className="w-6 h-6 text-purple-600" />
@@ -346,20 +346,20 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* Pricing Transparency */}
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
               Transparent, Startup-Friendly Pricing
             </h2>
-            <p className="text-slate-600 text-lg max-w-2xl mx-auto mb-8">
+            <p className="text-slate-600 text-lg max-w-2xl mx-auto mb-12">
               No hidden fees or platform charges. Pay providers directly at rates that work for startups.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
             <Card className="border-0 bg-white shadow-lg">
-              <CardContent className="p-8">
+              <CardContent className="p-10">
                 <h3 className="text-xl font-bold mb-4">For Startups</h3>
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center gap-3">
@@ -386,7 +386,7 @@ export default function ExecutionNetworkLanding() {
             </Card>
 
             <Card className="border-0 bg-white shadow-lg">
-              <CardContent className="p-8">
+              <CardContent className="p-10">
                 <h3 className="text-xl font-bold mb-4">Typical Rates</h3>
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between">
@@ -416,13 +416,13 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h3 className="text-4xl font-bold text-white mb-4">Ready to Build Your Dream Team?</h3>
-          <p className="text-xl text-purple-100 mb-8 max-w-3xl mx-auto">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 py-32">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-4xl font-bold text-white mb-6">Ready to Build Your Dream Team?</h3>
+          <p className="text-xl text-purple-100 mb-12 max-w-3xl mx-auto">
             Join hundreds of startups who've accelerated their growth with our expert execution network.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-purple-50 hover:text-purple-700 font-semibold px-8 py-4">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Post Your Project
@@ -439,9 +439,9 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* Bottom Features */}
-      <div className="bg-slate-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-slate-50 py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <Globe className="w-8 h-8 text-white" />
