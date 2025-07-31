@@ -240,36 +240,45 @@ export default function Home() {
         <div className="mb-24">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-              How CoLaunchr Works
+              Your Path to Success
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Simple, flexible, and designed to get you moving fast
+              Three simple steps to build your dream team and accelerate your startup
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold">
+            <div className="text-center group">
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform shadow-xl">
                 1
               </div>
-              <h3 className="text-xl font-bold mb-4">Tell Us What You Need</h3>
-              <p className="text-slate-600">Complete our smart intake to understand your goals, challenges, and ideal support structure.</p>
+              <h3 className="text-xl font-bold mb-4 group-hover:text-blue-600 transition-colors">Find Your Co-Founder</h3>
+              <p className="text-slate-600 mb-4">Take our personality assessment and get matched with co-founders who complement your skills and share your vision.</p>
+              <Button asChild variant="outline" size="sm" className="group-hover:border-blue-300">
+                <Link href="/co-founder-matching">Start Matching</Link>
+              </Button>
             </div>
 
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold">
+            <div className="text-center group">
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform shadow-xl">
                 2
               </div>
-              <h3 className="text-xl font-bold mb-4">Get Matched</h3>
-              <p className="text-slate-600">Our AI connects you with perfectly suited co-founders, advisors, or execution teams.</p>
+              <h3 className="text-xl font-bold mb-4 group-hover:text-purple-600 transition-colors">Build Your MVP</h3>
+              <p className="text-slate-600 mb-4">Post your project and connect with pre-vetted developers, designers, and marketers ready to bring your idea to life.</p>
+              <Button asChild variant="outline" size="sm" className="group-hover:border-purple-300">
+                <Link href="/execution-network">Find Talent</Link>
+              </Button>
             </div>
 
-            <div className="text-center">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold">
+            <div className="text-center group">
+              <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full mx-auto mb-6 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform shadow-xl">
                 3
               </div>
-              <h3 className="text-xl font-bold mb-4">Launch & Scale</h3>
-              <p className="text-slate-600">Execute with confidence knowing you have the right team and ongoing support.</p>
+              <h3 className="text-xl font-bold mb-4 group-hover:text-emerald-600 transition-colors">Join the Community</h3>
+              <p className="text-slate-600 mb-4">Connect with fellow founders, share progress, get feedback, and learn from others on the same journey.</p>
+              <Button asChild variant="outline" size="sm" className="group-hover:border-emerald-300">
+                <Link href="/community-hub">Join Now</Link>
+              </Button>
             </div>
           </div>
         </div>
