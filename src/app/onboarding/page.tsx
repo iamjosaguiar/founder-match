@@ -204,7 +204,7 @@ export default function Onboarding() {
     let stepCount = 3; // Role selection + Basic profile + Skills (if needed)
     if (isFounder) {
       stepCount += 3; // Founder journey + What you're looking for + Business info
-      stepCount += totalPsychPages; // Psychology assessment
+      // Psychology assessment is now handled separately in /founder-assessment
     }
     return stepCount;
   };
@@ -268,40 +268,13 @@ export default function Onboarding() {
         throw new Error('Failed to update profile');
       }
 
-      // Submit psychology quiz only for founders
+      // For founders, redirect to comprehensive assessment
       if (data.userRoles.includes('founder')) {
-        const quizData = {
-          openness1: Number(data.openness1),
-          openness2: Number(data.openness2),
-          conscientiousness1: Number(data.conscientiousness1),
-          conscientiousness2: Number(data.conscientiousness2),
-          extraversion1: Number(data.extraversion1),
-          extraversion2: Number(data.extraversion2),
-          agreeableness1: Number(data.agreeableness1),
-          agreeableness2: Number(data.agreeableness2),
-          neuroticism1: Number(data.neuroticism1),
-          neuroticism2: Number(data.neuroticism2),
-          riskTolerance1: Number(data.riskTolerance1),
-          riskTolerance2: Number(data.riskTolerance2),
-        };
-
-        console.log('Submitting quiz data:', quizData);
-        const quizResponse = await fetch('/api/submit-quiz', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(quizData),
-        });
-        
-        console.log('Quiz response status:', quizResponse.status);
-        if (!quizResponse.ok) {
-          const error = await quizResponse.json();
-          console.error('Quiz submission failed:', error);
-          alert(`Error: ${error.message || 'Failed to submit assessment'}`);
-          return;
-        }
+        router.push('/founder-assessment');
+        return;
       }
       
-      // Redirect to dashboard on success
+      // For non-founders (service providers), go to dashboard
       router.push('/dashboard');
     } catch (error) {
       console.error('Onboarding error:', error);

@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -16,8 +16,8 @@ model User {
   profileImage      String?  // Professional profile photo URL
   password          String?  // For credentials login
   
-  // User role - can be multiple
-  roles             String[] @default(["founder"]) // ["founder", "service_provider"]
+  // User role - can be multiple (stored as JSON string)
+  roles             String @default("[\"founder\"]") // JSON: ["founder", "service_provider"]
   
   // Founder-specific fields
   founderJourney    String?  // Founder journey stage from onboarding
@@ -95,7 +95,7 @@ model User {
   isTechnical       Boolean?  // Can build product without outside assistance
   
   // Service Provider fields
-  serviceTypes      String[] @default([]) // ["development", "design", "marketing", "legal"]
+  serviceTypes      String @default("[]") // JSON: ["development", "design", "marketing", "legal"]
   portfolio         String?  // JSON string of portfolio items
   hourlyRate        Int?     // Rate in USD
   availability      String?  // "immediate", "within_week", "within_month"
@@ -195,7 +195,7 @@ model Project {
   
   // Project details
   requirements    String?   // Detailed requirements
-  techStack       String[]  @default([]) // For development projects
+  techStack       String  @default("[]") // JSON: For development projects
   deliverables    String?   // JSON string of expected deliverables
   
   // Status
