@@ -123,14 +123,14 @@ export default function CoFounderMatchingLanding() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-16 pb-24">
-        <div className="text-center max-w-4xl mx-auto mb-16">
+      <div className="container mx-auto px-6 py-20">
+        <div className="text-center max-w-4xl mx-auto mb-32">
           <Badge variant="secondary" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
             <Brain className="w-3 h-3 mr-1" />
             AI-Powered Personality Matching
           </Badge>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Find Your Perfect
             </span>
@@ -140,12 +140,12 @@ export default function CoFounderMatchingLanding() {
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
             Don't leave your most important business decision to chance. Our science-backed personality 
             matching system finds co-founders who truly complement your strengths and working style.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
             <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Get Matched Now
@@ -158,7 +158,7 @@ export default function CoFounderMatchingLanding() {
           </div>
 
           {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
+          <div className="flex items-center justify-center gap-12 text-sm text-slate-500">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span>2,500+ Successful Matches</span>
@@ -175,27 +175,27 @@ export default function CoFounderMatchingLanding() {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-4 gap-8 mb-24">
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-blue-600 mb-1">94%</div>
               <div className="text-sm text-slate-600">Match Success Rate</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-green-600 mb-1">12</div>
               <div className="text-sm text-slate-600">Question Assessment</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-purple-600 mb-1">7</div>
               <div className="text-sm text-slate-600">Founder Types</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-orange-600 mb-1">3min</div>
               <div className="text-sm text-slate-600">Average Assessment</div>
             </CardContent>
@@ -204,9 +204,9 @@ export default function CoFounderMatchingLanding() {
       </div>
 
       {/* How It Works */}
-      <div id="how-it-works" className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div id="how-it-works" className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Rocket className="w-3 h-3 mr-1" />
               The Science Behind Matching
@@ -219,9 +219,9 @@ export default function CoFounderMatchingLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-3 gap-12 mb-24">
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30">
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-10 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Brain className="w-10 h-10 text-white" />
                 </div>
@@ -233,7 +233,7 @@ export default function CoFounderMatchingLanding() {
             </Card>
 
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-green-50/30">
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-10 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <UserCheck className="w-10 h-10 text-white" />
                 </div>
@@ -245,7 +245,7 @@ export default function CoFounderMatchingLanding() {
             </Card>
 
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30">
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-10 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Target className="w-10 h-10 text-white" />
                 </div>
@@ -260,9 +260,9 @@ export default function CoFounderMatchingLanding() {
       </div>
 
       {/* Personality Traits */}
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <BarChart3 className="w-3 h-3 mr-1" />
               Big Five + Startup Traits
@@ -275,12 +275,12 @@ export default function CoFounderMatchingLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {personalityTraits.map((trait, index) => {
               const IconComponent = trait.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-6">
+                  <CardContent className="p-8">
                     <div className="flex items-start gap-4">
                       <div className={`p-3 rounded-xl bg-slate-50 group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className={`w-6 h-6 ${trait.color}`} />
@@ -299,9 +299,9 @@ export default function CoFounderMatchingLanding() {
       </div>
 
       {/* Founder Types */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Star className="w-3 h-3 mr-1" />
               7 Founder Personality Types
@@ -314,10 +314,10 @@ export default function CoFounderMatchingLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {founderTypes.map((type, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className={`w-12 h-12 bg-gradient-to-br ${type.color} rounded-xl mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                     <Users className="w-6 h-6 text-white" />
                   </div>
@@ -341,13 +341,13 @@ export default function CoFounderMatchingLanding() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h3 className="text-4xl font-bold text-white mb-4">Ready to Find Your Co-Founder?</h3>
-          <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-32">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-4xl font-bold text-white mb-6">Ready to Find Your Co-Founder?</h3>
+          <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto">
             Join thousands of founders who've found their perfect business partner through our science-backed matching system.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold px-8 py-4">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Start Free Assessment
@@ -364,9 +364,9 @@ export default function CoFounderMatchingLanding() {
       </div>
 
       {/* Features */}
-      <div className="bg-slate-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-slate-50 py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <Clock className="w-8 h-8 text-white" />
