@@ -305,7 +305,7 @@ export default function Home() {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="lg" className="border-white !text-white hover:bg-white hover:!text-blue-600 hover:border-white px-8 py-4">
+              <Button asChild variant="outline" size="lg" className="border-white !text-white bg-white/10 hover:bg-white hover:!text-blue-600 hover:border-white px-8 py-4">
                 <Link href="/co-founder-matching">
                   Find Co-Founders
                 </Link>
