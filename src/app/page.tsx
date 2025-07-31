@@ -19,17 +19,17 @@ export default function Home() {
       <div className="container mx-auto px-6 py-20">
         {/* Hero Section */}
         <div className="text-center max-w-6xl mx-auto mb-32">
-          <Badge variant="secondary" className="mb-6 bg-red-50 text-red-700 border-red-200">
+          <Badge variant="secondary" className="mb-6 bg-blue-50 text-blue-700 border-blue-200">
             <Target className="w-3 h-3 mr-1" />
             For Founders Building Alone
           </Badge>
           
           <h1 className="text-6xl md:text-7xl font-bold mb-12 leading-tight">
-            <span className="bg-gradient-to-r from-slate-900 via-red-900 to-slate-900 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
               Stop Building Your Startup
             </span>
             <br />
-            <span className="bg-gradient-to-r from-red-600 to-slate-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-slate-600 bg-clip-text text-transparent">
               In Isolation.
             </span>
           </h1>
@@ -61,15 +61,15 @@ export default function Home() {
           {/* Social Proof */}
           <div className="flex items-center justify-center gap-12 text-sm text-slate-600 mb-24">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span>500+ Connected Founders</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span>Pre-Vetted Network</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
               <span>Systematic Matching</span>
             </div>
           </div>
