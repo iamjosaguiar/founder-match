@@ -77,6 +77,7 @@ export default function Discover() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [matches, setMatches] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [redirecting, setRedirecting] = useState(false);
   const [exitDirection, setExitDirection] = useState<"left" | "right" | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<FilterCriteria>({
@@ -168,14 +169,18 @@ export default function Discover() {
         
         // Check if user has completed onboarding
         const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
-        const hasQuizCompleted = profile.quizCompleted;
+        const hasQuizCompleted = profile.quizCompleted === true; // Explicit boolean check
         
         if (!hasBasicProfile || !hasQuizCompleted) {
           console.log('Redirecting to onboarding - missing:', {
             hasBasicProfile,
-            hasQuizCompleted
+            hasQuizCompleted,
+            quizCompletedValue: profile.quizCompleted,
+            quizCompletedType: typeof profile.quizCompleted
           });
-          router.push('/onboarding');
+          // Set redirecting state and force redirect
+          setRedirecting(true);
+          router.replace('/onboarding');
           return;
         }
         
@@ -216,7 +221,13 @@ export default function Discover() {
   // Simple compatibility calculation based on personality differences
   const calculateCompatibility = (founder: Founder) => {
     if (!currentUserProfile?.quizScores || !founder.quizScores) {
-      return Math.floor(Math.random() * 30) + 70; // Fallback random 70-99%
+      // Don't show fake percentages - this should never happen if onboarding works correctly
+      console.warn('Missing quiz scores for compatibility calculation:', {
+        currentUserHasScores: !!currentUserProfile?.quizScores,
+        founderHasScores: !!founder.quizScores,
+        founderId: founder.id
+      });
+      return 0; // Return 0 to indicate incomplete data
     }
     
     // Check if this is the same person (self-match)
@@ -301,11 +312,13 @@ export default function Discover() {
   };
 
 
-  if (loading) {
+  if (loading || redirecting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <Card className="p-8 text-center">
-          <h2 className="text-2xl font-bold mb-4">Loading founders...</h2>
+          <h2 className="text-2xl font-bold mb-4">
+            {redirecting ? 'Redirecting to complete profile...' : 'Loading founders...'}
+          </h2>
         </Card>
       </div>
     );
@@ -599,7 +612,10 @@ export default function Discover() {
 
                       {/* Compatibility Score */}
                       <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-bold border border-gray-200">
-                        {calculateCompatibility(currentFounder)}% Match
+                        {(() => {
+                          const compatibility = calculateCompatibility(currentFounder);
+                          return compatibility > 0 ? `${compatibility}% Match` : 'Complete Assessment';
+                        })()}
                       </div>
                     </div>
 
@@ -654,7 +670,10 @@ export default function Discover() {
                         <div className="flex items-center justify-between mb-3">
                           <h3 className="font-bold text-gray-900">Compatibility</h3>
                           <Badge className="bg-blue-600 text-white">
-                            {calculateCompatibility(currentFounder)}% Match
+                            {(() => {
+                              const compatibility = calculateCompatibility(currentFounder);
+                              return compatibility > 0 ? `${compatibility}% Match` : 'Complete Assessment';
+                            })()}
                           </Badge>
                         </div>
                         {currentFounder.personalityProfile && (
