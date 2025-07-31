@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/components/dashboard-layout";
 import UserAvatar from "@/components/user-avatar";
+import { useNotifications } from "@/components/notification-provider";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -39,6 +40,7 @@ type Match = {
 export default function MatchesPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const { notifications } = useNotifications();
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,6 +52,15 @@ export default function MatchesPage() {
     }
     fetchMatches();
   }, [session, status, router]);
+
+  // Refresh matches when new match notifications come in
+  useEffect(() => {
+    const matchNotifications = notifications.filter(n => n.type === 'match');
+    if (matchNotifications.length > 0) {
+      // Refresh matches when we get a new match notification
+      fetchMatches();
+    }
+  }, [notifications]);
 
   const fetchMatches = async () => {
     if (!session) {

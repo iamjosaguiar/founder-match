@@ -5,6 +5,7 @@ import { useSession, signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import UserAvatar from "@/components/user-avatar";
+import NotificationBell from "@/components/notification-bell";
 import { Button } from "@/components/ui/button";
 import { 
   LayoutDashboard, 
@@ -331,6 +332,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
           
           <div className="flex items-center gap-4">
+            <NotificationBell />
             <Button variant="outline" size="sm" asChild>
               <Link href="/">
                 View Public Site

@@ -154,7 +154,7 @@ export default function ExecutionNetworkLanding() {
               Your Startup's
             </span>
             <br />
-            <span className="bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Execution Network
             </span>
           </h1>
@@ -165,7 +165,7 @@ export default function ExecutionNetworkLanding() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
-            <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
+            <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Post a Project
                 <ArrowRight className="w-5 h-5" />
@@ -416,7 +416,7 @@ export default function ExecutionNetworkLanding() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 py-32">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-32">
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-6">Ready to Build Your Dream Team?</h3>
           <p className="text-xl text-purple-100 mb-12 max-w-3xl mx-auto">

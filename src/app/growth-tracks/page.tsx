@@ -204,14 +204,14 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-16 pb-24">
-        <div className="text-center max-w-4xl mx-auto mb-16">
+      <div className="container mx-auto px-6 py-20">
+        <div className="text-center max-w-4xl mx-auto mb-32">
           <Badge variant="secondary" className="mb-6 bg-orange-100 text-orange-700 border-orange-200">
             <TrendingUp className="w-3 h-3 mr-1" />
             Structured Growth Programs
           </Badge>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               From Idea to
             </span>
@@ -221,12 +221,12 @@ export default function GrowthTracksLanding() {
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
             Structured programs designed to take you from MVP to market, early stage to scale, 
             with expert mentorship, proven frameworks, and a supportive founder community.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
             <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Join Waitlist
@@ -239,7 +239,7 @@ export default function GrowthTracksLanding() {
           </div>
 
           {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
+          <div className="flex items-center justify-center gap-12 text-sm text-slate-500">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span>50+ Expert Mentors</span>
@@ -256,7 +256,7 @@ export default function GrowthTracksLanding() {
         </div>
 
         {/* Benefits */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-24">
           {benefits.map((benefit, index) => {
             const IconComponent = benefit.icon;
             return (
@@ -274,9 +274,9 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* Growth Tracks */}
-      <div id="tracks" className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div id="tracks" className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Target className="w-3 h-3 mr-1" />
               Growth Track Programs
@@ -289,12 +289,12 @@ export default function GrowthTracksLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-12">
             {tracks.map((track, index) => {
               const IconComponent = track.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-8">
+                  <CardContent className="p-10">
                     <div className="flex items-start gap-4 mb-6">
                       <div className={`w-12 h-12 bg-gradient-to-br ${track.color} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                         <IconComponent className="w-6 h-6 text-white" />
@@ -349,9 +349,9 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* How It Works */}
-      <div className="bg-gradient-to-br from-slate-50 to-orange-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-orange-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <Rocket className="w-3 h-3 mr-1" />
               The Growth Track Experience
@@ -364,9 +364,9 @@ export default function GrowthTracksLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-12">
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-10 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <UserCheck className="w-10 h-10 text-white" />
                 </div>
@@ -378,7 +378,7 @@ export default function GrowthTracksLanding() {
             </Card>
 
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-10 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Calendar className="w-10 h-10 text-white" />
                 </div>
@@ -390,7 +390,7 @@ export default function GrowthTracksLanding() {
             </Card>
 
             <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-              <CardContent className="p-8 text-center">
+              <CardContent className="p-10 text-center">
                 <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <Award className="w-10 h-10 text-white" />
                 </div>
@@ -405,9 +405,9 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* Features */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Star className="w-3 h-3 mr-1" />
               Program Features
@@ -420,12 +420,12 @@ export default function GrowthTracksLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => {
               const IconComponent = feature.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-6">
+                  <CardContent className="p-8">
                     <div className="flex items-start gap-4">
                       <div className="p-3 rounded-xl bg-orange-50 group-hover:scale-110 transition-transform duration-300">
                         <IconComponent className="w-6 h-6 text-orange-600" />
@@ -444,9 +444,9 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* Testimonials */}
-      <div className="bg-gradient-to-br from-slate-50 to-red-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-red-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <MessageCircle className="w-3 h-3 mr-1" />
               Success Stories
@@ -459,10 +459,10 @@ export default function GrowthTracksLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-12">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="border-0 bg-white shadow-lg">
-                <CardContent className="p-8">
+                <CardContent className="p-10">
                   <div className="flex items-center gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
@@ -492,15 +492,15 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-orange-600 to-red-600 py-24">
-        <div className="container mx-auto px-4 text-center">
+      <div className="bg-gradient-to-r from-orange-600 to-red-600 py-32">
+        <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-4">Ready to Accelerate Your Growth?</h3>
-          <p className="text-xl text-orange-100 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-orange-100 mb-12 max-w-3xl mx-auto">
             Join the waitlist to be among the first founders in our structured growth programs. 
             Expert mentorship and proven frameworks await.
           </p>
           
-          <div className="bg-orange-500/20 border border-orange-400/30 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
+          <div className="bg-orange-500/20 border border-orange-400/30 rounded-lg p-8 mb-12 max-w-4xl mx-auto">
             <div className="flex items-center justify-center gap-3 text-orange-100 mb-3">
               <Rocket className="w-5 h-5" />
               <span className="font-semibold">Early Access Benefits</span>
@@ -521,7 +521,7 @@ export default function GrowthTracksLanding() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-orange-600 hover:bg-orange-50 hover:text-orange-700 font-semibold px-8 py-4">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Join Waitlist - Free
@@ -538,9 +538,9 @@ export default function GrowthTracksLanding() {
       </div>
 
       {/* Bottom Features */}
-      <div className="bg-slate-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-slate-50 py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <Coffee className="w-8 h-8 text-white" />

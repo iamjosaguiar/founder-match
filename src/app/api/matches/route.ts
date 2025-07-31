@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { sendNotificationToUser } from '../notifications/stream/route';
 
 // POST /api/matches - Record a like/pass and check for mutual match
 export async function POST(request: NextRequest) {
@@ -80,6 +81,59 @@ export async function POST(request: NextRequest) {
           },
           data: { matched: true }
         });
+
+        // Get user details for notifications
+        const [sender, receiver] = await Promise.all([
+          prisma.user.findUnique({
+            where: { id: senderId },
+            select: { id: true, name: true, title: true, image: true, profileImage: true }
+          }),
+          prisma.user.findUnique({
+            where: { id: targetUserId },
+            select: { id: true, name: true, title: true, image: true, profileImage: true }
+          })
+        ]);
+
+        // Send real-time notifications to both users
+        if (sender && receiver) {
+          sendNotificationToUser(senderId, {
+            type: 'match',
+            user: {
+              id: receiver.id,
+              name: receiver.name,
+              title: receiver.title,
+              image: receiver.profileImage || receiver.image
+            }
+          });
+
+          sendNotificationToUser(targetUserId, {
+            type: 'match',
+            user: {
+              id: sender.id,
+              name: sender.name,
+              title: sender.title,
+              image: sender.profileImage || sender.image
+            }
+          });
+        }
+      } else {
+        // Just a like, send notification to the target user
+        const sender = await prisma.user.findUnique({
+          where: { id: senderId },
+          select: { id: true, name: true, title: true, image: true, profileImage: true }
+        });
+
+        if (sender) {
+          sendNotificationToUser(targetUserId, {
+            type: 'like',
+            user: {
+              id: sender.id,
+              name: sender.name,
+              title: sender.title,
+              image: sender.profileImage || sender.image
+            }
+          });
+        }
       }
     }
 

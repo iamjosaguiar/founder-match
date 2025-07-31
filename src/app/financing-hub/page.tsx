@@ -165,14 +165,14 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-16 pb-24">
-        <div className="text-center max-w-4xl mx-auto mb-16">
+      <div className="container mx-auto px-6 py-20">
+        <div className="text-center max-w-4xl mx-auto mb-32">
           <Badge variant="secondary" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
             <DollarSign className="w-3 h-3 mr-1" />
             Startup Financing Hub
           </Badge>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Connect With
             </span>
@@ -182,12 +182,12 @@ export default function FinancingHubLanding() {
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
             Discover funding opportunities, connect with investors, and access the resources you need 
             to fuel your startup's growth. From pre-seed to Series A and beyond.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
             <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href={showcaseUrl} className="flex items-center gap-2">
                 Showcase Your Startup
@@ -217,27 +217,27 @@ export default function FinancingHubLanding() {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-4 gap-8 mb-24">
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-blue-600 mb-1">150+</div>
               <div className="text-sm text-slate-600">Showcased Companies</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-green-600 mb-1">89</div>
               <div className="text-sm text-slate-600">Investor Profiles</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-purple-600 mb-1">156</div>
               <div className="text-sm text-slate-600">Connections Made</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-4">
+            <CardContent className="p-6">
               <div className="text-3xl font-bold text-orange-600 mb-1">4.2k</div>
               <div className="text-sm text-slate-600">Resource Downloads</div>
             </CardContent>
@@ -246,9 +246,9 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* Funding Stages */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <TrendingUp className="w-3 h-3 mr-1" />
               Funding Journey
@@ -261,10 +261,10 @@ export default function FinancingHubLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {investmentStages.map((stage, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className={`w-12 h-12 bg-gradient-to-br ${stage.color} rounded-xl mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                     <DollarSign className="w-6 h-6 text-white" />
                   </div>
@@ -282,9 +282,9 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* Investor Types */}
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <Users className="w-3 h-3 mr-1" />
               Investor Ecosystem
@@ -338,9 +338,9 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* Featured Companies */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Rocket className="w-3 h-3 mr-1" />
               Company Showcase
@@ -353,10 +353,10 @@ export default function FinancingHubLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {showcaseCompanies.map((company, index) => (
               <Card key={index} className="hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="font-bold text-lg mb-1">{company.name}</h3>
@@ -412,9 +412,9 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* Resources */}
-      <div className="bg-gradient-to-br from-slate-50 to-indigo-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-indigo-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <FileText className="w-3 h-3 mr-1" />
               Fundraising Resources
@@ -427,10 +427,10 @@ export default function FinancingHubLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {resources.map((resource, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className="flex items-center gap-2 mb-3">
                     <FileText className="w-5 h-5 text-blue-600" />
                     <Badge variant="outline" className="text-xs">{resource.type}</Badge>
@@ -451,15 +451,15 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-24">
-        <div className="container mx-auto px-4 text-center">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 py-32">
+        <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-4">Ready to Fuel Your Growth?</h3>
-          <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+          <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto">
             Join hundreds of startups who've connected with investors and raised capital through our platform.
           </p>
           
           {/* Legal Notice */}
-          <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-4 mb-8 max-w-4xl mx-auto">
+          <div className="bg-blue-500/20 border border-blue-400/30 rounded-lg p-6 mb-12 max-w-4xl mx-auto">
             <div className="flex items-start gap-3 text-sm text-blue-100">
               <Shield className="w-5 h-5 flex-shrink-0 mt-0.5" />
               <div className="text-left">
@@ -473,7 +473,7 @@ export default function FinancingHubLanding() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold px-8 py-4">
               <Link href={showcaseUrl} className="flex items-center gap-2">
                 Get Started
@@ -490,9 +490,9 @@ export default function FinancingHubLanding() {
       </div>
 
       {/* Bottom Features */}
-      <div className="bg-slate-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-slate-50 py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <Search className="w-8 h-8 text-white" />
