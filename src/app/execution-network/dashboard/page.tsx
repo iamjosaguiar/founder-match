@@ -154,7 +154,7 @@ export default function ServiceProviderDashboard() {
           // Founder Dashboard Content
           <div className="space-y-8">
             {/* Quick Actions */}
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
                 <CardContent className="p-6 text-center">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
@@ -164,19 +164,6 @@ export default function ServiceProviderDashboard() {
                   <p className="text-slate-600 text-sm mb-4">Get expert help for your startup</p>
                   <Button asChild className="w-full">
                     <Link href="/execution-network/projects/new">Post Project</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300">
-                <CardContent className="p-6 text-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl mx-auto mb-4 flex items-center justify-center">
-                    <Search className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="font-bold text-lg mb-2">Find Providers</h3>
-                  <p className="text-slate-600 text-sm mb-4">Browse vetted service providers</p>
-                  <Button asChild className="w-full" variant="outline">
-                    <Link href="/execution-network/providers">Browse Providers</Link>
                   </Button>
                 </CardContent>
               </Card>
