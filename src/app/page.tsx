@@ -6,6 +6,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Zap, Users, Brain, Rocket, Target, TrendingUp, Code, Briefcase, Lightbulb, Shield, Star, CheckCircle, MessageCircle } from "lucide-react";
+import { motion } from "framer-motion";
+
+const fadeInUpVariants = {
+  hidden: { opacity: 0, y: 60 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const staggerChildren = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2
+    }
+  }
+};
 
 export default function Home() {
   const { data: session } = useSession();
@@ -76,7 +92,13 @@ export default function Home() {
         </div>
 
         {/* Core Services */}
-        <div className="mb-32">
+        <motion.div 
+          className="mb-32"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUpVariants}
+        >
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Rocket className="w-3 h-3 mr-1" />
@@ -90,9 +112,16 @@ export default function Home() {
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+          <motion.div 
+            className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto"
+            variants={staggerChildren}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
             {/* Co-Founder Matching */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30 backdrop-blur-sm lg:scale-105">
+            <motion.div variants={fadeInUpVariants}>
+              <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30 backdrop-blur-sm lg:scale-105">
               <CardHeader className="text-center pb-6 pt-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mx-auto mb-8 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
                   <Users className="w-10 h-10 text-white" />
@@ -126,10 +155,12 @@ export default function Home() {
                   </Link>
                 </Button>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
             {/* Execution Network */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30 backdrop-blur-sm lg:scale-105">
+            <motion.div variants={fadeInUpVariants}>
+              <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30 backdrop-blur-sm lg:scale-105">
               <CardHeader className="text-center pb-6 pt-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl mx-auto mb-8 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
                   <Code className="w-10 h-10 text-white" />
@@ -163,10 +194,12 @@ export default function Home() {
                   </Link>
                 </Button>
               </CardContent>
-            </Card>
+              </Card>
+            </motion.div>
 
             {/* Community */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/30 backdrop-blur-sm lg:scale-105">
+            <motion.div variants={fadeInUpVariants}>
+              <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/30 backdrop-blur-sm lg:scale-105">
               <CardHeader className="text-center pb-6 pt-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl mx-auto mb-8 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
                   <MessageCircle className="w-10 h-10 text-white" />
@@ -200,12 +233,19 @@ export default function Home() {
                   </Link>
                 </Button>
               </CardContent>
-            </Card>
-          </div>
-        </div>
+              </Card>
+            </motion.div>
+          </motion.div>
+        </motion.div>
 
         {/* Target Audience */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-16 mb-32 border border-slate-200/50 shadow-xl">
+        <motion.div 
+          className="bg-white/60 backdrop-blur-sm rounded-3xl p-16 mb-32 border border-slate-200/50 shadow-xl"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUpVariants}
+        >
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Target className="w-3 h-3 mr-1" />
@@ -241,10 +281,17 @@ export default function Home() {
               <p className="text-slate-600 text-sm">Have the strategy? Find technical talent and development teams.</p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* How It Works */}
-        <div className="mb-32" id="how-it-works">
+        <motion.div 
+          className="mb-32" 
+          id="how-it-works"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUpVariants}
+        >
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
               How Elite Founders Build Networks
@@ -288,11 +335,17 @@ export default function Home() {
               </Button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
 
         {/* CTA Section */}
-        <div className="text-center">
+        <motion.div 
+          className="text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeInUpVariants}
+        >
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-16 text-white">
             <h3 className="text-3xl font-bold mb-4">Stop Building in Isolation</h3>
             <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
@@ -312,7 +365,7 @@ export default function Home() {
               </Button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
