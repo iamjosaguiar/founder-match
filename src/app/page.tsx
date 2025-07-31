@@ -209,7 +209,7 @@ export default function Home() {
             </h2>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             <div className="text-center group">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Lightbulb className="w-8 h-8 text-white" />
@@ -232,14 +232,6 @@ export default function Home() {
               </div>
               <h3 className="font-bold text-slate-800 mb-2">Business Leaders</h3>
               <p className="text-slate-600 text-sm">Have the strategy? Find technical talent and development teams.</p>
-            </div>
-
-            <div className="text-center group">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Shield className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="font-bold text-slate-800 mb-2">Tier 2/3 Markets</h3>
-              <p className="text-slate-600 text-sm">Priced out of top-tier agencies? Get world-class help at fair prices.</p>
             </div>
           </div>
         </div>
