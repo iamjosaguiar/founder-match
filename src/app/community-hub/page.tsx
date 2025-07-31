@@ -155,14 +155,14 @@ export default function CommunityHubLanding() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-blue-50">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 pt-16 pb-24">
-        <div className="text-center max-w-4xl mx-auto mb-16">
+      <div className="container mx-auto px-6 py-20">
+        <div className="text-center max-w-4xl mx-auto mb-32">
           <Badge variant="secondary" className="mb-6 bg-green-100 text-green-700 border-green-200">
             <MessageCircle className="w-3 h-3 mr-1" />
             Founder Community Hub
           </Badge>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Learn From
             </span>
@@ -172,12 +172,12 @@ export default function CommunityHubLanding() {
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-8 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
             Join thousands of founders sharing real experiences, solving problems together, and building 
             the next generation of successful startups. Get answers, share knowledge, and grow your network.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
             <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Join Community
@@ -190,7 +190,7 @@ export default function CommunityHubLanding() {
           </div>
 
           {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
+          <div className="flex items-center justify-center gap-12 text-sm text-slate-500">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
               <span>5.2k Active Founders</span>
@@ -207,12 +207,12 @@ export default function CommunityHubLanding() {
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-6 mb-16">
+        <div className="grid md:grid-cols-4 gap-8 mb-24">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
             return (
               <Card key={index} className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-                <CardContent className="p-4">
+                <CardContent className="p-6">
                   <IconComponent className="w-8 h-8 text-green-600 mx-auto mb-2" />
                   <div className="text-3xl font-bold text-slate-900 mb-1">{stat.number}</div>
                   <div className="text-sm text-slate-600">{stat.label}</div>
@@ -224,9 +224,9 @@ export default function CommunityHubLanding() {
       </div>
 
       {/* Community Categories */}
-      <div id="categories" className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div id="categories" className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <BookOpen className="w-3 h-3 mr-1" />
               Discussion Categories
@@ -239,12 +239,12 @@ export default function CommunityHubLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {communityCategories.map((category, index) => {
               const IconComponent = category.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-6">
+                  <CardContent className="p-8">
                     <div className={`w-12 h-12 bg-gradient-to-br ${category.color} rounded-xl mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
                       <IconComponent className="w-6 h-6 text-white" />
                     </div>
@@ -271,9 +271,9 @@ export default function CommunityHubLanding() {
       </div>
 
       {/* Recent Discussions */}
-      <div className="bg-gradient-to-br from-slate-50 to-green-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-gradient-to-br from-slate-50 to-green-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-white text-slate-700 border-slate-200">
               <TrendingUp className="w-3 h-3 mr-1" />
               Trending Discussions
@@ -286,10 +286,10 @@ export default function CommunityHubLanding() {
             </p>
           </div>
 
-          <div className="max-w-4xl mx-auto space-y-4">
+          <div className="max-w-5xl mx-auto space-y-6">
             {recentTopics.map((topic, index) => (
               <Card key={index} className="hover:shadow-lg transition-all duration-300 border-0 bg-white">
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
@@ -320,7 +320,7 @@ export default function CommunityHubLanding() {
             ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-12">
             <Button asChild variant="outline" size="lg">
               <Link href={getStartedUrl}>View All Discussions</Link>
             </Button>
@@ -329,9 +329,9 @@ export default function CommunityHubLanding() {
       </div>
 
       {/* Features */}
-      <div className="bg-white py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <div className="bg-white py-32">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Star className="w-3 h-3 mr-1" />
               Community Features
@@ -344,12 +344,12 @@ export default function CommunityHubLanding() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => {
               const IconComponent = feature.icon;
               return (
                 <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white">
-                  <CardContent className="p-6">
+                  <CardContent className="p-8">
                     <div className="flex items-start gap-4">
                       <div className="p-3 rounded-xl bg-green-50 group-hover:scale-110 transition-transform duration-300">
                         <IconComponent className="w-6 h-6 text-green-600" />
@@ -368,10 +368,10 @@ export default function CommunityHubLanding() {
       </div>
 
       {/* Community Guidelines */}
-      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-24">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+      <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-32">
+        <div className="container mx-auto px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-16">
               <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
                 Our Community Values
               </h2>
@@ -380,9 +380,9 @@ export default function CommunityHubLanding() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid md:grid-cols-2 gap-12">
               <Card className="border-0 bg-white shadow-lg">
-                <CardContent className="p-8">
+                <CardContent className="p-10">
                   <div className="flex items-center gap-3 mb-4">
                     <CheckCircle className="w-6 h-6 text-green-500" />
                     <h3 className="text-xl font-bold">What We Encourage</h3>
@@ -409,7 +409,7 @@ export default function CommunityHubLanding() {
               </Card>
 
               <Card className="border-0 bg-white shadow-lg">
-                <CardContent className="p-8">
+                <CardContent className="p-10">
                   <div className="flex items-center gap-3 mb-4">
                     <Shield className="w-6 h-6 text-blue-500" />
                     <h3 className="text-xl font-bold">Quality Standards</h3>
@@ -440,14 +440,14 @@ export default function CommunityHubLanding() {
       </div>
 
       {/* CTA Section */}
-      <div className="bg-gradient-to-r from-green-600 to-blue-600 py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h3 className="text-4xl font-bold text-white mb-4">Join the Conversation</h3>
-          <p className="text-xl text-green-100 mb-8 max-w-3xl mx-auto">
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 py-32">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-4xl font-bold text-white mb-6">Join the Conversation</h3>
+          <p className="text-xl text-green-100 mb-12 max-w-3xl mx-auto">
             Connect with thousands of founders who are building, learning, and succeeding together. 
             Your next breakthrough insight is one conversation away.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-green-600 hover:bg-green-50 hover:text-green-700 font-semibold px-8 py-4">
               <Link href={getStartedUrl} className="flex items-center gap-2">
                 Join Community Free
@@ -464,9 +464,9 @@ export default function CommunityHubLanding() {
       </div>
 
       {/* Bottom Features */}
-      <div className="bg-slate-50 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
+      <div className="bg-slate-50 py-24">
+        <div className="container mx-auto px-6">
+          <div className="grid md:grid-cols-3 gap-12">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <UserPlus className="w-8 h-8 text-white" />
