@@ -19,51 +19,58 @@ export default function Home() {
       <div className="container mx-auto px-6 py-20">
         {/* Hero Section */}
         <div className="text-center max-w-6xl mx-auto mb-32">
-          <Badge variant="secondary" className="mb-6 bg-blue-100 text-blue-700 border-blue-200">
-            <Zap className="w-3 h-3 mr-1" />
-            Your Startup's Ultimate Sidekick
+          <Badge variant="secondary" className="mb-6 bg-red-50 text-red-700 border-red-200">
+            <Target className="w-3 h-3 mr-1" />
+            For Founders Building Alone
           </Badge>
           
           <h1 className="text-6xl md:text-7xl font-bold mb-12 leading-tight">
-            <span className="bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
-              Don't Go It Alone.
+            <span className="bg-gradient-to-r from-slate-900 via-red-900 to-slate-900 bg-clip-text text-transparent">
+              Stop Building Your Startup
             </span>
             <br />
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              CoLaunch It.
+            <span className="bg-gradient-to-r from-red-600 to-slate-600 bg-clip-text text-transparent">
+              In Isolation.
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-4xl mx-auto">
-            Find your perfect co-founder, access vetted execution talent, and connect with a thriving founder community. 
-            Everything you need to turn your idea into reality.
-          </p>
+          <div className="text-xl text-slate-700 mb-16 leading-relaxed max-w-4xl mx-auto space-y-4">
+            <p className="font-medium">Most founders burn out not from building—<br />but from building everything alone.</p>
+            
+            <div className="text-lg text-slate-600 space-y-2">
+              <p>The wrong co-founder wastes 18 months.</p>
+              <p>Unreliable freelancers kill momentum.</p>
+              <p>No peer network means no perspective.</p>
+            </div>
+            
+            <p className="font-semibold text-slate-800 pt-4">Elite founders solve this systematically.<br />They build networks before they need them.</p>
+          </div>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
-            <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200">
+            <Button asChild size="lg" className="text-lg px-8 py-4 bg-gradient-to-r from-slate-800 to-slate-700 hover:from-slate-900 hover:to-slate-800 shadow-lg hover:shadow-xl transition-all duration-200">
               <Link href="/auth/signup" className="flex items-center gap-2">
-                Start Your CoLaunch
+                Build Your Network
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </Button>
-            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4 border-slate-300 hover:bg-slate-50">
-              <Link href="/co-founder-matching">Find Co-Founders</Link>
+            <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4 border-slate-400 hover:bg-slate-50 text-slate-700">
+              <Link href="#how-it-works">See How</Link>
             </Button>
           </div>
 
           {/* Social Proof */}
-          <div className="flex items-center justify-center gap-12 text-sm text-slate-500 mb-24">
+          <div className="flex items-center justify-center gap-12 text-sm text-slate-600 mb-24">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>500+ Founders Served</span>
+              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+              <span>500+ Connected Founders</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>Expert Network</span>
+              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+              <span>Pre-Vetted Network</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-              <span>AI-Powered Matching</span>
+              <div className="w-2 h-2 bg-slate-600 rounded-full"></div>
+              <span>Systematic Matching</span>
             </div>
           </div>
         </div>
@@ -76,10 +83,10 @@ export default function Home() {
               Core Founder Platforms
             </Badge>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-              Your Complete Founder Toolkit
+              Build Your Founder Network
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Three essential platforms to accelerate your startup journey
+              Three systematic approaches to end startup isolation
             </p>
           </div>
           
@@ -96,7 +103,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="text-center px-8 pb-8">
                 <p className="text-slate-600 leading-relaxed mb-6 text-lg">
-                  AI-powered personality matching to find your perfect co-founder based on skills, values, and working style.
+                  Skip 18 months of wrong partnerships. Get systematically matched with co-founders who complement your gaps.
                 </p>
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-slate-600">
@@ -133,7 +140,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="text-center px-8 pb-8">
                 <p className="text-slate-600 leading-relaxed mb-6 text-lg">
-                  Connect with vetted developers, designers, and marketers. Get your MVP built fast and affordably.
+                  Stop wasting time on unreliable freelancers. Access pre-vetted talent that understands startup urgency.
                 </p>
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-slate-600">
@@ -170,7 +177,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="text-center px-8 pb-8">
                 <p className="text-slate-600 leading-relaxed mb-6 text-lg">
-                  Connect with fellow founders, share insights, get feedback, and learn from the community's collective wisdom.
+                  Get perspective from founders who've solved your exact problems. No more building in a feedback vacuum.
                 </p>
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-slate-600">
@@ -237,13 +244,13 @@ export default function Home() {
         </div>
 
         {/* How It Works */}
-        <div className="mb-32">
+        <div className="mb-32" id="how-it-works">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-              Your Path to Success
+              How Elite Founders Build Networks
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Three simple steps to build your dream team and accelerate your startup
+              The systematic approach to ending startup isolation
             </p>
           </div>
 
@@ -252,8 +259,8 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-full mx-auto mb-8 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform shadow-xl">
                 1
               </div>
-              <h3 className="text-xl font-bold mb-6 group-hover:text-blue-600 transition-colors">Find Your Co-Founder</h3>
-              <p className="text-slate-600 mb-8 leading-relaxed">Take our personality assessment and get matched with co-founders who complement your skills and share your vision.</p>
+              <h3 className="text-xl font-bold mb-6 group-hover:text-blue-600 transition-colors">Identify Your Gaps</h3>
+              <p className="text-slate-600 mb-8 leading-relaxed">Map what you're missing—technical skills, business expertise, or industry connections. Get matched accordingly.</p>
               <Button asChild variant="outline" size="sm" className="group-hover:border-blue-300">
                 <Link href="/co-founder-matching">Start Matching</Link>
               </Button>
@@ -263,8 +270,8 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-violet-500 rounded-full mx-auto mb-8 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform shadow-xl">
                 2
               </div>
-              <h3 className="text-xl font-bold mb-6 group-hover:text-purple-600 transition-colors">Build Your MVP</h3>
-              <p className="text-slate-600 mb-8 leading-relaxed">Post your project and connect with pre-vetted developers, designers, and marketers ready to bring your idea to life.</p>
+              <h3 className="text-xl font-bold mb-6 group-hover:text-purple-600 transition-colors">Access Execution Talent</h3>
+              <p className="text-slate-600 mb-8 leading-relaxed">Connect with developers and designers who understand startup timelines. No more project delays from unreliable freelancers.</p>
               <Button asChild variant="outline" size="sm" className="group-hover:border-purple-300">
                 <Link href="/execution-network">Find Talent</Link>
               </Button>
@@ -274,8 +281,8 @@ export default function Home() {
               <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-full mx-auto mb-8 flex items-center justify-center text-white text-2xl font-bold group-hover:scale-110 transition-transform shadow-xl">
                 3
               </div>
-              <h3 className="text-xl font-bold mb-6 group-hover:text-emerald-600 transition-colors">Join the Community</h3>
-              <p className="text-slate-600 mb-8 leading-relaxed">Connect with fellow founders, share progress, get feedback, and learn from others on the same journey.</p>
+              <h3 className="text-xl font-bold mb-6 group-hover:text-emerald-600 transition-colors">Build Peer Network</h3>
+              <p className="text-slate-600 mb-8 leading-relaxed">Get strategic perspective from founders solving similar problems. End the isolation of building alone.</p>
               <Button asChild variant="outline" size="sm" className="group-hover:border-emerald-300">
                 <Link href="/community-hub">Join Now</Link>
               </Button>
@@ -287,14 +294,14 @@ export default function Home() {
         {/* CTA Section */}
         <div className="text-center">
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-16 text-white">
-            <h3 className="text-3xl font-bold mb-4">Ready to CoLaunch Your Startup?</h3>
+            <h3 className="text-3xl font-bold mb-4">Stop Building in Isolation</h3>
             <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
-              Join hundreds of founders who've accelerated their journey with expert support
+              Join the founders who solved startup loneliness systematically
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold px-8 py-4">
                 <Link href="/auth/signup" className="flex items-center gap-2">
-                  Get Started Free
+                  Build Your Network
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </Button>
