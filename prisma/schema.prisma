@@ -27,8 +27,60 @@ model User {
   experience        String?
   lookingFor        String?
   projectLinks      String?  // Store as JSON string
-  quizCompleted     Boolean  @default(false)
-  quizScores        Json?    // Store { openness: 4.2, conscientiousness: 3.8, ... }
+  // Founder Matching Assessment (replaces Big Five)
+  assessmentCompleted Boolean @default(false)
+  
+  // Section 1: Founder Identity & Work Style
+  motivation        String?   // What motivates you to build a startup
+  founderPersonality String?  // Visionary, Operator, Craftsman, Strategist  
+  pressureResponse  String?   // Take control, Collaborate, Withdraw, Escalate
+  conflictHandling  String?   // Free text response
+  communicationStyle String?  // Direct, Detailed, Casual, Emotional
+  bigFiveData       Json?     // Optional: MBTI, Big Five, DISC data
+  
+  // Section 2: Vision, Commitment & Ambition  
+  longTermVision    String?   // Billion-dollar, Lifestyle, Niche problem
+  idealExit         String?   // Acquisition, IPO, Long-term operator, Undecided
+  weeklyCommitment  Int?      // Hours per week
+  fullTimeReady     Boolean?  // Open to full-time commitment
+  noPayCommitment   Boolean?  // Willing to go 6+ months with minimal pay
+  locationFlexible  Boolean?  // Open to relocating/timezone flexibility
+  riskAppetite      Int?      // 1-10 scale
+  
+  // Section 3: Skills, Strengths & Role Fit
+  topSkills         String?   // JSON array of top 3 skills
+  weakAreas         String?   // Areas not comfortable leading
+  preferredRoles    String?   // JSON array: Product, Tech, Ops, Growth, etc.
+  technicalLevel    String?   // Technical, Semi-technical, Non-technical
+  portfolioLinks    String?   // JSON: LinkedIn, GitHub, etc.
+  biggestAchievement String?  // Hardest thing shipped/achieved
+  
+  // Section 4: Startup Stage & Domain Fit
+  currentStage      String?   // Idea, Validation, MVP, Early Revenue, Scaling
+  lookingToJoin     String?   // Start from scratch, Join existing, Find technical, etc.
+  passionateIndustries String? // JSON array of industries
+  domainExperience  Boolean?  // Has experience/networks in domain
+  previousStartupExp Boolean? // Previously worked in startup or founded one
+  
+  // Section 5: Work Culture & Operating Style  
+  workingStyle      String?   // Remote, Hybrid, In-person
+  workPreference    String?   // Fast chaos, Methodical, Deep focus, High collab
+  timezoneFlexibility String? // Timezone preferences
+  meetingRhythm     String?   // Daily, Weekly, Async only
+  collaborationScale Int?     // 1-10: Solo execution to constant pairing
+  
+  // Section 6: Conflict, Equity & Red Flags
+  scenarioResponse  String?   // How handle cofounder missing deadline
+  equityExpectation String?   // Expected equity percentage  
+  dealbreakers      String?   // JSON array of absolute dealbreakers
+  previousCofounderExp String? // What worked/didn't work
+  
+  // Section 7: Optional Psychometrics (moved from main)
+  psychometricData  Json?     // Enneagram, conflict modes, emotional regulation
+  
+  // Legacy Big Five support (optional enhancement)
+  quizCompleted     Boolean  @default(false) // Keep for backward compatibility
+  quizScores        Json?    // Optional Big Five scores
   personalityProfile Json?   // Calculated compatibility profile
   
   // Additional profile fields for filtering

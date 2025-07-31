@@ -46,6 +46,43 @@ type Founder = {
     emotionalStability: number;
     riskTolerance: number;
   };
+  
+  // New founder assessment fields
+  assessmentCompleted?: boolean;
+  motivation?: string;
+  founderPersonality?: string;
+  pressureResponse?: string;
+  conflictHandling?: string;
+  communicationStyleAssessment?: string;
+  longTermVision?: string;
+  idealExit?: string;
+  weeklyCommitment?: number;
+  fullTimeReady?: boolean;
+  noPayCommitment?: boolean;
+  locationFlexible?: boolean;
+  riskAppetite?: number;
+  topSkills?: string;
+  weakAreas?: string;
+  preferredRoles?: string;
+  technicalLevel?: string;
+  portfolioLinks?: string;
+  biggestAchievement?: string;
+  currentStage?: string;
+  lookingToJoin?: string;
+  passionateIndustries?: string;
+  domainExperience?: boolean;
+  previousStartupExp?: boolean;
+  workingStyleAssessment?: string;
+  workPreference?: string;
+  timezoneFlexibility?: string;
+  meetingRhythm?: string;
+  collaborationScale?: number;
+  scenarioResponse?: string;
+  equityExpectation?: string;
+  dealbreakers?: string;
+  previousCofounderExp?: string;
+  psychometricData?: any;
+  
   personalityProfile?: {
     leadershipStyle: string;
     innovationPreference: string;
@@ -169,14 +206,20 @@ export default function Discover() {
         
         // Check if user has completed onboarding
         const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
-        const hasQuizCompleted = profile.quizCompleted === true; // Explicit boolean check
+        const hasAssessmentCompleted = profile.assessmentCompleted === true; // New founder assessment
+        const hasLegacyQuiz = profile.quizCompleted === true; // Legacy Big Five support
         
-        if (!hasBasicProfile || !hasQuizCompleted) {
+        // Allow either new assessment or legacy quiz for backward compatibility
+        const hasMatchingData = hasAssessmentCompleted || hasLegacyQuiz;
+        
+        if (!hasBasicProfile || !hasMatchingData) {
           console.log('Redirecting to onboarding - missing:', {
             hasBasicProfile,
-            hasQuizCompleted,
-            quizCompletedValue: profile.quizCompleted,
-            quizCompletedType: typeof profile.quizCompleted
+            hasAssessmentCompleted,
+            hasLegacyQuiz,
+            hasMatchingData,
+            assessmentValue: profile.assessmentCompleted,
+            quizValue: profile.quizCompleted
           });
           // Set redirecting state and force redirect
           setRedirecting(true);
@@ -218,13 +261,107 @@ export default function Discover() {
   
   const currentFounder = founders[currentIndex];
 
-  // Simple compatibility calculation based on personality differences
+  // New founder assessment compatibility calculation
+  const calculateFounderAssessmentCompatibility = (currentUser: any, founder: any) => {
+    let compatibilityScore = 0;
+    let totalWeight = 0;
+
+    // 1. Vision & Ambition Alignment (High Weight: 25%)
+    if (currentUser.longTermVision && founder.longTermVision) {
+      const visionMatch = currentUser.longTermVision === founder.longTermVision ? 100 : 
+                         (currentUser.longTermVision === 'Lifestyle' && founder.longTermVision === 'Niche problem') ? 80 : 60;
+      compatibilityScore += visionMatch * 0.25;
+      totalWeight += 0.25;
+    }
+
+    // 2. Commitment Level Match (High Weight: 20%)
+    if (currentUser.fullTimeReady !== undefined && founder.fullTimeReady !== undefined) {
+      const commitmentMatch = currentUser.fullTimeReady === founder.fullTimeReady ? 100 : 40;
+      compatibilityScore += commitmentMatch * 0.20;
+      totalWeight += 0.20;
+    }
+
+    // 3. Role Complementarity (High Weight: 20%)
+    if (currentUser.preferredRoles && founder.preferredRoles) {
+      try {
+        const userRoles = JSON.parse(currentUser.preferredRoles || '[]');
+        const founderRoles = JSON.parse(founder.preferredRoles || '[]');
+        const overlap = userRoles.filter((role: string) => founderRoles.includes(role)).length;
+        const roleMatch = overlap === 0 ? 100 : Math.max(30, 100 - (overlap * 20)); // Less overlap = better
+        compatibilityScore += roleMatch * 0.20;
+        totalWeight += 0.20;
+      } catch (e) {
+        // Fallback if JSON parsing fails
+        compatibilityScore += 70 * 0.20;
+        totalWeight += 0.20;
+      }
+    }
+
+    // 4. Work Style & Communication (Medium Weight: 15%)
+    if (currentUser.communicationStyleAssessment && founder.communicationStyleAssessment) {
+      const styleMatch = currentUser.communicationStyleAssessment === founder.communicationStyleAssessment ? 90 : 
+                        (currentUser.communicationStyleAssessment === 'Direct' && founder.communicationStyleAssessment === 'Detailed') ? 75 : 60;
+      compatibilityScore += styleMatch * 0.15;
+      totalWeight += 0.15;
+    }
+
+    // 5. Risk Appetite Balance (Medium Weight: 10%)
+    if (currentUser.riskAppetite && founder.riskAppetite) {
+      const riskDiff = Math.abs(currentUser.riskAppetite - founder.riskAppetite);
+      const riskMatch = Math.max(50, 100 - (riskDiff * 8)); // Small differences are good
+      compatibilityScore += riskMatch * 0.10;
+      totalWeight += 0.10;
+    }
+
+    // 6. Stage & Experience Match (Medium Weight: 10%)
+    if (currentUser.currentStage && founder.currentStage) {
+      const stageMatch = currentUser.currentStage === founder.currentStage ? 95 : 70;
+      compatibilityScore += stageMatch * 0.10;
+      totalWeight += 0.10;
+    }
+
+    // Normalize score based on available data
+    const finalScore = totalWeight > 0 ? compatibilityScore / totalWeight : 70;
+    return Math.max(60, Math.min(98, Math.round(finalScore)));
+  };
+
+  // Legacy Big Five compatibility (kept for backward compatibility)
+  const calculateLegacyBigFiveCompatibility = (currentUser: any, founder: any) => {
+    const currentUserScores = currentUser.quizScores;
+    const founderScores = founder.quizScores;
+
+    // Calculate compatibility based on complementary traits
+    const opennessDiff = Math.abs(currentUserScores.openness - founderScores.openness);
+    const conscientiousnessDiff = Math.abs(currentUserScores.conscientiousness - founderScores.conscientiousness);
+    const extraversionDiff = Math.abs(currentUserScores.extraversion - founderScores.extraversion);
+    const agreeablenessDiff = Math.abs(currentUserScores.agreeableness - founderScores.agreeableness);
+    const riskDiff = Math.abs(currentUserScores.riskTolerance - founderScores.riskTolerance);
+
+    // Higher compatibility for moderate differences (complementary traits)
+    const avgDifference = (opennessDiff + conscientiousnessDiff + extraversionDiff + agreeablenessDiff + riskDiff) / 5;
+    
+    // Convert to percentage (lower difference = higher compatibility)
+    const compatibility = Math.max(60, Math.min(98, 95 - (avgDifference * 12)));
+    
+    return Math.round(compatibility);
+  };
+
+  // Enhanced compatibility calculation using founder assessment data
   const calculateCompatibility = (founder: Founder) => {
-    if (!currentUserProfile?.quizScores || !founder.quizScores) {
-      // Don't show fake percentages - this should never happen if onboarding works correctly
-      console.warn('Missing quiz scores for compatibility calculation:', {
-        currentUserHasScores: !!currentUserProfile?.quizScores,
-        founderHasScores: !!founder.quizScores,
+    // Check for new assessment data first, fallback to legacy Big Five
+    const currentUserHasAssessment = currentUserProfile?.assessmentCompleted;
+    const founderHasAssessment = founder.assessmentCompleted;
+    const currentUserHasLegacy = currentUserProfile?.quizScores;
+    const founderHasLegacy = founder.quizScores;
+    
+    // Require matching data type for comparison
+    if (!((currentUserHasAssessment && founderHasAssessment) || 
+          (currentUserHasLegacy && founderHasLegacy))) {
+      console.warn('Missing or mismatched assessment data for compatibility:', {
+        currentUserHasAssessment: !!currentUserHasAssessment,
+        founderHasAssessment: !!founderHasAssessment,
+        currentUserHasLegacy: !!currentUserHasLegacy,
+        founderHasLegacy: !!founderHasLegacy,
         founderId: founder.id
       });
       return 0; // Return 0 to indicate incomplete data
@@ -236,24 +373,17 @@ export default function Discover() {
       return 100; // Perfect match with yourself!
     }
 
-    const currentUserScores = currentUserProfile.quizScores;
-
-    // Calculate compatibility based on complementary traits
-    const opennessDiff = Math.abs(currentUserScores.openness - founder.quizScores.openness);
-    const conscientiousnessDiff = Math.abs(currentUserScores.conscientiousness - founder.quizScores.conscientiousness);
-    const extraversionDiff = Math.abs(currentUserScores.extraversion - founder.quizScores.extraversion);
-    const agreeablenessDiff = Math.abs(currentUserScores.agreeableness - founder.quizScores.agreeableness);
-    const riskDiff = Math.abs(currentUserScores.riskTolerance - founder.quizScores.riskTolerance);
-
-    // Higher compatibility for moderate differences (complementary traits)
-    const avgDifference = (opennessDiff + conscientiousnessDiff + extraversionDiff + agreeablenessDiff + riskDiff) / 5;
+    // Use new founder assessment for compatibility if available
+    if (currentUserHasAssessment && founderHasAssessment) {
+      return calculateFounderAssessmentCompatibility(currentUserProfile, founder);
+    }
     
-    // Convert to percentage (lower difference = higher compatibility)
-    // On 1-5 scale, max difference per trait is 4, so max avg difference is 4
-    // Scale this to compatibility percentage
-    const compatibility = Math.max(60, Math.min(98, 95 - (avgDifference * 12)));
+    // Fallback to legacy Big Five compatibility
+    if (currentUserHasLegacy && founderHasLegacy) {
+      return calculateLegacyBigFiveCompatibility(currentUserProfile, founder);
+    }
     
-    return Math.round(compatibility);
+    return 0; // This shouldn't happen due to earlier checks
   };
 
   const handleSwipe = async (direction: "left" | "right") => {
