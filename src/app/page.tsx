@@ -35,8 +35,8 @@ export default function Home() {
           </h1>
           
           <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-4xl mx-auto">
-            From idea to execution, CoLaunchr connects you with expert co-founders, advisory pods, 
-            and execution teams. Get the support you need to build, launch, and scale—without breaking the bank.
+            Find your perfect co-founder, access vetted execution talent, and connect with a thriving founder community. 
+            Everything you need to turn your idea into reality.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -73,129 +73,123 @@ export default function Home() {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 bg-slate-50 text-slate-700 border-slate-200">
               <Rocket className="w-3 h-3 mr-1" />
-              Complete Startup Ecosystem
+              Core Founder Platforms
             </Badge>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-              Everything You Need to Launch
+              Your Complete Founder Toolkit
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Access world-class expertise across every aspect of building your startup
+              Three essential platforms to accelerate your startup journey
             </p>
           </div>
           
-          <div className="grid lg:grid-cols-2 xl:grid-cols-5 gap-6">
-            {/* Founder Matching */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30 backdrop-blur-sm">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Co-Founder Matching */}
+            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-blue-50/30 backdrop-blur-sm lg:scale-105">
               <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Users className="w-8 h-8 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                  <Users className="w-10 h-10 text-white" />
                 </div>
-                <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
+                <CardTitle className="text-2xl font-bold text-slate-800 group-hover:text-blue-600 transition-colors">
                   Co-Founder Matching
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-slate-600 leading-relaxed mb-4">
+                <p className="text-slate-600 leading-relaxed mb-6 text-lg">
                   AI-powered personality matching to find your perfect co-founder based on skills, values, and working style.
                 </p>
-                <Button asChild variant="outline" size="sm" className="group-hover:bg-blue-50 group-hover:border-blue-300">
-                  <Link href="/co-founder-matching">
-                    Explore Matching
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* CoLaunch Pods */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-green-50/30 backdrop-blur-sm">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Brain className="w-8 h-8 text-white" />
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Personality assessment & matching
+                  </div>
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Skills & experience verification
+                  </div>
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Compatibility scoring
+                  </div>
                 </div>
-                <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-green-600 transition-colors">
-                  CoLaunch Pods
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-slate-600 leading-relaxed mb-4">
-                  Curated advisory pods with experts in marketing, tech, legal, and finance. Your dream team on-demand.
-                </p>
-                <Button asChild variant="outline" size="sm" className="group-hover:bg-green-50 group-hover:border-green-300">
-                  <Link href="/colaunch-pods">
-                    Join Waitlist
-                    <ArrowRight className="w-4 h-4 ml-1" />
+                <Button asChild size="lg" className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600">
+                  <Link href="/co-founder-matching">
+                    Find Co-Founders
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </CardContent>
             </Card>
 
             {/* Execution Network */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30 backdrop-blur-sm">
+            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-purple-50/30 backdrop-blur-sm lg:scale-105">
               <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <Code className="w-8 h-8 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-violet-500 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                  <Code className="w-10 h-10 text-white" />
                 </div>
-                <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-purple-600 transition-colors">
+                <CardTitle className="text-2xl font-bold text-slate-800 group-hover:text-purple-600 transition-colors">
                   Execution Network
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-slate-600 leading-relaxed mb-4">
-                  Vetted technical teams, designers, and marketers. Build MVPs, run campaigns, and execute fast.
+                <p className="text-slate-600 leading-relaxed mb-6 text-lg">
+                  Connect with vetted developers, designers, and marketers. Get your MVP built fast and affordably.
                 </p>
-                <div className="flex flex-col gap-2">
-                  <Button asChild variant="outline" size="sm" className="group-hover:bg-purple-50 group-hover:border-purple-300">
-                    <Link href="/execution-network">
-                      Learn More
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </Link>
-                  </Button>
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Pre-vetted service providers
+                  </div>
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Transparent pricing & timelines
+                  </div>
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Project management support
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Community */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/30 backdrop-blur-sm">
-              <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <MessageCircle className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">
-                  Community
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-slate-600 leading-relaxed mb-4">
-                  Connect with fellow founders, share insights, and learn from the community's collective wisdom.
-                </p>
-                <Button asChild variant="outline" size="sm" className="group-hover:bg-emerald-50 group-hover:border-emerald-300">
-                  <Link href="/community-hub">
-                    Learn More
-                    <ArrowRight className="w-4 h-4 ml-1" />
+                <Button asChild size="lg" className="w-full bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600">
+                  <Link href="/execution-network">
+                    Find Providers
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </CardContent>
             </Card>
 
-            {/* Growth Tracks */}
-            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-orange-50/30 backdrop-blur-sm">
+            {/* Community */}
+            <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-emerald-50/30 backdrop-blur-sm lg:scale-105">
               <CardHeader className="text-center pb-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <TrendingUp className="w-8 h-8 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-2xl">
+                  <MessageCircle className="w-10 h-10 text-white" />
                 </div>
-                <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-orange-600 transition-colors">
-                  Growth Tracks
+                <CardTitle className="text-2xl font-bold text-slate-800 group-hover:text-emerald-600 transition-colors">
+                  Community Hub
                 </CardTitle>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-slate-600 leading-relaxed mb-4">
-                  Structured programs from MVP to market. 1:1 coaching, group mentorship, and accountability.
+                <p className="text-slate-600 leading-relaxed mb-6 text-lg">
+                  Connect with fellow founders, share insights, get feedback, and learn from the community's collective wisdom.
                 </p>
-                <Button asChild variant="outline" size="sm" className="group-hover:bg-orange-50 group-hover:border-orange-300">
-                  <Link href="/growth-tracks">
-                    Join Waitlist
-                    <ArrowRight className="w-4 h-4 ml-1" />
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Founder networking events
+                  </div>
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Peer feedback & support
+                  </div>
+                  <div className="flex items-center text-sm text-slate-600">
+                    <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                    Knowledge sharing
+                  </div>
+                </div>
+                <Button asChild size="lg" className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600">
+                  <Link href="/community-hub">
+                    Join Community
+                    <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
               </CardContent>
