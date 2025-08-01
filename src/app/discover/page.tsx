@@ -209,8 +209,8 @@ export default function Discover() {
         const hasAssessmentCompleted = profile.assessmentCompleted === true; // New founder assessment
         const hasLegacyQuiz = profile.quizCompleted === true; // Legacy Big Five support
         
-        // Allow either new assessment or legacy quiz for backward compatibility
-        const hasMatchingData = hasAssessmentCompleted || hasLegacyQuiz;
+        // Prioritize new comprehensive assessment, only allow legacy quiz temporarily
+        const hasMatchingData = hasAssessmentCompleted; // Require new assessment
         
         if (!hasBasicProfile || !hasMatchingData) {
           console.log('Redirecting due to missing data:', {
