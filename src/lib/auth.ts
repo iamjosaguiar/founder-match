@@ -42,11 +42,13 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        // Return minimal user data to reduce JWT size (exclude image to prevent large headers)
+        // Return user data with image if it's not too large
         return {
           id: user.id,
           email: user.email,
           name: user.name,
+          image: user.image,
+          profileImage: user.profileImage
         };
       }
     })
