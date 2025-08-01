@@ -64,7 +64,7 @@ export async function GET(
         },
         likes: {
           where: {
-            userId: session.user.id
+            userId: session.user.id || ''
           }
         }
       }
