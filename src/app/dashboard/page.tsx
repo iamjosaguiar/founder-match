@@ -67,42 +67,70 @@ export default function DashboardPage() {
     }
 
     try {
-      // This would fetch real data from your APIs
-      // For now, using mock data structure
+      // Fetch real stats from APIs
+      const [matchesResponse, projectsResponse, postsResponse] = await Promise.all([
+        fetch('/api/matches').catch(() => ({ ok: false })),
+        fetch('/api/projects/my').catch(() => ({ ok: false })),
+        fetch('/api/community/posts/my').catch(() => ({ ok: false }))
+      ]);
+
+      let founderMatches = 0;
+      let executionProjects = 0;
+      let communityPosts = 0;
+      const recentActivities: RecentActivity[] = [];
+
+      // Get matches count
+      if (matchesResponse.ok) {
+        const matchesData = await matchesResponse.json();
+        founderMatches = matchesData.matches?.length || 0;
+        
+        // Add recent match activities
+        if (matchesData.matches?.length > 0) {
+          matchesData.matches.slice(0, 2).forEach((match: any) => {
+            recentActivities.push({
+              id: match.id,
+              type: 'match',
+              title: 'New co-founder match',
+              description: `Matched with ${match.user?.name || 'another founder'}`,
+              timestamp: new Date(match.matchedAt).toLocaleDateString(),
+              status: 'active'
+            });
+          });
+        }
+      }
+
+      // Get projects count (fallback for now since API may not exist)
+      if (projectsResponse.ok) {
+        const projectsData = await projectsResponse.json();
+        executionProjects = projectsData.projects?.length || 0;
+      }
+
+      // Get community posts count (fallback for now since API may not exist)
+      if (postsResponse.ok) {
+        const postsData = await postsResponse.json();
+        communityPosts = postsData.posts?.length || 0;
+      }
+
       setStats({
-        founderMatches: 3,
-        executionProjects: 1,
-        communityPosts: 5,
-        totalConnections: 12
+        founderMatches,
+        executionProjects,
+        communityPosts,
+        totalConnections: founderMatches + executionProjects + communityPosts
       });
 
-      setRecentActivity([
-        {
-          id: '1',
-          type: 'match',
-          title: 'New co-founder match',
-          description: 'Sarah Chen liked your profile',
-          timestamp: '2 hours ago',
-          status: 'pending'
-        },
-        {
-          id: '2',
-          type: 'project',
-          title: 'Project proposal received',
-          description: 'MVP Development project got a new proposal',
-          timestamp: '5 hours ago',
-          status: 'active'
-        },
-        {
-          id: '3',
-          type: 'post',
-          title: 'Community post liked',
-          description: 'Your post in Technical Discussion got 8 likes',
-          timestamp: '1 day ago'
-        }
-      ]);
+      // If no real activity, show empty state
+      setRecentActivity(recentActivities);
+      
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      // Set empty stats on error
+      setStats({
+        founderMatches: 0,
+        executionProjects: 0,
+        communityPosts: 0,
+        totalConnections: 0
+      });
+      setRecentActivity([]);
     } finally {
       setLoading(false);
     }
