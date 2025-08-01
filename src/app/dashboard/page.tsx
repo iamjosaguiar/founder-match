@@ -4,10 +4,12 @@ import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/components/dashboard-layout";
+import UserAvatar from "@/components/user-avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Textarea } from "@/components/ui/textarea";
 import { 
   Users, 
   Code, 
@@ -19,7 +21,13 @@ import {
   Clock,
   Star,
   Plus,
-  Eye
+  Eye,
+  Heart,
+  Share2,
+  MoreHorizontal,
+  Send,
+  Image as ImageIcon,
+  Smile
 } from "lucide-react";
 import Link from "next/link";
 
@@ -39,6 +47,35 @@ type RecentActivity = {
   status?: string;
 };
 
+type FeedPost = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  views: number;
+  likesCount: number;
+  commentsCount: number;
+  isPinned: boolean;
+  isLocked: boolean;
+  isLiked: boolean;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+    image?: string;
+    profileImage?: string;
+    title?: string;
+  };
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+    color: string;
+    icon?: string;
+  };
+};
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -49,7 +86,10 @@ export default function DashboardPage() {
     totalConnections: 0
   });
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
+  const [feedPosts, setFeedPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [feedLoading, setFeedLoading] = useState(true);
+  const [newPostContent, setNewPostContent] = useState("");
 
   useEffect(() => {
     if (status === "loading") return;
@@ -58,6 +98,7 @@ export default function DashboardPage() {
       return;
     }
     fetchDashboardData();
+    fetchFeedPosts();
   }, [session, status, router]);
 
   const fetchDashboardData = async () => {
@@ -134,6 +175,66 @@ export default function DashboardPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchFeedPosts = async () => {
+    if (!session) {
+      setFeedLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/dashboard/feed?limit=10');
+      if (response.ok) {
+        const data = await response.json();
+        setFeedPosts(data.posts || []);
+      }
+    } catch (error) {
+      console.error('Error fetching feed posts:', error);
+    } finally {
+      setFeedLoading(false);
+    }
+  };
+
+  const handleLikePost = async (postId: string) => {
+    try {
+      const response = await fetch(`/api/forum/posts/${postId}/like`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFeedPosts(prev => prev.map(post => 
+          post.id === postId 
+            ? { ...post, isLiked: data.isLiked, likesCount: data.likesCount }
+            : post
+        ));
+      }
+    } catch (error) {
+      console.error('Error liking post:', error);
+    }
+  };
+
+  const formatTimeAgo = (dateString: string) => {
+    const now = new Date();
+    const postDate = new Date(dateString);
+    const diffInSeconds = Math.floor((now.getTime() - postDate.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    
+    return postDate.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  const truncateContent = (content: string, maxLength: number = 200) => {
+    if (content.length <= maxLength) return content;
+    return content.substring(0, maxLength).trim() + '...';
   };
 
   const getActivityIcon = (type: string) => {
@@ -277,58 +378,179 @@ export default function DashboardPage() {
           </Card>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Recent Activity */}
-          <div className="lg:col-span-2">
-            <Card className="border-0 bg-white shadow-lg">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-5 h-5" />
-                  Recent Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {recentActivity.length > 0 ? (
-                  <div className="space-y-4">
-                    {recentActivity.map((activity) => {
-                      const IconComponent = getActivityIcon(activity.type);
-                      return (
-                        <div key={activity.id} className="flex items-start gap-4 p-4 bg-slate-50 rounded-lg">
-                          <div className={`p-2 rounded-lg ${getActivityColor(activity.type)}`}>
-                            <IconComponent className="w-4 h-4" />
-                          </div>
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Main Feed */}
+          <div className="lg:col-span-3">
+            <div className="space-y-6">
+              {/* Post Composer */}
+              <Card className="border-0 bg-white shadow-lg">
+                <CardContent className="p-6">
+                  <div className="flex gap-4">
+                    <UserAvatar 
+                      size="md"
+                      user={{
+                        name: session?.user?.name || "",
+                        email: session?.user?.email || "",
+                        image: session?.user?.image
+                      }}
+                    />
+                    <div className="flex-1">
+                      <Textarea
+                        placeholder="What's on your mind? Share an update, ask a question, or start a discussion..."
+                        value={newPostContent}
+                        onChange={(e) => setNewPostContent(e.target.value)}
+                        className="border-0 resize-none text-lg placeholder:text-slate-500 focus:ring-0 p-0"
+                        rows={3}
+                      />
+                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-200">
+                        <div className="flex items-center gap-4">
+                          <Button variant="ghost" size="sm" className="text-slate-500 hover:text-slate-700">
+                            <ImageIcon className="w-4 h-4 mr-2" />
+                            Photo
+                          </Button>
+                          <Button variant="ghost" size="sm" className="text-slate-500 hover:text-slate-700">
+                            <Smile className="w-4 h-4 mr-2" />
+                            Feeling
+                          </Button>
+                        </div>
+                        <Button 
+                          asChild
+                          disabled={!newPostContent.trim()}
+                          className="bg-gradient-to-r from-blue-600 to-indigo-600"
+                        >
+                          <Link href={`/community/new${newPostContent.trim() ? `?content=${encodeURIComponent(newPostContent)}` : ''}`}>
+                            <Send className="w-4 h-4 mr-2" />
+                            Post
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Social Feed */}
+              <div className="space-y-6">
+                {feedLoading ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="mt-4 text-slate-600">Loading feed...</p>
+                  </div>
+                ) : feedPosts.length > 0 ? (
+                  feedPosts.map((post) => (
+                    <Card key={post.id} className="border-0 bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+                      <CardContent className="p-6">
+                        {/* Post Header */}
+                        <div className="flex items-start gap-4 mb-4">
+                          <UserAvatar 
+                            size="md"
+                            user={{
+                              name: post.author.name,
+                              email: post.author.email,
+                              image: post.author.image,
+                              profileImage: post.author.profileImage
+                            }}
+                          />
                           <div className="flex-1">
                             <div className="flex items-center justify-between">
-                              <h4 className="font-medium text-slate-900">{activity.title}</h4>
-                              {activity.status && (
-                                <Badge variant="outline" className="text-xs">
-                                  {activity.status}
-                                </Badge>
-                              )}
+                              <div>
+                                <p className="font-semibold text-slate-900">{post.author.name}</p>
+                                {post.author.title && (
+                                  <p className="text-sm text-slate-600">{post.author.title}</p>
+                                )}
+                                <div className="flex items-center gap-2 text-sm text-slate-500">
+                                  <span>{formatTimeAgo(post.createdAt)}</span>
+                                  <span>•</span>
+                                  <Badge 
+                                    variant="secondary" 
+                                    className="text-xs"
+                                    style={{ backgroundColor: `${post.category.color}20`, color: post.category.color }}
+                                  >
+                                    {post.category.name}
+                                  </Badge>
+                                </div>
+                              </div>
+                              <Button variant="ghost" size="sm">
+                                <MoreHorizontal className="w-4 h-4" />
+                              </Button>
                             </div>
-                            <p className="text-sm text-slate-600 mt-1">{activity.description}</p>
-                            <p className="text-xs text-slate-500 mt-2">{activity.timestamp}</p>
                           </div>
                         </div>
-                      );
-                    })}
-                  </div>
+
+                        {/* Post Content */}
+                        <div className="mb-4">
+                          <Link href={`/community/post/${post.id}`}>
+                            <h3 className="font-semibold text-lg text-slate-900 mb-2 hover:text-blue-600 transition-colors">
+                              {post.title}
+                            </h3>
+                          </Link>
+                          <p className="text-slate-700 leading-relaxed whitespace-pre-wrap">
+                            {truncateContent(post.content)}
+                          </p>
+                          {post.content.length > 200 && (
+                            <Link 
+                              href={`/community/post/${post.id}`}
+                              className="text-blue-600 hover:text-blue-700 text-sm mt-2 inline-block"
+                            >
+                              Read more
+                            </Link>
+                          )}
+                        </div>
+
+                        {/* Post Actions */}
+                        <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                          <div className="flex items-center gap-6 text-sm text-slate-500">
+                            <span>{post.views} views</span>
+                            <span>{post.commentsCount} comments</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleLikePost(post.id)}
+                              className={post.isLiked ? "text-red-600 hover:text-red-700" : "text-slate-500 hover:text-slate-700"}
+                            >
+                              <Heart className={`w-4 h-4 mr-1 ${post.isLiked ? "fill-current" : ""}`} />
+                              {post.likesCount}
+                            </Button>
+                            <Button variant="ghost" size="sm" className="text-slate-500 hover:text-slate-700">
+                              <MessageCircle className="w-4 h-4 mr-1" />
+                              Comment
+                            </Button>
+                            <Button variant="ghost" size="sm" className="text-slate-500 hover:text-slate-700">
+                              <Share2 className="w-4 h-4 mr-1" />
+                              Share
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
                 ) : (
-                  <div className="text-center py-8">
-                    <Calendar className="w-12 h-12 text-slate-400 mx-auto mb-4" />
-                    <p className="text-slate-600">No recent activity</p>
-                    <p className="text-sm text-slate-500">Start connecting with the community!</p>
-                  </div>
+                  <Card className="border-0 bg-white shadow-lg">
+                    <CardContent className="p-12 text-center">
+                      <MessageCircle className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                      <h3 className="text-xl font-semibold text-slate-900 mb-2">No posts yet</h3>
+                      <p className="text-slate-600 mb-6">Be the first to share something with the community!</p>
+                      <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600">
+                        <Link href="/community/new">
+                          <Plus className="w-4 h-4 mr-2" />
+                          Create Post
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
 
-          {/* Quick Actions */}
-          <div>
-            <Card className="border-0 bg-white shadow-lg mb-6">
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Quick Actions */}
+            <Card className="border-0 bg-white shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-lg">
                   <Star className="w-5 h-5" />
                   Quick Actions
                 </CardTitle>
@@ -347,17 +569,47 @@ export default function DashboardPage() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full justify-start">
-                  <Link href="/execution-network/projects">
-                    <Eye className="w-4 h-4 mr-2" />
-                    Browse Projects
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start">
                   <Link href="/founder-matching">
                     <Users className="w-4 h-4 mr-2" />
-                    Browse Co-founders
+                    Find Co-founders
                   </Link>
                 </Button>
+              </CardContent>
+            </Card>
+
+            {/* Recent Activity */}
+            <Card className="border-0 bg-white shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Clock className="w-5 h-5" />
+                  Your Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {recentActivity.length > 0 ? (
+                  <div className="space-y-3">
+                    {recentActivity.slice(0, 3).map((activity) => {
+                      const IconComponent = getActivityIcon(activity.type);
+                      return (
+                        <div key={activity.id} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                          <div className={`p-1.5 rounded-lg ${getActivityColor(activity.type)}`}>
+                            <IconComponent className="w-3 h-3" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-sm text-slate-900 truncate">{activity.title}</h4>
+                            <p className="text-xs text-slate-600 truncate">{activity.description}</p>
+                            <p className="text-xs text-slate-500 mt-1">{activity.timestamp}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-center py-6">
+                    <Calendar className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                    <p className="text-sm text-slate-600">No recent activity</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -368,7 +620,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-slate-700 mb-4">
-                  Complete your profile to get better co-founder matches and attract top service providers.
+                  Engage with the community by liking and commenting on posts to build meaningful connections.
                 </p>
                 <Button asChild size="sm" variant="outline" className="border-orange-200 hover:bg-orange-50">
                   <Link href="/settings">

@@ -49,7 +49,8 @@ function NewPostForm() {
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<PostData>({
     defaultValues: {
-      categoryId: searchParams.get('category') || ''
+      categoryId: searchParams.get('category') || '',
+      content: searchParams.get('content') || ''
     }
   });
 
