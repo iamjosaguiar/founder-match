@@ -224,16 +224,10 @@ export default function Discover() {
             assessmentValue: profile.assessmentCompleted,
             quizValue: profile.quizCompleted
           });
-          // Set redirecting state and redirect appropriately
+          // Set redirecting state and redirect to founder assessment
           setRedirecting(true);
-          
-          // If missing basic profile, go to onboarding first
-          if (!hasBasicProfile) {
-            router.replace('/onboarding');
-          } else {
-            // If has basic profile but missing assessment, go to founder assessment
-            router.replace('/founder-assessment');
-          }
+          // Always redirect to founder assessment - it handles both basic profile and assessment
+          router.replace('/founder-assessment');
           return;
         }
         

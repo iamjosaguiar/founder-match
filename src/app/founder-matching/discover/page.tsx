@@ -85,25 +85,21 @@ export default function DiscoverFoundersPage() {
           });
           
           setRedirecting(true);
-          
-          if (!hasBasicProfile) {
-            router.replace('/onboarding');
-          } else {
-            router.replace('/founder-assessment');
-          }
+          // Always redirect to founder assessment - it handles both basic profile and assessment
+          router.replace('/founder-assessment');
           return false;
         }
         return true;
       } else {
-        console.log('Profile fetch failed from founder-matching/discover, redirecting to onboarding');
+        console.log('Profile fetch failed from founder-matching/discover, redirecting to founder assessment');
         setRedirecting(true);
-        router.replace('/onboarding');
+        router.replace('/founder-assessment');
         return false;
       }
     } catch (error) {
       console.error('Error checking assessment from founder-matching/discover:', error);
       setRedirecting(true);
-      router.replace('/onboarding');
+      router.replace('/founder-assessment');
       return false;
     }
   };
