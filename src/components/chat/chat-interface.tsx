@@ -15,7 +15,8 @@ import {
   History,
   Trash2,
   Settings,
-  Loader2
+  Loader2,
+  Brain
 } from "lucide-react";
 
 type Message = {
@@ -167,7 +168,7 @@ export default function ChatInterface({
           role: "assistant",
           content: data.response,
           createdAt: new Date().toISOString(),
-          metadata: data.usage
+          metadata: { ...data.usage, memoriesStored: data.memoriesStored }
         };
         
         setMessages(prev => [...prev.slice(0, -1), userMessage, aiMessage]);
@@ -251,13 +252,23 @@ export default function ChatInterface({
                 ×
               </Button>
             </div>
-            <Button
-              onClick={createNewConversation}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              New Conversation
-            </Button>
+            <div className="space-y-2">
+              <Button
+                onClick={createNewConversation}
+                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                New Conversation
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => window.open('/chat/memory', '_blank')}
+              >
+                <Brain className="w-4 h-4 mr-2" />
+                Manage Memories
+              </Button>
+            </div>
           </div>
           
           <div className="flex-1 overflow-y-auto p-4">
@@ -408,6 +419,11 @@ export default function ChatInterface({
                       {formatTimeAgo(message.createdAt)}
                       {message.metadata?.totalTokens && (
                         <span className="ml-2">• {message.metadata.totalTokens} tokens</span>
+                      )}
+                      {message.metadata?.memoriesStored > 0 && (
+                        <span className="ml-2 text-green-600">
+                          • {message.metadata.memoriesStored} memory stored
+                        </span>
                       )}
                     </p>
                   </div>

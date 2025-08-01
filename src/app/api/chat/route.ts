@@ -119,14 +119,16 @@ async function extractAndStoreMemories(userId: string, userMessage: string, aiRe
     { pattern: /i prefer|i like|i want|i need/i, type: 'preference' },
     { pattern: /my goal|i'm trying to|i hope to/i, type: 'goal' },
     { pattern: /i'm good at|i excel at|my strength/i, type: 'skill' },
-    { pattern: /i struggle with|i'm not good at|my weakness/i, type: 'weakness' }
+    { pattern: /i struggle with|i'm not good at|my weakness/i, type: 'weakness' },
+    { pattern: /i'm looking for|seeking|need help with/i, type: 'context' },
+    { pattern: /i work|i do|my role|my job/i, type: 'fact' }
   ];
 
-  const memories = [];
+  const extractedMemories = [];
   
   for (const { pattern, type } of memoryPatterns) {
     if (pattern.test(userMessage)) {
-      memories.push({
+      extractedMemories.push({
         userId,
         memoryType: type,
         content: userMessage,
@@ -138,11 +140,14 @@ async function extractAndStoreMemories(userId: string, userMessage: string, aiRe
     }
   }
 
-  if (memories.length > 0) {
-    await prisma.userMemory.createMany({
-      data: memories
+  if (extractedMemories.length > 0) {
+    const createdMemories = await prisma.userMemory.createMany({
+      data: extractedMemories
     });
+    return extractedMemories.length;
   }
+
+  return 0;
 }
 
 // POST /api/chat - Send message and get AI response
@@ -292,7 +297,7 @@ Guidelines:
     ]);
 
     // Extract and store new memories from this conversation
-    await extractAndStoreMemories(user.id, message, aiResponse);
+    const memoriesStored = await extractAndStoreMemories(user.id, message, aiResponse);
 
     // Update conversation timestamp
     await prisma.chatConversation.update({
@@ -303,6 +308,7 @@ Guidelines:
     return NextResponse.json({
       response: aiResponse,
       conversationId: conversation.id,
+      memoriesStored,
       usage: {
         promptTokens: completion.usage?.prompt_tokens || 0,
         completionTokens: completion.usage?.completion_tokens || 0,
