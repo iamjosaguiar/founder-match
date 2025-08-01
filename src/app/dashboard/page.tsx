@@ -90,6 +90,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [feedLoading, setFeedLoading] = useState(true);
   const [newPostContent, setNewPostContent] = useState("");
+  const [isPosting, setIsPosting] = useState(false);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -235,6 +236,81 @@ export default function DashboardPage() {
   const truncateContent = (content: string, maxLength: number = 200) => {
     if (content.length <= maxLength) return content;
     return content.substring(0, maxLength).trim() + '...';
+  };
+
+  const handleDirectPost = async () => {
+    if (!newPostContent.trim() || isPosting) return;
+
+    setIsPosting(true);
+    try {
+      // Get the "General" category ID first
+      const categoriesResponse = await fetch('/api/forum/categories');
+      let generalCategoryId = '';
+      
+      if (categoriesResponse.ok) {
+        const categoriesData = await categoriesResponse.json();
+        const generalCategory = categoriesData.find((cat: any) => cat.slug === 'general');
+        generalCategoryId = generalCategory?.id || '';
+      }
+
+      // Create the post
+      const response = await fetch('/api/forum/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: newPostContent.length > 50 
+            ? newPostContent.substring(0, 50).trim() + '...' 
+            : newPostContent.trim(),
+          content: newPostContent.trim(),
+          categoryId: generalCategoryId
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        // Add the new post to the feed
+        const newPost: FeedPost = {
+          id: result.post.id,
+          title: result.post.title,
+          content: result.post.content,
+          createdAt: result.post.createdAt,
+          updatedAt: result.post.updatedAt,
+          views: 0,
+          likesCount: 0,
+          commentsCount: 0,
+          isPinned: false,
+          isLocked: false,
+          isLiked: false,
+          author: {
+            id: session?.user?.id || '',
+            name: session?.user?.name || '',
+            email: session?.user?.email || '',
+            image: session?.user?.image,
+            title: result.post.author?.title
+          },
+          category: result.post.category
+        };
+
+        setFeedPosts(prev => [newPost, ...prev]);
+        setNewPostContent("");
+        
+        // Update stats
+        setStats(prev => ({
+          ...prev,
+          communityPosts: prev.communityPosts + 1,
+          totalConnections: prev.totalConnections + 1
+        }));
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Post creation error:', error);
+      alert('Failed to create post. Please try again.');
+    } finally {
+      setIsPosting(false);
+    }
   };
 
   const getActivityIcon = (type: string) => {
@@ -399,6 +475,12 @@ export default function DashboardPage() {
                         placeholder="What's on your mind? Share an update, ask a question, or start a discussion..."
                         value={newPostContent}
                         onChange={(e) => setNewPostContent(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && (e.metaKey || e.ctrlKey) && newPostContent.trim()) {
+                            e.preventDefault();
+                            handleDirectPost();
+                          }
+                        }}
                         className="border-0 resize-none text-lg placeholder:text-slate-500 focus:ring-0 p-0"
                         rows={3}
                       />
@@ -412,16 +494,18 @@ export default function DashboardPage() {
                             <Smile className="w-4 h-4 mr-2" />
                             Feeling
                           </Button>
+                          <Badge variant="secondary" className="text-xs bg-blue-50 text-blue-700">
+                            General
+                          </Badge>
+                          <span className="text-xs text-slate-400">Cmd+Enter to post</span>
                         </div>
                         <Button 
-                          asChild
-                          disabled={!newPostContent.trim()}
+                          onClick={handleDirectPost}
+                          disabled={!newPostContent.trim() || isPosting}
                           className="bg-gradient-to-r from-blue-600 to-indigo-600"
                         >
-                          <Link href={`/community/new${newPostContent.trim() ? `?content=${encodeURIComponent(newPostContent)}` : ''}`}>
-                            <Send className="w-4 h-4 mr-2" />
-                            Post
-                          </Link>
+                          <Send className="w-4 h-4 mr-2" />
+                          {isPosting ? "Posting..." : "Post"}
                         </Button>
                       </div>
                     </div>
