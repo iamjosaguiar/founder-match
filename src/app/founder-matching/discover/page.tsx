@@ -53,11 +53,60 @@ export default function DiscoverFoundersPage() {
   const [loading, setLoading] = useState(true);
   const [matching, setMatching] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
   const [filters, setFilters] = useState({
     industry: '',
     stage: '',
     remoteOk: false
   });
+
+  // Assessment check function
+  const checkAssessmentCompleted = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      if (response.ok) {
+        const profile = await response.json();
+        
+        console.log('Founder-matching discover - profile check:', {
+          email: profile.email,
+          assessmentCompleted: profile.assessmentCompleted,
+          assessmentCompletedType: typeof profile.assessmentCompleted,
+          hasAssessmentCompleted: profile.assessmentCompleted === true
+        });
+        
+        const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
+        const hasAssessmentCompleted = profile.assessmentCompleted === true;
+        
+        if (!hasBasicProfile || !hasAssessmentCompleted) {
+          console.log('Redirecting from founder-matching/discover due to missing data:', {
+            hasBasicProfile,
+            hasAssessmentCompleted,
+            assessmentValue: profile.assessmentCompleted
+          });
+          
+          setRedirecting(true);
+          
+          if (!hasBasicProfile) {
+            router.replace('/onboarding');
+          } else {
+            router.replace('/founder-assessment');
+          }
+          return false;
+        }
+        return true;
+      } else {
+        console.log('Profile fetch failed from founder-matching/discover, redirecting to onboarding');
+        setRedirecting(true);
+        router.replace('/onboarding');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error checking assessment from founder-matching/discover:', error);
+      setRedirecting(true);
+      router.replace('/onboarding');
+      return false;
+    }
+  };
 
   useEffect(() => {
     if (status === "loading") return;
@@ -65,7 +114,13 @@ export default function DiscoverFoundersPage() {
       router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/founder-matching/discover"));
       return;
     }
-    fetchFounders();
+    
+    // Check assessment before fetching founders
+    checkAssessmentCompleted().then(canProceed => {
+      if (canProceed) {
+        fetchFounders();
+      }
+    });
   }, [session, status, router, filters]);
 
   const fetchFounders = async () => {
@@ -131,13 +186,15 @@ export default function DiscoverFoundersPage() {
 
   const currentFounder = founders[currentIndex];
 
-  if (status === "loading" || loading) {
+  if (status === "loading" || loading || redirecting) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-full">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-            <p className="mt-4 text-slate-600">Finding potential co-founders...</p>
+            <p className="mt-4 text-slate-600">
+              {redirecting ? "Checking assessment..." : "Finding potential co-founders..."}
+            </p>
           </div>
         </div>
       </DashboardLayout>
