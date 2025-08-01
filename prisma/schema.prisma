@@ -124,6 +124,10 @@ model User {
   postLikes         PostLike[]
   commentLikes      CommentLike[]
   
+  // Chatbot relationships
+  conversations     ChatConversation[] @relation("UserConversations")
+  memories          UserMemory[] @relation("UserMemories")
+  
   @@map("users")
 }
 
@@ -328,4 +332,60 @@ model CommentLike {
   
   @@unique([userId, commentId])
   @@map("comment_likes")
+}
+
+// Chatbot conversations and memory
+model ChatConversation {
+  id        String    @id @default(uuid())
+  userId    String
+  title     String?   // Auto-generated or user-defined title
+  summary   String?   // AI-generated summary for long conversations
+  
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  // Relationships
+  user      User @relation("UserConversations", fields: [userId], references: [id], onDelete: Cascade)
+  messages  ChatMessage[]
+  
+  @@map("chat_conversations")
+}
+
+model ChatMessage {
+  id             String    @id @default(uuid())
+  conversationId String
+  role           String    // "user" or "assistant"
+  content        String    // Message content
+  metadata       Json?     // Context used, sources, confidence scores, etc.
+  tokenCount     Int?      // For usage tracking
+  
+  createdAt      DateTime  @default(now())
+  
+  // Relationships
+  conversation   ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  @@map("chat_messages")
+}
+
+model UserMemory {
+  id            String    @id @default(uuid())
+  userId        String
+  memoryType    String    // "preference", "goal", "fact", "context", "skill"
+  content       String    // The actual memory content
+  category      String?   // "profile", "conversation", "behavior", "feedback"
+  importance    Int       @default(5) // 1-10 importance score
+  confidence    Float     @default(1.0) // 0-1 confidence in this memory
+  source        String?   // Where this memory came from ("conversation", "profile", "assessment")
+  lastUsed      DateTime? // Track when memory was last accessed
+  expiresAt     DateTime? // Optional expiration for temporary memories
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relationships  
+  user          User @relation("UserMemories", fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId, memoryType])
+  @@index([userId, importance])
+  @@map("user_memories")
 }

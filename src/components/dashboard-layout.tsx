@@ -18,6 +18,7 @@ import {
   Users, 
   Code, 
   MessageCircle,
+  Bot,
   Settings,
   ChevronLeft,
   ChevronRight,
@@ -115,6 +116,11 @@ const navigation = [
     name: "Community",
     href: "/community",
     icon: MessageCircle
+  },
+  {
+    name: "AI Assistant",
+    href: "/chat",
+    icon: Bot
   },
   {
     name: "Settings",
