@@ -251,3 +251,116 @@ export async function GET(
     }, { status: 500 });
   }
 }
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const session = await getServerSession(authOptions) as any;
+    
+    if (!session?.user?.email) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { proposal, proposedRate, proposedTimeline } = await request.json();
+
+    if (!proposal || !proposal.trim()) {
+      return NextResponse.json({ message: 'Proposal is required' }, { status: 400 });
+    }
+
+    // Get current user
+    const currentUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true }
+    });
+
+    if (!currentUser) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    // Get the project
+    const project = await prisma.project.findUnique({
+      where: { id: params.id },
+      select: { 
+        id: true, 
+        ownerId: true, 
+        status: true,
+        title: true 
+      }
+    });
+
+    if (!project) {
+      return NextResponse.json({ message: 'Project not found' }, { status: 404 });
+    }
+
+    if (project.status !== 'open') {
+      return NextResponse.json({ message: 'Project is no longer accepting proposals' }, { status: 400 });
+    }
+
+    if (project.ownerId === currentUser.id) {
+      return NextResponse.json({ message: 'Cannot apply to your own project' }, { status: 400 });
+    }
+
+    // Check if user already applied
+    const existingMatch = await prisma.projectMatch.findUnique({
+      where: {
+        projectId_serviceProviderId: {
+          projectId: params.id,
+          serviceProviderId: currentUser.id
+        }
+      }
+    });
+
+    if (existingMatch) {
+      return NextResponse.json({ message: 'You have already applied to this project' }, { status: 400 });
+    }
+
+    // Create the proposal
+    const match = await prisma.projectMatch.create({
+      data: {
+        projectId: params.id,
+        serviceProviderId: currentUser.id,
+        proposal: proposal.trim(),
+        proposedRate: proposedRate ? parseInt(proposedRate) : null,
+        proposedTimeline: proposedTimeline || null,
+        status: 'pending'
+      },
+      include: {
+        serviceProvider: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            image: true,
+            profileImage: true,
+            title: true,
+            location: true,
+            hourlyRate: true,
+            serviceTypes: true
+          }
+        },
+        project: {
+          select: {
+            id: true,
+            title: true
+          }
+        }
+      }
+    });
+
+    return NextResponse.json({
+      success: true,
+      message: 'Proposal submitted successfully',
+      match
+    });
+
+  } catch (error) {
+    console.error('Error submitting proposal:', error);
+    return NextResponse.json({
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 });
+  }
+}
