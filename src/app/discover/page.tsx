@@ -235,9 +235,17 @@ export default function Discover() {
         }
         
         setCurrentUserProfile(profile);
+      } else {
+        // If profile fetch fails (user doesn't exist or has no profile), redirect to onboarding
+        console.log('Profile fetch failed, redirecting to onboarding');
+        setRedirecting(true);
+        router.replace('/onboarding');
       }
     } catch (error) {
       console.error('Error fetching current user profile:', error);
+      // On error, also redirect to onboarding
+      setRedirecting(true);
+      router.replace('/onboarding');
     }
   }, [router]);
 
