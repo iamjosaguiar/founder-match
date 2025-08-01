@@ -40,19 +40,6 @@ type CompleteOnboardingData = {
   workStyle: string;
   isTechnical: boolean;
   
-  // Psychological Assessment
-  openness1: number;
-  openness2: number;
-  conscientiousness1: number;
-  conscientiousness2: number;
-  extraversion1: number;
-  extraversion2: number;
-  agreeableness1: number;
-  agreeableness2: number;
-  neuroticism1: number;
-  neuroticism2: number;
-  riskTolerance1: number;
-  riskTolerance2: number;
 };
 
 // Business options
@@ -98,20 +85,6 @@ const founderJourneyOptions = [
   { value: "join-startup", label: "I want to join someone else's startup" },
 ];
 
-const psychQuestions = [
-  { key: "openness1", trait: "Openness", question: "I enjoy trying new approaches to problems", reverse: false },
-  { key: "openness2", trait: "Openness", question: "I am interested in abstract ideas and concepts", reverse: false },
-  { key: "conscientiousness1", trait: "Conscientiousness", question: "I pay attention to details in my work", reverse: false },
-  { key: "conscientiousness2", trait: "Conscientiousness", question: "I like to have a clear plan before starting projects", reverse: false },
-  { key: "extraversion1", trait: "Extraversion", question: "I enjoy being the center of attention", reverse: false },
-  { key: "extraversion2", trait: "Extraversion", question: "I feel comfortable around people I don't know", reverse: false },
-  { key: "agreeableness1", trait: "Agreeableness", question: "I generally trust others until proven otherwise", reverse: false },
-  { key: "agreeableness2", trait: "Agreeableness", question: "I am genuinely interested in other people's well-being", reverse: false },
-  { key: "neuroticism1", trait: "Emotional Stability", question: "I remain calm under pressure", reverse: true },
-  { key: "neuroticism2", trait: "Emotional Stability", question: "I rarely worry about things I cannot control", reverse: true },
-  { key: "riskTolerance1", trait: "Risk Tolerance", question: "I am comfortable with uncertainty in business decisions", reverse: false },
-  { key: "riskTolerance2", trait: "Risk Tolerance", question: "I enjoy taking calculated risks for potential rewards", reverse: false },
-];
 
 export default function Onboarding() {
   const [step, setStep] = useState(0);
@@ -158,12 +131,6 @@ export default function Onboarding() {
     setValue("skills", newSkills);
   };
 
-  const questionsPerPage = 4;
-  const totalPsychPages = Math.ceil(psychQuestions.length / questionsPerPage);
-  const currentPsychQuestions = psychQuestions.slice(
-    (step - 5) * questionsPerPage,
-    (step - 4) * questionsPerPage
-  );
 
   // Step 0: Role Selection
   const isStep0Complete = userRoles.length > 0;
@@ -204,7 +171,6 @@ export default function Onboarding() {
     let stepCount = 3; // Role selection + Basic profile + Skills (if needed)
     if (isFounder) {
       stepCount += 3; // Founder journey + What you're looking for + Business info
-      // Psychology assessment is now handled separately in /founder-assessment
     }
     return stepCount;
   };
@@ -219,17 +185,6 @@ export default function Onboarding() {
   else if (step === 3) isCurrentStepComplete = isStep3Complete;
   else if (step === 4) isCurrentStepComplete = isStep4Complete;
   else if (step === 5) isCurrentStepComplete = isStep5Complete;
-  else if (step >= 6 && isFounder) {
-    // For psychology questions (only for founders)
-    const psychStep = step - 6;
-    const currentPsychQs = psychQuestions.slice(
-      psychStep * questionsPerPage,
-      (psychStep + 1) * questionsPerPage
-    );
-    isCurrentStepComplete = currentPsychQs.every(q => 
-      watchedValues[q.key as keyof CompleteOnboardingData]
-    );
-  }
 
   const onSubmit = async (data: CompleteOnboardingData) => {
     setIsSubmitting(true);
@@ -736,47 +691,6 @@ export default function Onboarding() {
               )}
 
 
-              {/* Steps 6+: Psychology Questions (only for founders) */}
-              {step >= 6 && isFounder && (
-                <div className="space-y-6">
-                  <h3 className="text-xl font-semibold">
-                    Personality Assessment - Part {step - 5} of {totalPsychPages}
-                  </h3>
-                  <p className="text-gray-600 text-center mb-6">
-                    Rate each statement from 1 (Strongly Disagree) to 5 (Strongly Agree)
-                  </p>
-                  
-                  {currentPsychQuestions.map((q, index) => (
-                    <div key={q.key} className="space-y-3">
-                      <div className="flex items-start gap-3">
-                        <span className="text-blue-600 font-semibold text-lg min-w-[24px]">
-                          {index + 1}.
-                        </span>
-                        <div className="flex-1">
-                          <p className="text-gray-800 font-medium mb-3">{q.question}</p>
-                          <div className="flex justify-between items-center">
-                            <span className="text-xs text-gray-500">Strongly Disagree</span>
-                            <div className="flex gap-4">
-                              {[1, 2, 3, 4, 5].map((value) => (
-                                <label key={value} className="flex flex-col items-center gap-1 cursor-pointer">
-                                  <input
-                                    type="radio"
-                                    value={value}
-                                    {...register(q.key as keyof CompleteOnboardingData, { required: true })}
-                                    className="w-4 h-4 text-blue-600"
-                                  />
-                                  <span className="text-xs text-gray-600">{value}</span>
-                                </label>
-                              ))}
-                            </div>
-                            <span className="text-xs text-gray-500">Strongly Agree</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
 
               <div className="flex justify-between pt-6 border-t">
                 <Button
