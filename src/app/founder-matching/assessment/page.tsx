@@ -12,6 +12,7 @@ import { ArrowLeft, Brain, CheckCircle, RefreshCw, Target, TrendingUp } from "lu
 
 type UserProfile = {
   quizCompleted: boolean;
+  assessmentCompleted: boolean;
   quizScores?: any;
   personalityProfile?: any;
 };
@@ -75,11 +76,11 @@ export default function AssessmentPage() {
               </Link>
             </Button>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Personality Assessment</h1>
-          <p className="text-slate-600">Your Big Five personality assessment for co-founder matching</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Founder Assessment</h1>
+          <p className="text-slate-600">Complete your comprehensive founder profile for better co-founder matching</p>
         </div>
 
-        {userProfile?.quizCompleted ? (
+        {userProfile?.assessmentCompleted || userProfile?.quizCompleted ? (
           // Assessment Completed State
           <div className="space-y-6">
             <Card className="border-0 bg-gradient-to-br from-green-50 to-green-100 shadow-lg">
@@ -89,7 +90,7 @@ export default function AssessmentPage() {
                 </div>
                 <h2 className="text-2xl font-bold text-green-900 mb-2">Assessment Completed!</h2>
                 <p className="text-green-700 mb-6">
-                  You've successfully completed your personality assessment. Your profile is active and ready for matching.
+                  You've successfully completed your founder assessment. Your profile is active and ready for matching.
                 </p>
                 <Badge className="bg-green-100 text-green-800 border-green-200 mb-6">
                   ✅ Profile Active
@@ -103,7 +104,7 @@ export default function AssessmentPage() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Brain className="w-5 h-5" />
-                    Your Personality Profile
+                    Your Founder Profile
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -117,7 +118,7 @@ export default function AssessmentPage() {
                         {userProfile.personalityProfile.founderType || "Visionary Leader"}
                       </p>
                       <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-                        Personality Match Ready
+                        Profile Match Ready
                       </Badge>
                     </div>
                     <div className="text-center">
@@ -159,9 +160,9 @@ export default function AssessmentPage() {
                   You can retake the assessment if your preferences or personality have changed.
                 </p>
                 <Button variant="outline" asChild className="flex items-center gap-2">
-                  <Link href="/onboarding">
+                  <Link href="/founder-assessment">
                     <RefreshCw className="w-4 h-4" />
-                    Retake Assessment
+                    Update Assessment
                   </Link>
                 </Button>
               </CardContent>
@@ -177,10 +178,10 @@ export default function AssessmentPage() {
                 </div>
                 <h2 className="text-2xl font-bold text-purple-900 mb-2">Complete Your Assessment</h2>
                 <p className="text-purple-700 mb-6">
-                  Take our 12-question Big Five personality assessment to unlock co-founder matching.
+                  Complete our comprehensive founder assessment to unlock precise co-founder matching.
                 </p>
                 <Button asChild size="lg" className="bg-purple-600 hover:bg-purple-700">
-                  <Link href="/onboarding">
+                  <Link href="/founder-assessment">
                     Start Assessment
                   </Link>
                 </Button>
@@ -198,15 +199,15 @@ export default function AssessmentPage() {
                     <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                       <span className="text-white font-bold">1</span>
                     </div>
-                    <h4 className="font-semibold mb-2">12 Questions</h4>
-                    <p className="text-slate-600 text-sm">Answer questions about your work style and preferences</p>
+                    <h4 className="font-semibold mb-2">8 Sections</h4>
+                    <p className="text-slate-600 text-sm">Complete comprehensive assessment covering all founder dimensions</p>
                   </div>
                   <div className="text-center">
                     <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
                       <span className="text-white font-bold">2</span>
                     </div>
                     <h4 className="font-semibold mb-2">AI Analysis</h4>
-                    <p className="text-slate-600 text-sm">Our algorithm analyzes your Big Five personality traits</p>
+                    <p className="text-slate-600 text-sm">Our algorithm analyzes your founder profile and compatibility factors</p>
                   </div>
                   <div className="text-center">
                     <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-3 w-12 h-12 mx-auto mb-3 flex items-center justify-center">
