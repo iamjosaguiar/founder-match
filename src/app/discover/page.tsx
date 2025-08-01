@@ -213,7 +213,7 @@ export default function Discover() {
         const hasMatchingData = hasAssessmentCompleted || hasLegacyQuiz;
         
         if (!hasBasicProfile || !hasMatchingData) {
-          console.log('Redirecting to onboarding - missing:', {
+          console.log('Redirecting due to missing data:', {
             hasBasicProfile,
             hasAssessmentCompleted,
             hasLegacyQuiz,
@@ -221,9 +221,16 @@ export default function Discover() {
             assessmentValue: profile.assessmentCompleted,
             quizValue: profile.quizCompleted
           });
-          // Set redirecting state and force redirect
+          // Set redirecting state and redirect appropriately
           setRedirecting(true);
-          router.replace('/onboarding');
+          
+          // If missing basic profile, go to onboarding first
+          if (!hasBasicProfile) {
+            router.replace('/onboarding');
+          } else {
+            // If has basic profile but missing assessment, go to founder assessment
+            router.replace('/founder-assessment');
+          }
           return;
         }
         
