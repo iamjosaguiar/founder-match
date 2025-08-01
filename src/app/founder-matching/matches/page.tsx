@@ -44,13 +44,59 @@ export default function MatchesPage() {
   const [matches, setMatches] = useState<Match[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Assessment check function
+  const checkAssessmentCompleted = async () => {
+    try {
+      const response = await fetch('/api/profile');
+      if (response.ok) {
+        const profile = await response.json();
+        
+        console.log('Matches page - profile check:', {
+          email: profile.email,
+          assessmentCompleted: profile.assessmentCompleted,
+          assessmentCompletedType: typeof profile.assessmentCompleted,
+          hasAssessmentCompleted: profile.assessmentCompleted === true
+        });
+        
+        const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
+        const hasAssessmentCompleted = profile.assessmentCompleted === true;
+        
+        if (!hasBasicProfile || !hasAssessmentCompleted) {
+          console.log('Redirecting from matches due to missing data:', {
+            hasBasicProfile,
+            hasAssessmentCompleted,
+            assessmentValue: profile.assessmentCompleted
+          });
+          
+          router.replace('/founder-assessment');
+          return false;
+        }
+        return true;
+      } else {
+        console.log('Profile fetch failed from matches, redirecting to founder assessment');
+        router.replace('/founder-assessment');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error checking assessment from matches:', error);
+      router.replace('/founder-assessment');
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (status === "loading") return;
     if (!session) {
       router.push("/auth/signup?callbackUrl=" + encodeURIComponent("/founder-matching/matches"));
       return;
     }
-    fetchMatches();
+    
+    // Check assessment before fetching matches
+    checkAssessmentCompleted().then(canProceed => {
+      if (canProceed) {
+        fetchMatches();
+      }
+    });
   }, [session, status, router]);
 
   // Refresh matches when new match notifications come in
