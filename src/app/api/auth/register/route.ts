@@ -42,6 +42,7 @@ export async function POST(req: Request) {
         name,
         email,
         password: hashedPassword,
+        assessmentCompleted: false,
         quizCompleted: false,
       },
     });
@@ -58,8 +59,18 @@ export async function POST(req: Request) {
 
   } catch (error) {
     console.error("Registration error:", error);
+    
+    // More detailed error logging
+    if (error instanceof Error) {
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+    }
+    
     return NextResponse.json(
-      { message: "Internal server error" },
+      { 
+        message: "Internal server error",
+        error: process.env.NODE_ENV === 'development' ? error : undefined
+      },
       { status: 500 }
     );
   }
