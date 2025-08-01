@@ -116,19 +116,19 @@ const howItWorks = [
   {
     step: "1",
     title: "Post Your Project",
-    description: "Describe your project needs, timeline, and budget in our simple project posting form",
+    description: "Share your project idea, required skills, and what kind of collaboration you're looking for",
     icon: Briefcase
   },
   {
     step: "2", 
-    title: "Get Matched",
-    description: "Our algorithm matches you with 3-5 qualified providers based on your specific requirements",
+    title: "Connect & Collaborate",
+    description: "Browse projects or let others find yours. Connect with founders and professionals who share your vision",
     icon: Users
   },
   {
     step: "3",
-    title: "Choose & Work",
-    description: "Review proposals, interview candidates, and start working with your chosen provider",
+    title: "Build Together",
+    description: "Work together on exciting projects, learn from each other, and grow your network",
     icon: Rocket
   }
 ];
@@ -137,7 +137,7 @@ export default function ExecutionNetworkLanding() {
   const { data: session } = useSession();
   
   const getStartedUrl = session ? "/execution-network/projects/new" : "/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/projects/new");
-  const browseProvidersUrl = session ? "/execution-network/providers" : "/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/providers");
+  const browseProjectsUrl = session ? "/execution-network/projects" : "/auth/signup?callbackUrl=" + encodeURIComponent("/execution-network/projects");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-indigo-50">
@@ -160,8 +160,8 @@ export default function ExecutionNetworkLanding() {
           </h1>
           
           <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
-            Access world-class developers, designers, marketers, and experts without the overhead. 
-            Build faster, launch sooner, and scale smarter with our curated network of startup specialists.
+            Connect with talented professionals and collaborate on exciting startup projects. 
+            Build together, launch faster, and grow your network within the founder community.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
@@ -172,7 +172,7 @@ export default function ExecutionNetworkLanding() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-lg px-8 py-4 border-slate-300 hover:bg-slate-50">
-              <Link href={browseProvidersUrl}>Browse Providers</Link>
+              <Link href={browseProjectsUrl}>Browse Projects</Link>
             </Button>
           </div>
 
@@ -180,43 +180,37 @@ export default function ExecutionNetworkLanding() {
           <div className="flex items-center justify-center gap-12 text-sm text-slate-500">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-              <span>850+ Vetted Experts</span>
+              <span>Active Projects</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-              <span>24hr Response Time</span>
+              <span>Founder Network</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-              <span>95% Satisfaction Rate</span>
+              <span>Collaborative Community</span>
             </div>
           </div>
         </div>
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-8 mb-24">
+        <div className="grid md:grid-cols-3 gap-8 mb-24">
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-purple-600 mb-1">850+</div>
-              <div className="text-sm text-slate-600">Expert Providers</div>
+              <div className="text-3xl font-bold text-purple-600 mb-1">Join</div>
+              <div className="text-sm text-slate-600">Active Projects</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-green-600 mb-1">2.4k</div>
-              <div className="text-sm text-slate-600">Projects Completed</div>
+              <div className="text-3xl font-bold text-green-600 mb-1">Post</div>
+              <div className="text-sm text-slate-600">Your Project</div>
             </CardContent>
           </Card>
           <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
             <CardContent className="p-6">
-              <div className="text-3xl font-bold text-blue-600 mb-1">24hr</div>
-              <div className="text-sm text-slate-600">Avg Match Time</div>
-            </CardContent>
-          </Card>
-          <Card className="text-center bg-white/80 backdrop-blur-sm border-0 shadow-lg">
-            <CardContent className="p-6">
-              <div className="text-3xl font-bold text-orange-600 mb-1">95%</div>
-              <div className="text-sm text-slate-600">Satisfaction Rate</div>
+              <div className="text-3xl font-bold text-blue-600 mb-1">Build</div>
+              <div className="text-sm text-slate-600">Together</div>
             </CardContent>
           </Card>
         </div>
@@ -407,7 +401,7 @@ export default function ExecutionNetworkLanding() {
                   </div>
                 </div>
                 <Button asChild variant="outline" className="w-full">
-                  <Link href={browseProvidersUrl}>Browse All Providers</Link>
+                  <Link href={browseProjectsUrl}>Browse All Projects</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -430,8 +424,8 @@ export default function ExecutionNetworkLanding() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white/10 px-8 py-4">
-              <Link href={browseProvidersUrl}>
-                Find Providers
+              <Link href={browseProjectsUrl}>
+                Browse Projects
               </Link>
             </Button>
           </div>

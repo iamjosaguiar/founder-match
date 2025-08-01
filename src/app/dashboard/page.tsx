@@ -347,9 +347,9 @@ export default function DashboardPage() {
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full justify-start">
-                  <Link href="/execution-network/providers">
+                  <Link href="/execution-network/projects">
                     <Eye className="w-4 h-4 mr-2" />
-                    Find Providers
+                    Browse Projects
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full justify-start">

@@ -69,11 +69,6 @@ const navigation = [
     icon: Code,
     children: [
       {
-        name: "Find Providers",
-        href: "/execution-network/providers",
-        icon: Search
-      },
-      {
         name: "Post Project",
         href: "/execution-network/projects/new",
         icon: Plus
@@ -221,7 +216,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
         {/* User Profile */}
         <div className="p-4 border-b border-slate-200">
-          <div className="flex items-center gap-3">
+          <Link 
+            href="/settings"
+            className="flex items-center gap-3 w-full rounded-lg hover:bg-slate-100 transition-colors duration-200 p-2 -m-2"
+          >
             <UserAvatar size="md" />
             {!sidebarCollapsed && (
               <div className="flex-1 min-w-0">
@@ -233,7 +231,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 </p>
               </div>
             )}
-          </div>
+          </Link>
         </div>
 
         {/* Navigation */}
