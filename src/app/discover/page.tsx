@@ -195,18 +195,21 @@ export default function Discover() {
         
         // Debug profile data
         console.log('Discover page - profile check:', {
+          email: profile.email,
           title: profile.title,
           bio: profile.bio,
           experience: profile.experience,
           lookingFor: profile.lookingFor,
+          assessmentCompleted: profile.assessmentCompleted,
+          assessmentCompletedType: typeof profile.assessmentCompleted,
           quizCompleted: profile.quizCompleted,
           hasBasicProfile: !!(profile.title && profile.bio && profile.experience && profile.lookingFor),
-          hasQuizCompleted: !!profile.quizCompleted
+          hasAssessmentCompleted: profile.assessmentCompleted === true
         });
         
         // Check if user has completed onboarding
         const hasBasicProfile = profile.title && profile.bio && profile.experience && profile.lookingFor;
-        const hasAssessmentCompleted = profile.assessmentCompleted === true; // New founder assessment
+        const hasAssessmentCompleted = profile.assessmentCompleted === true; // New founder assessment (must be explicitly true)
         const hasLegacyQuiz = profile.quizCompleted === true; // Legacy Big Five support
         
         // Prioritize new comprehensive assessment, only allow legacy quiz temporarily
