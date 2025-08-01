@@ -7,6 +7,12 @@ import Link from "next/link";
 import UserAvatar from "@/components/user-avatar";
 import NotificationBell from "@/components/notification-bell";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   LayoutDashboard, 
   Users, 
@@ -15,6 +21,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Plus,
   Search,
   FolderOpen,
@@ -298,12 +305,29 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Bottom Actions */}
         {!sidebarCollapsed && (
           <div className="p-4 border-t border-slate-200 space-y-3">
-            <Button asChild className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
-              <Link href="/community/new">
-                <Plus className="w-4 h-4 mr-2" />
-                New Post
-              </Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Post
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link href="/community/new" className="flex items-center w-full">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Community Post
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/execution-network/projects/new" className="flex items-center w-full">
+                    <Briefcase className="w-4 h-4 mr-2" />
+                    Project Posting
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <Button 
               variant="ghost" 
