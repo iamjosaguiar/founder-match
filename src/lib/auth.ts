@@ -25,6 +25,7 @@ export const authOptions: AuthOptions = {
             email: true,
             name: true,
             image: true,
+            profileImage: true,
             password: true
           }
         });
@@ -42,12 +43,12 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
-        // Return user data with image if it's not too large
+        // Return user data including image fields
         return {
           id: user.id,
           email: user.email,
           name: user.name,
-          image: user.image,
+          image: user.image || user.profileImage,
           profileImage: user.profileImage
         };
       }
@@ -66,14 +67,18 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        // Only store essential data in JWT to minimize size
+        // Store user data including image info in JWT
         token.id = user.id;
+        token.image = user.image;
+        token.profileImage = user.profileImage;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
+        session.user.image = token.image as string;
+        session.user.profileImage = token.profileImage as string;
       }
       return session;
     },
