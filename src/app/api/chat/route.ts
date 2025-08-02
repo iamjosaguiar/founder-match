@@ -114,14 +114,17 @@ async function getRelevantMemories(userId: string, query: string, limit = 5) {
 
 // Helper function to extract and store new memories
 async function extractAndStoreMemories(userId: string, userMessage: string, aiResponse: string) {
-  // Simple memory extraction - look for key patterns
+  // Enhanced memory extraction - look for key patterns
   const memoryPatterns = [
     { pattern: /i prefer|i like|i want|i need/i, type: 'preference' },
-    { pattern: /my goal|i'm trying to|i hope to/i, type: 'goal' },
+    { pattern: /my goal|i'm trying to|i hope to|my plan is/i, type: 'goal' },
     { pattern: /i'm good at|i excel at|my strength/i, type: 'skill' },
     { pattern: /i struggle with|i'm not good at|my weakness/i, type: 'weakness' },
     { pattern: /i'm looking for|seeking|need help with/i, type: 'context' },
-    { pattern: /i work|i do|my role|my job/i, type: 'fact' }
+    { pattern: /i work|i do|my role|my job/i, type: 'fact' },
+    { pattern: /i'm thinking about|considering|planning to build|working on|creating|developing/i, type: 'goal' },
+    { pattern: /my startup|my company|my business|my idea|my project/i, type: 'context' },
+    { pattern: /i have experience|i've worked|i used to|i previously/i, type: 'fact' }
   ];
 
   const extractedMemories = [];
