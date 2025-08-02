@@ -180,7 +180,12 @@ export default function ChatInterface({
           role: "assistant",
           content: data.response,
           createdAt: new Date().toISOString(),
-          metadata: { ...data.usage, memoriesStored: data.memoriesStored }
+          metadata: { 
+            ...data.usage, 
+            memoriesStored: data.memoriesStored,
+            businessUpdated: data.businessUpdated,
+            updatedBusinessFields: data.updatedBusinessFields
+          }
         };
         
         setMessages(prev => [...prev.slice(0, -1), userMessage, aiMessage]);
@@ -466,6 +471,16 @@ export default function ChatInterface({
                       {message.metadata?.contextUsed?.webSearchUsed && (
                         <span className="ml-2 text-blue-600">
                           • web search used
+                        </span>
+                      )}
+                      {message.metadata?.businessUpdated && (
+                        <span className="ml-2 text-purple-600">
+                          • business context updated
+                          {message.metadata.updatedBusinessFields?.length > 0 && (
+                            <span className="text-xs">
+                              {` (${message.metadata.updatedBusinessFields.join(', ')})`}
+                            </span>
+                          )}
                         </span>
                       )}
                     </p>

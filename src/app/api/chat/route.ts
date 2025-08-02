@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
 import { getRelevantKnowledge } from '@/lib/knowledge-base';
 import { searchDuckDuckGo, shouldPerformWebSearch, formatSearchResults } from '@/lib/web-search';
+import { updateBusinessFromConversation } from '@/lib/business-updater';
 
 // Initialize OpenAI client only when needed to avoid build-time errors
 const getOpenAIClient = () => {
@@ -441,6 +442,31 @@ Keep responses conversational, practical, and personalized to their specific bus
     // Extract and store new memories from this conversation
     const memoriesStored = await extractAndStoreMemories(user.id, message, aiResponse);
 
+    // Update business context from conversation if user has a current business
+    let businessUpdated = false;
+    let updatedBusinessFields: string[] = [];
+    
+    if (userContext?.business?.id) {
+      try {
+        const businessUpdate = await updateBusinessFromConversation(
+          user.id,
+          userContext.business.id,
+          message,
+          aiResponse,
+          userContext.business
+        );
+        
+        businessUpdated = businessUpdate.updated;
+        updatedBusinessFields = businessUpdate.updatedFields;
+        
+        if (businessUpdated) {
+          console.log('📊 Business context updated from conversation:', updatedBusinessFields);
+        }
+      } catch (businessUpdateError) {
+        console.warn('⚠️ Business context update failed:', businessUpdateError);
+      }
+    }
+
     // Update conversation timestamp
     await prisma.chatConversation.update({
       where: { id: conversation.id },
@@ -451,6 +477,8 @@ Keep responses conversational, practical, and personalized to their specific bus
       response: aiResponse,
       conversationId: conversation.id,
       memoriesStored,
+      businessUpdated,
+      updatedBusinessFields,
       usage: {
         promptTokens: completion.usage?.prompt_tokens || 0,
         completionTokens: completion.usage?.completion_tokens || 0,
