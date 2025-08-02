@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { sendNotificationToUser } from '../notifications/stream/route';
+import { sendNotificationToUser } from '@/lib/notifications';
 
 // POST /api/matches - Record a like/pass and check for mutual match
 export async function POST(request: NextRequest) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     console.log('Match API session:', JSON.stringify(session));
     console.log('Session user ID:', session?.user?.id);
@@ -155,7 +154,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

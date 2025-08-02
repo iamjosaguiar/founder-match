@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 type ServiceProvider = {
@@ -130,11 +129,12 @@ function calculateMatchScore(project: any, provider: ServiceProvider): MatchScor
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -146,7 +146,7 @@ export async function GET(
 
     // Get the project
     const project = await prisma.project.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       include: {
         owner: {
           select: { id: true, email: true }
@@ -254,11 +254,12 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -282,7 +283,7 @@ export async function POST(
 
     // Get the project
     const project = await prisma.project.findUnique({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       select: { 
         id: true, 
         ownerId: true, 
@@ -307,7 +308,7 @@ export async function POST(
     const existingMatch = await prisma.projectMatch.findUnique({
       where: {
         projectId_serviceProviderId: {
-          projectId: params.id,
+          projectId: resolvedParams.id,
           serviceProviderId: currentUser.id
         }
       }
@@ -320,7 +321,7 @@ export async function POST(
     // Create the proposal
     const match = await prisma.projectMatch.create({
       data: {
-        projectId: params.id,
+        projectId: resolvedParams.id,
         serviceProviderId: currentUser.id,
         proposal: proposal.trim(),
         proposedRate: proposedRate ? parseInt(proposedRate) : null,

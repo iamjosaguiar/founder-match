@@ -1,14 +1,11 @@
 import { NextRequest } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
-
-// Store active connections
-const connections = new Map<string, WritableStreamDefaultWriter>();
+import { auth } from '@/lib/auth';
+import { connections } from '@/lib/notifications';
 
 export async function GET(request: NextRequest) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.id) {
       return new Response('Unauthorized', { status: 401 });
@@ -88,20 +85,3 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// Function to send notification to a specific user
-export function sendNotificationToUser(userId: string, notification: any) {
-  const connection = connections.get(userId);
-  if (connection) {
-    try {
-      const encoder = new TextEncoder();
-      const data = `data: ${JSON.stringify(notification)}\n\n`;
-      connection.write(encoder.encode(data));
-    } catch (error) {
-      console.error('Error sending notification:', error);
-      connections.delete(userId);
-    }
-  }
-}
-
-// Export the connections map so other API routes can use it
-export { connections };

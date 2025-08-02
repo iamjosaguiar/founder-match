@@ -84,15 +84,15 @@ export async function POST(req: Request) {
     console.error("=== DEBUG REGISTRATION ERROR ===");
     console.error("Error type:", typeof error);
     console.error("Error name:", error?.constructor?.name);
-    console.error("Error message:", error?.message);
-    console.error("Error stack:", error?.stack);
+    console.error("Error message:", (error as Error)?.message);
+    console.error("Error stack:", (error as Error)?.stack);
     
     // Prisma-specific error details
-    if (error?.code) {
-      console.error("Prisma error code:", error.code);
+    if ((error as any)?.code) {
+      console.error("Prisma error code:", (error as any).code);
     }
-    if (error?.meta) {
-      console.error("Prisma error meta:", error.meta);
+    if ((error as any)?.meta) {
+      console.error("Prisma error meta:", (error as any).meta);
     }
     
     return NextResponse.json(
@@ -101,9 +101,9 @@ export async function POST(req: Request) {
         debug: {
           type: typeof error,
           name: error?.constructor?.name,
-          message: error?.message,
-          code: error?.code,
-          meta: error?.meta
+          message: (error as Error)?.message,
+          code: (error as any)?.code,
+          meta: (error as any)?.meta
         }
       },
       { status: 500 }

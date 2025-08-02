@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 // PATCH /api/chat/memory/[id] - Update specific memory
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -36,7 +36,7 @@ export async function PATCH(
 
     const memory = await prisma.userMemory.updateMany({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id // Ensure user owns this memory
       },
       data: updateData
@@ -59,11 +59,12 @@ export async function PATCH(
 // DELETE /api/chat/memory/[id] - Delete specific memory
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -80,7 +81,7 @@ export async function DELETE(
 
     const memory = await prisma.userMemory.deleteMany({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id // Ensure user owns this memory
       }
     });

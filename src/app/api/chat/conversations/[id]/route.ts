@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/chat/conversations/[id] - Get specific conversation with messages
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -27,7 +27,7 @@ export async function GET(
 
     const conversation = await prisma.chatConversation.findFirst({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id // Ensure user owns this conversation
       },
       include: {
@@ -61,11 +61,12 @@ export async function GET(
 // PATCH /api/chat/conversations/[id] - Update conversation (title, summary)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -84,7 +85,7 @@ export async function PATCH(
 
     const conversation = await prisma.chatConversation.updateMany({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id // Ensure user owns this conversation
       },
       data: {
@@ -111,11 +112,12 @@ export async function PATCH(
 // DELETE /api/chat/conversations/[id] - Delete conversation
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -132,7 +134,7 @@ export async function DELETE(
 
     const conversation = await prisma.chatConversation.deleteMany({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id // Ensure user owns this conversation
       }
     });

@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 // GET /api/businesses/[id] - Get specific business
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -27,7 +27,7 @@ export async function GET(
 
     const business = await prisma.business.findFirst({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id,
         isActive: true
       }
@@ -50,11 +50,12 @@ export async function GET(
 // PUT /api/businesses/[id] - Update business
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -74,7 +75,7 @@ export async function PUT(
     // Verify business ownership
     const existingBusiness = await prisma.business.findFirst({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id,
         isActive: true
       }
@@ -85,7 +86,7 @@ export async function PUT(
     }
 
     const business = await prisma.business.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: {
         name: businessData.name,
         description: businessData.description,
@@ -127,11 +128,12 @@ export async function PUT(
 // DELETE /api/businesses/[id] - Soft delete business
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const resolvedParams = await params;
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -149,7 +151,7 @@ export async function DELETE(
     // Verify business ownership
     const business = await prisma.business.findFirst({
       where: { 
-        id: params.id,
+        id: resolvedParams.id,
         userId: user.id,
         isActive: true
       }
@@ -161,12 +163,12 @@ export async function DELETE(
 
     // Soft delete the business
     await prisma.business.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: { isActive: false }
     });
 
     // If this was the current business, clear the current business selection
-    if (user.currentBusinessId === params.id) {
+    if (user.currentBusinessId === resolvedParams.id) {
       await prisma.user.update({
         where: { id: user.id },
         data: { currentBusinessId: null }

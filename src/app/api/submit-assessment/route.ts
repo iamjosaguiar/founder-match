@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
 export type FounderAssessmentData = {
@@ -111,7 +110,7 @@ export async function POST(req: Request) {
   try {
     // Check if user is authenticated
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     if (!session || !session.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },

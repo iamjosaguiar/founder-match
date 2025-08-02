@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
 import { getRelevantKnowledge } from '@/lib/knowledge-base';
@@ -111,25 +110,26 @@ async function getUserContext(userId: string) {
       workingStyle: user.workingStyle
     } : null,
     business: user.currentBusiness ? {
+      id: user.currentBusiness.id,
       name: user.currentBusiness.name,
-      description: user.currentBusiness.description,
+      description: user.currentBusiness.description ?? undefined,
       industry: user.currentBusiness.industry,
       businessType: user.currentBusiness.businessType,
-      subType: user.currentBusiness.subType,
-      location: user.currentBusiness.location,
-      country: user.currentBusiness.country,
-      targetMarket: user.currentBusiness.targetMarket,
-      targetAudience: user.currentBusiness.targetAudience,
+      subType: user.currentBusiness.subType ?? undefined,
+      location: user.currentBusiness.location ?? undefined,
+      country: user.currentBusiness.country ?? undefined,
+      targetMarket: user.currentBusiness.targetMarket ?? undefined,
+      targetAudience: user.currentBusiness.targetAudience ?? undefined,
       stage: user.currentBusiness.stage,
-      teamSize: user.currentBusiness.teamSize,
-      revenueRange: user.currentBusiness.revenueRange,
-      businessModel: user.currentBusiness.businessModel,
-      revenueModel: user.currentBusiness.revenueModel,
-      pricePoint: user.currentBusiness.pricePoint,
-      primaryServices: user.currentBusiness.primaryServices,
-      specialties: user.currentBusiness.specialties,
-      mainCompetitors: user.currentBusiness.mainCompetitors,
-      marketPosition: user.currentBusiness.marketPosition
+      teamSize: user.currentBusiness.teamSize ?? undefined,
+      revenueRange: user.currentBusiness.revenueRange ?? undefined,
+      businessModel: user.currentBusiness.businessModel ?? undefined,
+      revenueModel: user.currentBusiness.revenueModel ?? undefined,
+      pricePoint: user.currentBusiness.pricePoint ?? undefined,
+      primaryServices: user.currentBusiness.primaryServices ?? undefined,
+      specialties: user.currentBusiness.specialties ?? undefined,
+      mainCompetitors: user.currentBusiness.mainCompetitors ?? undefined,
+      marketPosition: user.currentBusiness.marketPosition ?? undefined
     } : null,
     recentActivity: {
       posts: user.forumPosts,
@@ -209,7 +209,7 @@ export async function POST(request: NextRequest) {
   
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await getServerSession(authOptions) as any;
+    const session = await auth() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
