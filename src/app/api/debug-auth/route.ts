@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 
-// TEMPORARY DEBUG ENDPOINT - DELETE AFTER USE
+// TEMPORARY DEBUG ENDPOINT - ONLY AVAILABLE IN DEVELOPMENT
 export async function GET() {
+  // Block access in production
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ message: 'Not available in production' }, { status: 404 });
+  }
   try {
     const email = 'jos@iamjosaguiar.com';
     const testPassword = 'reset123';

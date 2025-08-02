@@ -140,41 +140,50 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
 
   // Persist sidebar state in localStorage
   useEffect(() => {
-    try {
-      const savedCollapsed = localStorage.getItem('dashboard-sidebar-collapsed');
-      const savedExpanded = localStorage.getItem('dashboard-expanded-sections');
-      
-      if (savedCollapsed !== null) {
-        setSidebarCollapsed(JSON.parse(savedCollapsed));
-      }
-      
-      if (savedExpanded) {
-        setExpandedSections(JSON.parse(savedExpanded));
-      } else {
-        // Default expanded sections
+    if (typeof window !== 'undefined') {
+      try {
+        const savedCollapsed = localStorage.getItem('dashboard-sidebar-collapsed');
+        const savedExpanded = localStorage.getItem('dashboard-expanded-sections');
+        
+        if (savedCollapsed !== null) {
+          setSidebarCollapsed(JSON.parse(savedCollapsed));
+        }
+        
+        if (savedExpanded) {
+          setExpandedSections(JSON.parse(savedExpanded));
+        } else {
+          // Default expanded sections
+          setExpandedSections(['Execution Network']);
+        }
+      } catch (error) {
+        console.warn('Failed to load dashboard state from localStorage:', error);
+        // Set defaults if localStorage fails
         setExpandedSections(['Execution Network']);
       }
-    } catch (error) {
-      console.warn('Failed to load dashboard state from localStorage:', error);
-      // Set defaults if localStorage fails
+    } else {
+      // SSR fallback
       setExpandedSections(['Execution Network']);
     }
   }, []);
 
   // Save sidebar state when it changes
   useEffect(() => {
-    try {
-      localStorage.setItem('dashboard-sidebar-collapsed', JSON.stringify(sidebarCollapsed));
-    } catch (error) {
-      console.warn('Failed to save sidebar state to localStorage:', error);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('dashboard-sidebar-collapsed', JSON.stringify(sidebarCollapsed));
+      } catch (error) {
+        console.warn('Failed to save sidebar state to localStorage:', error);
+      }
     }
   }, [sidebarCollapsed]);
 
   useEffect(() => {
-    try {
-      localStorage.setItem('dashboard-expanded-sections', JSON.stringify(expandedSections));
-    } catch (error) {
-      console.warn('Failed to save expanded sections to localStorage:', error);  
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('dashboard-expanded-sections', JSON.stringify(expandedSections));
+      } catch (error) {
+        console.warn('Failed to save expanded sections to localStorage:', error);  
+      }
     }
   }, [expandedSections]);
 

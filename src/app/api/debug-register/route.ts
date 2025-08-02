@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 
-// TEMPORARY DEBUG REGISTRATION ENDPOINT
+// TEMPORARY DEBUG REGISTRATION ENDPOINT - ONLY AVAILABLE IN DEVELOPMENT
 export async function POST(req: Request) {
+  // Block access in production
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ message: 'Not available in production' }, { status: 404 });
+  }
   try {
     console.log("=== DEBUG REGISTRATION START ===");
     

@@ -16,7 +16,9 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         try {
           if (!credentials?.email || !credentials?.password) {
-            console.log("Missing credentials");
+            if (process.env.NODE_ENV === 'development') {
+              console.log("Missing credentials");
+            }
             return null;
           }
 
@@ -35,7 +37,9 @@ export const authOptions: AuthOptions = {
           });
 
           if (!user || !user.password) {
-            console.log("User not found or no password");
+            if (process.env.NODE_ENV === 'development') {
+              console.log("User not found or no password");
+            }
             return null;
           }
 
@@ -45,11 +49,15 @@ export const authOptions: AuthOptions = {
           );
 
           if (!isPasswordValid) {
-            console.log("Invalid password");
+            if (process.env.NODE_ENV === 'development') {
+              console.log("Invalid password");
+            }
             return null;
           }
 
-          console.log("User authenticated successfully:", user.email);
+          if (process.env.NODE_ENV === 'development') {
+            console.log("User authenticated successfully:", user.email);
+          }
           
           // Return user data including image fields
           return {
