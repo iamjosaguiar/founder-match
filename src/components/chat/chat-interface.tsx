@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import UserAvatar from "@/components/user-avatar";
+import ReactMarkdown from "react-markdown";
 import {
   MessageCircle,
   Send,
@@ -229,7 +230,7 @@ export default function ChatInterface({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -408,9 +409,23 @@ export default function ChatInterface({
                         : "bg-white border border-slate-200 text-slate-900 mr-12"
                     }`}
                   >
-                    <p className="whitespace-pre-wrap leading-relaxed">
-                      {message.content}
-                    </p>
+                    {message.role === "assistant" ? (
+                      <ReactMarkdown 
+                        className="prose prose-sm max-w-none leading-relaxed
+                          prose-headings:text-slate-900 prose-headings:font-semibold
+                          prose-p:text-slate-700 prose-p:my-2
+                          prose-strong:text-slate-900 prose-strong:font-semibold
+                          prose-ul:my-2 prose-li:text-slate-700
+                          prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+                          prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:pl-4"
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    ) : (
+                      <p className="whitespace-pre-wrap leading-relaxed">
+                        {message.content}
+                      </p>
+                    )}
                     <p
                       className={`text-xs mt-2 ${
                         message.role === "user" ? "text-blue-100" : "text-slate-500"
@@ -462,7 +477,7 @@ export default function ChatInterface({
                 />
                 <div className="flex items-center justify-between mt-2">
                   <p className="text-xs text-slate-500">
-                    Cmd+Enter to send • Your AI business co-pilot
+                    Enter to send • Shift+Enter for new line
                   </p>
                   <div className="flex items-center gap-2">
                     <Button
