@@ -69,8 +69,6 @@ export async function GET() {
         
         personalityProfile: true,
         projectLinks: true,
-        image: true,
-        profileImage: true,
         industry: true,
         stage: true,
         location: true,
@@ -193,7 +191,6 @@ export async function PATCH(request: NextRequest) {
         quizScores: true,
         personalityProfile: true,
         projectLinks: true,
-        image: true,
         profileImage: true,
         industry: true,
         stage: true,
