@@ -439,7 +439,14 @@ export default function ChatInterface({
                           prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:pl-4 prose-blockquote:my-4
                           [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
                       >
-                        {message.content}
+                        {message.content
+                          // Add proper line breaks for better paragraph formatting
+                          .replace(/([.!?])\s*([A-Z])/g, '$1\n\n$2')
+                          // Handle specific patterns like "Ad Copy 1:", "Ad Copy 2:" etc.
+                          .replace(/(Ad Copy \d+:)/g, '\n\n$1')
+                          // Handle other common patterns that should start new paragraphs
+                          .replace(/(Target Audience:|Offer Type:|Tone:|Emotional Temperature:|Strategic Frame:)/g, '\n\n$1')
+                        }
                       </ReactMarkdown>
                     ) : (
                       <p className="whitespace-pre-wrap leading-relaxed">
