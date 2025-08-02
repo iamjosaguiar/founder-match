@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
 import { getRelevantKnowledge } from '@/lib/knowledge-base';
+import { searchDuckDuckGo, shouldPerformWebSearch, formatSearchResults } from '@/lib/web-search';
 
 // Initialize OpenAI client only when needed to avoid build-time errors
 const getOpenAIClient = () => {
@@ -220,6 +221,23 @@ export async function POST(request: NextRequest) {
       relevantKnowledge = '';
     }
 
+    // Perform web search if the query would benefit from current information
+    let webSearchResults = '';
+    if (shouldPerformWebSearch(message)) {
+      try {
+        console.log('Performing web search for:', message);
+        const searchResult = await searchDuckDuckGo(message);
+        if (searchResult) {
+          webSearchResults = formatSearchResults(searchResult);
+          console.log('Web search completed successfully');
+        }
+      } catch (searchError) {
+        console.warn('Web search error:', searchError);
+        // Continue without web search if it fails
+        webSearchResults = '';
+      }
+    }
+
     // Build context-aware system prompt
     const systemPrompt = `You are CoLaunchr, a personal business sidekick AI for entrepreneurs and business owners. Your role is to be their trusted co-pilot, helping them navigate challenges, make decisions, and grow their businesses.
 
@@ -261,6 +279,11 @@ IMPORTANT: When the user requests copywriting help, ALWAYS start by using the 6-
 6. Strategic Frame (What belief are we shifting/anchoring)
 
 Apply all specialized frameworks naturally without mentioning methodology names to users.
+
+` : ''}${webSearchResults ? `CURRENT WEB INFORMATION:
+${webSearchResults}
+
+Use this current information to provide up-to-date insights and data in your response. Combine web search results with your business expertise for comprehensive answers.
 
 ` : ''}Your Personality & Approach:
 - Act as CoLaunchr, their personal business co-pilot and trusted sidekick
@@ -330,7 +353,9 @@ Keep responses conversational, practical, and personalized to their specific bus
               hasProfile: !!userContext?.profile,
               hasAssessment: !!userContext?.assessment,
               memoriesCount: relevantMemories.length,
-              conversationLength: conversationHistory.length
+              conversationLength: conversationHistory.length,
+              webSearchUsed: !!webSearchResults,
+              hasKnowledgeBase: !!relevantKnowledge
             }
           }
         }

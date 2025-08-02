@@ -463,6 +463,11 @@ export default function ChatInterface({
                           • {message.metadata.memoriesStored} memory stored
                         </span>
                       )}
+                      {message.metadata?.contextUsed?.webSearchUsed && (
+                        <span className="ml-2 text-blue-600">
+                          • web search used
+                        </span>
+                      )}
                     </p>
                   </div>
                   
