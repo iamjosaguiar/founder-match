@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import UserAvatar from "@/components/user-avatar";
 import NotificationBell from "@/components/notification-bell";
+import BusinessSelector from "@/components/business/business-selector";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -356,7 +357,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {pathname.startsWith("/execution-network") && "Execution Network"}
               {pathname.startsWith("/community") && "Community"}
               {pathname.startsWith("/settings") && "Settings"}
+              {pathname.startsWith("/chat") && "CoLaunchr"}
+              {pathname.startsWith("/financing") && "Financing Hub"}
             </h1>
+            <BusinessSelector />
           </div>
           
           <div className="flex items-center gap-4">

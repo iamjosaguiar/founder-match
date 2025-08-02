@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import UserAvatar from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
+import BusinessSelector from "@/components/business/business-selector";
+import BusinessForm from "@/components/business/business-form";
 import { 
   User, 
   Mail, 
@@ -22,7 +24,10 @@ import {
   Palette,
   Save,
   Camera,
-  Upload
+  Upload,
+  Building2,
+  Plus,
+  Settings as SettingsIcon
 } from "lucide-react";
 
 export default function SettingsPage() {
@@ -33,6 +38,10 @@ export default function SettingsPage() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [uploading, setUploading] = useState(false);
+  const [showBusinessForm, setShowBusinessForm] = useState(false);
+  const [editingBusiness, setEditingBusiness] = useState<any>(null);
+  const [businesses, setBusinesses] = useState<any[]>([]);
+  const [loadingBusinesses, setLoadingBusinesses] = useState(true);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -41,7 +50,22 @@ export default function SettingsPage() {
       return;
     }
     setLoading(false);
+    loadBusinesses();
   }, [session, status, router]);
+
+  const loadBusinesses = async () => {
+    try {
+      const response = await fetch('/api/businesses');
+      if (response.ok) {
+        const data = await response.json();
+        setBusinesses(data.businesses || []);
+      }
+    } catch (error) {
+      console.error('Error loading businesses:', error);
+    } finally {
+      setLoadingBusinesses(false);
+    }
+  };
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -110,6 +134,56 @@ export default function SettingsPage() {
       alert(`Failed to update profile photo: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleBusinessSave = async (businessData: any) => {
+    try {
+      const url = editingBusiness ? `/api/businesses/${editingBusiness.id}` : '/api/businesses';
+      const method = editingBusiness ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(businessData)
+      });
+
+      if (response.ok) {
+        await loadBusinesses();
+        setShowBusinessForm(false);
+        setEditingBusiness(null);
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error saving business:', error);
+      alert('Failed to save business. Please try again.');
+    }
+  };
+
+  const handleEditBusiness = (business: any) => {
+    setEditingBusiness(business);
+    setShowBusinessForm(true);
+  };
+
+  const handleDeleteBusiness = async (businessId: string) => {
+    if (!confirm('Are you sure you want to delete this business?')) return;
+
+    try {
+      const response = await fetch(`/api/businesses/${businessId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        await loadBusinesses();
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.message}`);
+      }
+    } catch (error) {
+      console.error('Error deleting business:', error);
+      alert('Failed to delete business. Please try again.');
     }
   };
 
@@ -275,47 +349,91 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            {/* Startup Information */}
+            {/* Business Management */}
             <Card className="border-0 bg-white shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Briefcase className="w-5 h-5" />
-                  Startup Information
+                <CardTitle className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="w-5 h-5" />
+                    Business Management
+                  </div>
+                  <Button
+                    onClick={() => {
+                      setEditingBusiness(null);
+                      setShowBusinessForm(true);
+                    }}
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600"
+                    size="sm"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add Business
+                  </Button>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Company Name</label>
-                  <Input placeholder="Your startup name" />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Industry</label>
-                    <select className="w-full p-3 border border-slate-200 rounded-xl">
-                      <option value="">Select industry</option>
-                      <option value="fintech">Fintech</option>
-                      <option value="healthtech">HealthTech</option>
-                      <option value="edtech">EdTech</option>
-                      <option value="saas">SaaS</option>
-                      <option value="ecommerce">E-commerce</option>
-                      <option value="other">Other</option>
-                    </select>
+              <CardContent>
+                {showBusinessForm ? (
+                  <BusinessForm
+                    business={editingBusiness}
+                    onSave={handleBusinessSave}
+                    onCancel={() => {
+                      setShowBusinessForm(false);
+                      setEditingBusiness(null);
+                    }}
+                  />
+                ) : loadingBusinesses ? (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
+                    <p className="text-slate-600">Loading businesses...</p>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Stage</label>
-                    <select className="w-full p-3 border border-slate-200 rounded-xl">
-                      <option value="">Select stage</option>
-                      <option value="idea">Idea</option>
-                      <option value="mvp">MVP</option>
-                      <option value="early-revenue">Early Revenue</option>
-                      <option value="scaling">Scaling</option>
-                    </select>
+                ) : businesses.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Building2 className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+                    <h3 className="text-lg font-semibold text-slate-900 mb-2">No businesses yet</h3>
+                    <p className="text-slate-600 mb-4">Add your first business to get personalized AI assistance</p>
+                    <Button
+                      onClick={() => setShowBusinessForm(true)}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Your First Business
+                    </Button>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Website</label>
-                  <Input type="url" placeholder="https://your-startup.com" />
-                </div>
+                ) : (
+                  <div className="space-y-4">
+                    {businesses.map((business) => (
+                      <div key={business.id} className="border border-slate-200 rounded-lg p-4">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-slate-900">{business.name}</h3>
+                            <p className="text-sm text-slate-600">
+                              {business.businessType} • {business.industry} • {business.stage}
+                            </p>
+                            {business.location && (
+                              <p className="text-sm text-slate-500">{business.location}</p>
+                            )}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleEditBusiness(business)}
+                            >
+                              <SettingsIcon className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleDeleteBusiness(business.id)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              ×
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
 
