@@ -18,22 +18,26 @@ export interface SearchResult {
 
 export async function searchDuckDuckGo(query: string): Promise<SearchResult | null> {
   try {
+    console.log('🌐 Making DuckDuckGo API request for:', query);
+    
     // DuckDuckGo Instant Answer API
-    const response = await fetch(
-      `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`,
-      {
-        headers: {
-          'User-Agent': 'CoLaunchr/1.0 (Business Assistant)',
-        },
-      }
-    );
+    const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`;
+    console.log('📡 API URL:', url);
+    
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'CoLaunchr/1.0 (Business Assistant)',
+      },
+    });
 
     if (!response.ok) {
-      console.warn('DuckDuckGo search failed:', response.status);
+      console.warn('💥 DuckDuckGo search failed:', response.status, response.statusText);
       return null;
     }
 
+    console.log('📥 DuckDuckGo response received, parsing JSON...');
     const data = await response.json();
+    console.log('📊 DuckDuckGo raw data:', data);
     
     // Extract useful information from DuckDuckGo response
     const result: SearchResult = {
@@ -59,6 +63,10 @@ export async function searchDuckDuckGo(query: string): Promise<SearchResult | nu
 
 export function shouldPerformWebSearch(message: string): boolean {
   console.log('🔍 Checking if web search needed for:', message);
+  
+  // TEMPORARY: Always search for testing
+  console.log('🧪 TESTING MODE: Always triggering search');
+  return true;
   
   // Quick check for obvious competitor queries
   const competitorKeywords = ['competitor', 'competitors', 'competition', 'rival', 'rivals'];
