@@ -55,7 +55,19 @@ export default function ChatInterface({
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(false);
+  
+  // Show sidebar by default on large screens
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setShowSidebar(window.innerWidth >= 1024); // lg breakpoint
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -237,10 +249,17 @@ export default function ChatInterface({
   };
 
   return (
-    <div className={`flex h-full bg-slate-50 ${className}`}>
-      {/* Sidebar */}
+    <div className={`flex h-full bg-slate-50 ${className} relative`}>
+      {/* Mobile Overlay */}
       {showSidebar && (
-        <div className="w-80 bg-white border-r border-slate-200 flex flex-col">
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
+      
+      {/* Sidebar */}
+      <div className={`${showSidebar ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 ease-in-out lg:block ${showSidebar ? 'block' : 'hidden lg:block'}`}>
           <div className="p-4 border-b border-slate-200">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-slate-900">CoLaunchr</h2>
@@ -324,7 +343,6 @@ export default function ChatInterface({
             </div>
           </div>
         </div>
-      )}
 
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col">
