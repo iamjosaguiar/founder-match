@@ -4,7 +4,8 @@ import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions: AuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -13,45 +14,55 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          return null;
-        }
-
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email
-          },
-          select: {
-            id: true,
-            email: true,
-            name: true,
-            image: true,
-            profileImage: true,
-            password: true
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            console.log("Missing credentials");
+            return null;
           }
-        });
 
-        if (!user || !user.password) {
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email
+            },
+            select: {
+              id: true,
+              email: true,
+              name: true,
+              image: true,
+              profileImage: true,
+              password: true
+            }
+          });
+
+          if (!user || !user.password) {
+            console.log("User not found or no password");
+            return null;
+          }
+
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isPasswordValid) {
+            console.log("Invalid password");
+            return null;
+          }
+
+          console.log("User authenticated successfully:", user.email);
+          
+          // Return user data including image fields
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image || user.profileImage,
+            profileImage: user.profileImage
+          };
+        } catch (error) {
+          console.error("Error in authorize function:", error);
           return null;
         }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isPasswordValid) {
-          return null;
-        }
-
-        // Return user data including image fields
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image || user.profileImage,
-          profileImage: user.profileImage
-        };
       }
     })
   ],
@@ -66,6 +77,14 @@ export const authOptions: AuthOptions = {
     signIn: "/auth/signin",
   },
   debug: process.env.NODE_ENV === 'development',
+  events: {
+    async signIn(message) {
+      console.log("NextAuth signIn event:", message);
+    },
+    async signOut(message) {
+      console.log("NextAuth signOut event:", message);
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
