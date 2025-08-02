@@ -242,7 +242,7 @@ export default function ChatInterface({
         <div className="w-80 bg-white border-r border-slate-200 flex flex-col">
           <div className="p-4 border-b border-slate-200">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900">AI Assistant</h2>
+              <h2 className="text-lg font-semibold text-slate-900">CoLaunchr</h2>
               <Button
                 onClick={() => setShowSidebar(false)}
                 variant="ghost"
@@ -345,8 +345,8 @@ export default function ChatInterface({
                   <Bot className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900">FounderMatch AI</h3>
-                  <p className="text-sm text-slate-600">Your co-founder matching assistant</p>
+                  <h3 className="font-semibold text-slate-900">CoLaunchr</h3>
+                  <p className="text-sm text-slate-600">Your personal business sidekick</p>
                 </div>
               </div>
             </div>
@@ -370,18 +370,18 @@ export default function ChatInterface({
               <div className="text-center max-w-md">
                 <Bot className="w-16 h-16 text-blue-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                  Welcome to FounderMatch AI!
+                  Welcome to CoLaunchr! 🚀
                 </h3>
                 <p className="text-slate-600 mb-6">
-                  I'm here to help with your founder journey. Ask me about finding co-founders, 
-                  startup advice, or navigating the platform.
+                  I'm your personal business sidekick. Think of me as your co-pilot for 
+                  navigating startup challenges, making decisions, and growing your business.
                 </p>
                 <div className="grid grid-cols-1 gap-2 text-sm">
                   <div className="p-3 bg-blue-50 rounded-lg text-left">
                     <p className="font-medium text-blue-900">💡 Try asking:</p>
-                    <p className="text-blue-700">• "Help me find a technical co-founder"</p>
-                    <p className="text-blue-700">• "What should I look for in a co-founder?"</p>
-                    <p className="text-blue-700">• "How do I improve my founder profile?"</p>
+                    <p className="text-blue-700">• "Help me validate my salon CRM idea"</p>
+                    <p className="text-blue-700">• "What's my next step for fundraising?"</p>
+                    <p className="text-blue-700">• "How should I price my SaaS product?"</p>
                   </div>
                 </div>
               </div>
@@ -455,14 +455,14 @@ export default function ChatInterface({
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask me anything about finding co-founders, startup advice, or using the platform..."
+                  placeholder="Ask me anything about your business - strategy, growth, problems, decisions..."
                   className="resize-none border-slate-300 focus:ring-blue-500 focus:border-blue-500"
                   rows={2}
                   disabled={isSending}
                 />
                 <div className="flex items-center justify-between mt-2">
                   <p className="text-xs text-slate-500">
-                    Cmd+Enter to send • Powered by GPT-4
+                    Cmd+Enter to send • Your AI business co-pilot
                   </p>
                   <div className="flex items-center gap-2">
                     <Button

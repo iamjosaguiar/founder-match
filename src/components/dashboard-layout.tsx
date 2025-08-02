@@ -118,7 +118,7 @@ const navigation = [
     icon: MessageCircle
   },
   {
-    name: "AI Assistant",
+    name: "CoLaunchr",
     href: "/chat",
     icon: Bot
   },
