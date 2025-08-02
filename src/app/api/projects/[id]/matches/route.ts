@@ -171,7 +171,7 @@ export async function GET(
     // Get all service providers
     const serviceProviders = await prisma.user.findMany({
       where: {
-        roles: { has: 'service_provider' },
+        roles: { contains: 'service_provider' },
         name: { not: null },
         title: { not: null },
         serviceTypes: { isEmpty: false }
