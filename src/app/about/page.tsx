@@ -17,7 +17,7 @@ export default function AboutPage() {
           </Button>
           <div>
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              About CoLaunchr
+              About CoFoundr
             </h1>
             <p className="text-slate-600 mt-2">Your startup's ultimate sidekick</p>
           </div>
@@ -35,7 +35,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-lg text-slate-700 leading-relaxed">
-              We believe no founder should go it alone. CoLaunchr exists to democratize access to 
+              We believe no founder should go it alone. CoFoundr exists to democratize access to 
               the expertise, connections, and support that traditionally only well-connected founders 
               in Silicon Valley could access. Whether you're looking for a co-founder, need expert 
               guidance, or want to execute fast with professional teams—we're here to help you succeed.
@@ -55,7 +55,7 @@ export default function AboutPage() {
           </CardHeader>
           <CardContent>
             <p className="text-slate-700 leading-relaxed mb-4">
-              CoLaunchr was born from the frustration of seeing brilliant founders struggle alone. 
+              CoFoundr was born from the frustration of seeing brilliant founders struggle alone. 
               Too many great ideas never see the light of day because founders lack the right 
               partnerships, guidance, or execution support.
             </p>

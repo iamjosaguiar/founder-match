@@ -1,13 +1,13 @@
-# CoLaunchr Knowledge Base
+# CoFoundr Knowledge Base
 
-This directory contains specialized knowledge files that CoLaunchr uses to provide expert-level guidance on specific business topics.
+This directory contains specialized knowledge files that CoFoundr uses to provide expert-level guidance on specific business topics.
 
 ## How It Works
 
 1. **Query Analysis**: When a user asks a question, the system analyzes their message for topic keywords
 2. **Knowledge Retrieval**: Relevant knowledge files are automatically loaded based on detected topics
 3. **Context Integration**: The specialized knowledge is combined with the user's personal context and memories
-4. **Expert Response**: CoLaunchr responds with personalized advice using the specialized knowledge
+4. **Expert Response**: CoFoundr responds with personalized advice using the specialized knowledge
 
 ## Adding New Knowledge Files
 

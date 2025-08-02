@@ -53,7 +53,7 @@ export default function SignIn() {
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-3xl">Welcome Back</CardTitle>
-            <p className="text-gray-600">Sign in to your CoLaunchr account</p>
+            <p className="text-gray-600">Sign in to your CoFoundr account</p>
           </CardHeader>
           
           <CardContent>

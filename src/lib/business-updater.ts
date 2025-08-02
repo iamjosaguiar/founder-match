@@ -1,4 +1,4 @@
-// Business context updater for CoLaunchr chat
+// Business context updater for CoFoundr chat
 import { prisma } from '@/lib/prisma';
 
 interface BusinessUpdate {

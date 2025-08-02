@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CoLaunchr - Don't Go It Alone. CoLaunch It.",
+  title: "CoFoundr - Don't Go It Alone. CoFound It.",
   description: "Your startup's ultimate sidekick. From co-founder matching to expert advisory pods and execution teams—get the support you need to build, launch, and scale.",
 };
 

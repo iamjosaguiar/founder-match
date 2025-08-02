@@ -83,7 +83,7 @@ export async function searchDuckDuckGo(query: string, businessContext?: any): Pr
     
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'CoLaunchr/1.0 (Business Assistant)',
+        'User-Agent': 'CoFoundr/1.0 (Business Assistant)',
       },
     });
 

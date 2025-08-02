@@ -465,7 +465,7 @@ export default function FinancingHubLanding() {
               <div className="text-left">
                 <p className="font-semibold mb-1">Information Platform Only</p>
                 <p>
-                  CoLaunchr provides information and networking opportunities only. We do not provide investment advice, 
+                  CoFoundr provides information and networking opportunities only. We do not provide investment advice, 
                   facilitate securities transactions, or guarantee investment outcomes. All investment decisions are made 
                   independently by users. Please consult with qualified professionals before making investment decisions.
                 </p>

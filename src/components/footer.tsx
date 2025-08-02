@@ -15,7 +15,7 @@ export default function Footer() {
             <div className="mb-6">
               <h3 className="text-2xl font-bold text-slate-800 mb-2">
                 <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  CoLaunchr
+                  CoFoundr
                 </span>
               </h3>
               <p className="text-slate-500 leading-relaxed max-w-md">
@@ -28,7 +28,7 @@ export default function Footer() {
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-blue-600" />
-                <span className="text-sm">hello@colaunchr.com</span>
+                <span className="text-sm">hello@cofoundr.com</span>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="w-4 h-4 text-blue-600" />
@@ -166,7 +166,7 @@ export default function Footer() {
         <div className="container mx-auto px-4 py-6 max-w-7xl">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="text-sm text-slate-500">
-              © {currentYear} CoLaunchr. All rights reserved.
+              © {currentYear} CoFoundr. All rights reserved.
             </div>
             
             <div className="flex items-center gap-6 text-sm text-slate-500">

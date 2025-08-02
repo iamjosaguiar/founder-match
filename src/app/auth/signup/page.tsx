@@ -120,7 +120,7 @@ export default function SignUp() {
       <div className="container mx-auto px-4 max-w-md">
         <Card>
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl">Join CoLaunchr</CardTitle>
+            <CardTitle className="text-3xl">Join CoFoundr</CardTitle>
             <p className="text-gray-600">Create your founder profile</p>
           </CardHeader>
           

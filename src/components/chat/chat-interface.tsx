@@ -266,7 +266,7 @@ export default function ChatInterface({
       <div className={`${showSidebar ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative inset-y-0 left-0 z-50 w-80 bg-white border-r border-slate-200 flex flex-col transform transition-transform duration-300 ease-in-out lg:block ${showSidebar ? 'block' : 'hidden lg:block'}`}>
           <div className="p-4 border-b border-slate-200">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-slate-900">CoLaunchr</h2>
+              <h2 className="text-lg font-semibold text-slate-900">CoFoundr</h2>
               <Button
                 onClick={() => setShowSidebar(false)}
                 variant="ghost"
@@ -368,7 +368,7 @@ export default function ChatInterface({
                   <Bot className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-slate-900">CoLaunchr</h3>
+                  <h3 className="font-semibold text-slate-900">CoFoundr</h3>
                   <p className="text-sm text-slate-600">Your personal business sidekick</p>
                 </div>
               </div>
@@ -393,7 +393,7 @@ export default function ChatInterface({
               <div className="text-center max-w-md">
                 <Bot className="w-16 h-16 text-blue-600 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">
-                  Welcome to CoLaunchr! 🚀
+                  Welcome to CoFoundr! 🚀
                 </h3>
                 <p className="text-slate-600 mb-6">
                   I'm your personal business sidekick. Think of me as your co-pilot for 

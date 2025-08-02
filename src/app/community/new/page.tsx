@@ -158,7 +158,7 @@ function NewPostForm() {
             </Button>
           </div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Create New Post</h1>
-          <p className="text-slate-600">Share your thoughts with the CoLaunchr community</p>
+          <p className="text-slate-600">Share your thoughts with the CoFoundr community</p>
         </div>
 
         <Card className="border-0 bg-white shadow-lg">

@@ -223,7 +223,7 @@ export default function SettingsPage() {
       <div className="p-6 max-w-4xl mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Settings</h1>
-          <p className="text-slate-600">Manage your account and CoLaunchr preferences</p>
+          <p className="text-slate-600">Manage your account and CoFoundr preferences</p>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">

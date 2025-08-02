@@ -355,7 +355,7 @@ export default function ServiceProviderDashboard() {
           <CardContent>
             <div className="space-y-4">
               <p className="text-slate-600">
-                Welcome to the CoLaunchr Execution Network! Here's how to get started:
+                Welcome to the CoFoundr Execution Network! Here's how to get started:
               </p>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="space-y-2">

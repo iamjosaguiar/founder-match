@@ -21,7 +21,7 @@ export default function ContactPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Contact Us
             </h1>
-            <p className="text-slate-600 mt-2">Get in touch with the CoLaunchr team</p>
+            <p className="text-slate-600 mt-2">Get in touch with the CoFoundr team</p>
           </div>
         </div>
 
@@ -41,8 +41,8 @@ export default function ContactPage() {
                 <p className="text-slate-600 mb-3">
                   Send us an email and we'll get back to you within 24 hours.
                 </p>
-                <a href="mailto:hello@colaunchr.com" className="text-blue-600 hover:text-blue-700 font-medium">
-                  hello@colaunchr.com
+                <a href="mailto:hello@cofoundr.com" className="text-blue-600 hover:text-blue-700 font-medium">
+                  hello@cofoundr.com
                 </a>
               </CardContent>
             </Card>

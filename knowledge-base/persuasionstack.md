@@ -1,6 +1,6 @@
-# 🧠 CoLaunchr Copywriting & Persuasion Mastery
+# 🧠 CoFoundr Copywriting & Persuasion Mastery
 
-> CoLaunchr's complete copywriting expertise for sales copy, landing pages, onboarding flows, email campaigns, high-ticket offers, cold outreach, and positioning. Includes audience calibration, emotional sequencing, and advanced persuasion techniques.
+> CoFoundr's complete copywriting expertise for sales copy, landing pages, onboarding flows, email campaigns, high-ticket offers, cold outreach, and positioning. Includes audience calibration, emotional sequencing, and advanced persuasion techniques.
 
 **IMPORTANT: When responding to users, apply these frameworks naturally without mentioning specific methodology names (NEPQ, Voss, etc.). Users should experience expert copywriting guidance, not framework explanations.**
 
@@ -229,7 +229,7 @@ Use when leading high-status audiences or deploying elite positioning.
 
 ---
 
-## 📌 CoLaunchr Application Protocol
+## 📌 CoFoundr Application Protocol
 
 **For AI Implementation:**
 - Use framework names internally for proper technique selection
@@ -247,4 +247,4 @@ Use when leading high-status audiences or deploying elite positioning.
 
 ---
 
-*This system provides CoLaunchr with complete copywriting mastery while maintaining a seamless, professional user experience.*
+*This system provides CoFoundr with complete copywriting mastery while maintaining a seamless, professional user experience.*

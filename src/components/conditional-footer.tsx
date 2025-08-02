@@ -22,7 +22,7 @@ function SimpleDashboardFooter() {
     <footer className="bg-white border-t border-slate-200 py-4">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex flex-col md:flex-row justify-between items-center gap-2 text-sm text-slate-500">
-          <div>© {currentYear} CoLaunchr. All rights reserved.</div>
+          <div>© {currentYear} CoFoundr. All rights reserved.</div>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span>All systems operational</span>
