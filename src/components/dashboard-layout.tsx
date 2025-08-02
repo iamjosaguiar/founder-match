@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import UserAvatar from "@/components/user-avatar";
 import NotificationBell from "@/components/notification-bell";
@@ -133,6 +133,7 @@ const navigation = [
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const { data: session } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<any>(null);
@@ -360,7 +361,10 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               {pathname.startsWith("/chat") && "CoLaunchr"}
               {pathname.startsWith("/financing") && "Financing Hub"}
             </h1>
-            <BusinessSelector />
+            <BusinessSelector 
+              onCreateNew={() => router.push('/settings#business')}
+              onManage={() => router.push('/settings#business')}
+            />
           </div>
           
           <div className="flex items-center gap-4">

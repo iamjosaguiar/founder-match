@@ -53,6 +53,20 @@ export default function SettingsPage() {
     loadBusinesses();
   }, [session, status, router]);
 
+  // Handle URL hash to show business form
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash === '#business') {
+      setShowBusinessForm(true);
+      // Scroll to business section
+      setTimeout(() => {
+        const businessSection = document.getElementById('business-management');
+        if (businessSection) {
+          businessSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, []);
+
   const loadBusinesses = async () => {
     try {
       const response = await fetch('/api/businesses');
@@ -350,7 +364,7 @@ export default function SettingsPage() {
             </Card>
 
             {/* Business Management */}
-            <Card className="border-0 bg-white shadow-lg">
+            <Card id="business-management" className="border-0 bg-white shadow-lg">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
