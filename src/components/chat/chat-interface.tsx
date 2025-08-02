@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import UserAvatar from "@/components/user-avatar";
-import ReactMarkdown from "react-markdown";
 import {
   MessageCircle,
   Send,
@@ -428,26 +427,23 @@ export default function ChatInterface({
                     }`}
                   >
                     {message.role === "assistant" ? (
-                      <ReactMarkdown 
-                        className="prose prose-sm max-w-none leading-relaxed
-                          prose-headings:text-slate-900 prose-headings:font-semibold prose-headings:mb-3 prose-headings:mt-4
-                          prose-p:text-slate-700 prose-p:mb-4 prose-p:leading-relaxed
-                          prose-strong:text-slate-900 prose-strong:font-semibold
-                          prose-ul:my-3 prose-li:text-slate-700 prose-li:mb-1
-                          prose-ol:my-3 prose-ol:ml-4
-                          prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-                          prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:pl-4 prose-blockquote:my-4
-                          [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
-                      >
+                      <div className="text-slate-700 leading-relaxed space-y-4">
                         {message.content
-                          // Add proper line breaks for better paragraph formatting
-                          .replace(/([.!?])\s*([A-Z])/g, '$1\n\n$2')
-                          // Handle specific patterns like "Ad Copy 1:", "Ad Copy 2:" etc.
-                          .replace(/(Ad Copy \d+:)/g, '\n\n$1')
-                          // Handle other common patterns that should start new paragraphs
-                          .replace(/(Target Audience:|Offer Type:|Tone:|Emotional Temperature:|Strategic Frame:)/g, '\n\n$1')
-                        }
-                      </ReactMarkdown>
+                          .split(/\n\n|\n/)
+                          .filter(paragraph => paragraph.trim())
+                          .map((paragraph, index) => {
+                            // Handle bold text with **text**
+                            const formattedParagraph = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-slate-900">$1</strong>');
+                            
+                            return (
+                              <div 
+                                key={index} 
+                                className="mb-4"
+                                dangerouslySetInnerHTML={{ __html: formattedParagraph }}
+                              />
+                            );
+                          })}
+                      </div>
                     ) : (
                       <p className="whitespace-pre-wrap leading-relaxed">
                         {message.content}
