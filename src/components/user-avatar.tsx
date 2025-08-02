@@ -33,18 +33,22 @@ export default function UserAvatar({ className = "", size = "md", user }: UserAv
   const { data: session } = useSession();
   const [profileData, setProfileData] = useState<any>(null);
   const [imageError, setImageError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Use passed user data or session data
   const userData = user || session?.user;
 
   useEffect(() => {
-    // Fetch updated profile data if we have a session
-    if (session?.user?.email && !user) {
+    // Only fetch profile data if we don't have user data passed in and don't already have profile data
+    if (session?.user?.email && !user && !profileData) {
       fetchProfileData();
     }
-  }, [session?.user?.email, user]);
+  }, [session?.user?.email, user, profileData]);
 
   const fetchProfileData = async () => {
+    if (isLoading) return; // Prevent multiple simultaneous requests
+    
+    setIsLoading(true);
     try {
       const response = await fetch('/api/profile');
       if (response.ok) {
@@ -53,6 +57,9 @@ export default function UserAvatar({ className = "", size = "md", user }: UserAv
       }
     } catch (error) {
       console.error('Error fetching profile data:', error);
+      // Don't retry on error to prevent endless requests
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -63,10 +70,23 @@ export default function UserAvatar({ className = "", size = "md", user }: UserAv
   const getAvatarImage = () => {
     if (imageError) return null;
     
-    return profileData?.profileImage || 
-           (userData as any)?.profileImage || 
-           userData?.image || 
-           null;
+    const candidates = [
+      profileData?.profileImage,
+      (userData as any)?.profileImage,
+      userData?.image
+    ];
+    
+    // Find the first valid image URL
+    for (const candidate of candidates) {
+      if (candidate && typeof candidate === 'string' && candidate.trim()) {
+        // Check if it's a valid URL or base64 data URL
+        if (candidate.startsWith('http') || candidate.startsWith('data:image/')) {
+          return candidate;
+        }
+      }
+    }
+    
+    return null;
   };
 
   const getInitials = () => {
@@ -88,12 +108,19 @@ export default function UserAvatar({ className = "", size = "md", user }: UserAv
 
   return (
     <Avatar className={`${sizeClasses[size]} ${className}`}>
-      {avatarImage ? (
+      {avatarImage && !imageError ? (
         <img 
           src={avatarImage} 
           alt={profileData?.name || userData?.name || 'User'} 
           className="w-full h-full object-cover"
-          onError={() => setImageError(true)}
+          onError={() => {
+            console.warn('Avatar image failed to load:', avatarImage);
+            setImageError(true);
+          }}
+          onLoad={() => {
+            // Reset error state if image loads successfully
+            if (imageError) setImageError(false);
+          }}
         />
       ) : (
         <AvatarFallback className={`bg-gradient-to-br from-blue-500 to-indigo-500 text-white font-medium ${fallbackSizeClasses[size]}`}>
