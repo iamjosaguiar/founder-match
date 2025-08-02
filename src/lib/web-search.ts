@@ -16,12 +16,39 @@ export interface SearchResult {
   type?: string;
 }
 
+// Improve search queries for better results
+function optimizeSearchQuery(query: string): string {
+  const lowerQuery = query.toLowerCase();
+  
+  // For competitor queries, make them more specific and searchable
+  if (lowerQuery.includes('competitor') || lowerQuery.includes('competition')) {
+    // Extract business type if mentioned
+    const businessTypes = ['salon', 'restaurant', 'shop', 'store', 'cafe', 'gym', 'clinic', 'spa'];
+    const mentionedType = businessTypes.find(type => lowerQuery.includes(type));
+    
+    if (mentionedType) {
+      return `${mentionedType} business market competition analysis`;
+    } else {
+      return 'business competition market analysis';
+    }
+  }
+  
+  // For local queries, make them more general
+  if (lowerQuery.includes('local') || lowerQuery.includes('my area')) {
+    return query.replace(/local|my area|around me|in my city/gi, 'business').trim();
+  }
+  
+  return query;
+}
+
 export async function searchDuckDuckGo(query: string): Promise<SearchResult | null> {
   try {
-    console.log('🌐 Making DuckDuckGo API request for:', query);
+    // Optimize the query for better results
+    const optimizedQuery = optimizeSearchQuery(query);
+    console.log('🌐 Making DuckDuckGo API request for:', optimizedQuery);
     
     // DuckDuckGo Instant Answer API
-    const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json&no_html=1&skip_disambig=1`;
+    const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(optimizedQuery)}&format=json&no_html=1&skip_disambig=1`;
     console.log('📡 API URL:', url);
     
     const response = await fetch(url, {
@@ -41,7 +68,7 @@ export async function searchDuckDuckGo(query: string): Promise<SearchResult | nu
     
     // Extract useful information from DuckDuckGo response
     const result: SearchResult = {
-      query,
+      query: optimizedQuery,
       answer: data.Answer || undefined,
       abstract: data.Abstract || undefined,
       abstractText: data.AbstractText || undefined,
@@ -54,6 +81,15 @@ export async function searchDuckDuckGo(query: string): Promise<SearchResult | nu
       relatedTopics: data.RelatedTopics?.filter((topic: { Text?: string }) => topic.Text && topic.Text.length > 0) || undefined,
     };
 
+    // Check if we got any useful data
+    const hasUsefulData = result.answer || result.abstractText || result.definition || 
+                         (result.relatedTopics && result.relatedTopics.length > 0);
+    
+    if (!hasUsefulData) {
+      console.log('❌ DuckDuckGo returned no useful data for this query');
+      return null;
+    }
+
     return result;
   } catch (error) {
     console.error('DuckDuckGo search error:', error);
@@ -63,10 +99,6 @@ export async function searchDuckDuckGo(query: string): Promise<SearchResult | nu
 
 export function shouldPerformWebSearch(message: string): boolean {
   console.log('🔍 Checking if web search needed for:', message);
-  
-  // TEMPORARY: Always search for testing
-  console.log('🧪 TESTING MODE: Always triggering search');
-  return true;
   
   // Quick check for obvious competitor queries
   const competitorKeywords = ['competitor', 'competitors', 'competition', 'rival', 'rivals'];

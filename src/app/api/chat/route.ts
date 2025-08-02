@@ -237,6 +237,10 @@ export async function POST(request: NextRequest) {
           console.log('✅ Web search completed successfully, results length:', webSearchResults.length);
         } else {
           console.log('❌ Web search returned no results');
+          // Add guidance for local/competitor queries when search fails
+          if (message.toLowerCase().includes('competitor') || message.toLowerCase().includes('local')) {
+            webSearchResults = `**Web Search Note:** I attempted to search for current information but didn't find specific results for this query. For local competitor research, I recommend:\n\n• Google Maps search for similar businesses in your area\n• Industry-specific directories and review sites\n• Local business association listings\n• Social media platforms for local business discovery\n\n`;
+          }
         }
       } catch (searchError) {
         console.warn('💥 Web search error:', searchError);
