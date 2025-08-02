@@ -257,7 +257,7 @@ export default function CreateShowcasePage() {
           {/* What You're Seeking */}
           <Card className="border-0 bg-white shadow-lg">
             <CardHeader>
-              <CardTitle>What You're Seeking</CardTitle>
+              <CardTitle>What You&apos;re Seeking</CardTitle>
               <p className="text-sm text-slate-600">Select all that apply</p>
             </CardHeader>
             <CardContent className="space-y-6">

@@ -1,7 +1,5 @@
 import path from 'path';
-
-// Dynamic import for fs to avoid build issues
-const fs = typeof window === 'undefined' ? require('fs') : null;
+import fs from 'fs';
 
 export type KnowledgeTopic = 
   | 'copywriting' 
@@ -91,7 +89,7 @@ export async function loadKnowledgeFiles(topics: KnowledgeTopic[]): Promise<stri
   if (topics.length === 0) return '';
 
   // Only try to load files in server environment
-  if (typeof window !== 'undefined' || !fs) return ''; // Skip on client side or if fs not available
+  if (typeof window !== 'undefined') return ''; // Skip on client side
   
   let combinedKnowledge = '';
 

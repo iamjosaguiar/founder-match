@@ -452,7 +452,7 @@ export default function GrowthTracksLanding() {
               Success Stories
             </Badge>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
-              Founders Who've Accelerated Their Growth
+              Founders Who&apos;ve Accelerated Their Growth
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
               See how other founders have transformed their startups through our structured growth programs.
@@ -469,7 +469,7 @@ export default function GrowthTracksLanding() {
                     ))}
                   </div>
                   <blockquote className="text-slate-700 mb-6 leading-relaxed">
-                    "{testimonial.quote}"
+                    &ldquo;{testimonial.quote}&rdquo;
                   </blockquote>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">

@@ -165,7 +165,7 @@ export default function IntroductionRequestModal({
               <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-green-900 mb-2">Introduction Request Sent!</h3>
               <p className="text-green-700">
-                Your message has been sent to {recipient.name}. They'll receive an email notification 
+                Your message has been sent to {recipient.name}. They&apos;ll receive an email notification 
                 and can respond directly to you.
               </p>
             </div>
@@ -269,7 +269,7 @@ export default function IntroductionRequestModal({
                     <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>
                   )}
                   <p className="text-xs text-slate-500 mt-1">
-                    Be specific about your background and what you're hoping to achieve from this connection.
+                    Be specific about your background and what you&apos;re hoping to achieve from this connection.
                   </p>
                 </div>
 
@@ -291,7 +291,7 @@ export default function IntroductionRequestModal({
                     <p className="text-red-500 text-sm mt-1">{errors.contactEmail.message}</p>
                   )}
                   <p className="text-xs text-slate-500 mt-1">
-                    They'll be able to respond directly to this email address.
+                    They&apos;ll be able to respond directly to this email address.
                   </p>
                 </div>
 

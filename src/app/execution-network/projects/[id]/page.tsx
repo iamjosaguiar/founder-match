@@ -218,7 +218,7 @@ export default function ProjectDetailsPage() {
       <DashboardLayout>
         <div className="p-6 max-w-4xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">Project Not Found</h1>
-          <p className="text-slate-600 mb-6">The project you're looking for doesn't exist or has been removed.</p>
+          <p className="text-slate-600 mb-6">The project you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <Button asChild>
             <Link href="/execution-network/projects">
               <ArrowLeft className="w-4 h-4 mr-2" />

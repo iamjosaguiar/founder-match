@@ -171,7 +171,7 @@ export default function MatchesPage() {
             <h3 className="text-2xl font-bold mb-4 text-slate-900">No matches yet</h3>
             <p className="text-slate-600 mb-6 max-w-md mx-auto">
               Start discovering other founders to find your perfect co-founder match. 
-              When someone likes you back, you'll see them here!
+              When someone likes you back, you&apos;ll see them here!
             </p>
             <Button asChild className="bg-gradient-to-r from-blue-600 to-indigo-600">
               <a href="/founder-matching/discover">

@@ -253,7 +253,7 @@ export default function FounderAssessment() {
         return (
           <motion.div variants={fadeInUp} initial="hidden" animate="visible" className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-3">What's your long-term vision?</label>
+              <label className="block text-sm font-medium mb-3">What&apos;s your long-term vision?</label>
               <div className="space-y-2">
                 {[
                   'Build a billion-dollar company',
@@ -273,7 +273,7 @@ export default function FounderAssessment() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-3">What's your ideal exit?</label>
+              <label className="block text-sm font-medium mb-3">What&apos;s your ideal exit?</label>
               <div className="grid grid-cols-2 gap-3">
                 {['Acquisition', 'IPO', 'Long-term operator', 'Undecided'].map((exit) => (
                   <Button
@@ -412,7 +412,7 @@ export default function FounderAssessment() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">What's the hardest thing you've shipped or achieved?</label>
+              <label className="block text-sm font-medium mb-2">What&apos;s the hardest thing you&apos;ve shipped or achieved?</label>
               <Textarea 
                 value={assessmentData.biggestAchievement}
                 onChange={(e) => updateData('biggestAchievement', e.target.value)}
@@ -633,7 +633,7 @@ export default function FounderAssessment() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">Have you had any previous cofounder relationships? What worked? What didn't?</label>
+              <label className="block text-sm font-medium mb-2">Have you had any previous cofounder relationships? What worked? What didn&apos;t?</label>
               <Textarea 
                 value={assessmentData.previousCofounderExp}
                 onChange={(e) => updateData('previousCofounderExp', e.target.value)}

@@ -396,15 +396,15 @@ export default function ChatInterface({
                   Welcome to CoFoundr! 🚀
                 </h3>
                 <p className="text-slate-600 mb-6">
-                  I'm your personal business sidekick. Think of me as your co-pilot for 
+                  I&apos;m your personal business sidekick. Think of me as your co-pilot for 
                   navigating startup challenges, making decisions, and growing your business.
                 </p>
                 <div className="grid grid-cols-1 gap-2 text-sm">
                   <div className="p-3 bg-blue-50 rounded-lg text-left">
                     <p className="font-medium text-blue-900">💡 Try asking:</p>
-                    <p className="text-blue-700">• "Help me validate my salon CRM idea"</p>
-                    <p className="text-blue-700">• "What's my next step for fundraising?"</p>
-                    <p className="text-blue-700">• "How should I price my SaaS product?"</p>
+                    <p className="text-blue-700">• &ldquo;Help me validate my salon CRM idea&rdquo;</p>
+                    <p className="text-blue-700">• &ldquo;What&apos;s my next step for fundraising?&rdquo;</p>
+                    <p className="text-blue-700">• &ldquo;How should I price my SaaS product?&rdquo;</p>
                   </div>
                 </div>
               </div>

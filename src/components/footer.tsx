@@ -19,7 +19,7 @@ export default function Footer() {
                 </span>
               </h3>
               <p className="text-slate-500 leading-relaxed max-w-md">
-                Your startup's ultimate sidekick. From co-founder matching to execution teams, 
+                Your startup&apos;s ultimate sidekick. From co-founder matching to execution teams, 
                 we connect you with the expertise you need to build, launch, and scale.
               </p>
             </div>

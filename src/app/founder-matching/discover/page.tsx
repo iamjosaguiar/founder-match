@@ -274,7 +274,7 @@ export default function DiscoverFoundersPage() {
         {!currentFounder || currentIndex >= founders.length ? (
           <Card className="text-center p-12">
             <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-2xl font-bold mb-4">You've seen all available founders!</h3>
+            <h3 className="text-2xl font-bold mb-4">You&apos;ve seen all available founders!</h3>
             <p className="text-slate-600 mb-6">
               Check back later for new members, or adjust your filters to see more profiles.
             </p>

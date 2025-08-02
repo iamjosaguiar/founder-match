@@ -39,7 +39,7 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-slate-600 mb-3">
-                  Send us an email and we'll get back to you within 24 hours.
+                  Send us an email and we&apos;ll get back to you within 24 hours.
                 </p>
                 <a href="mailto:hello@cofoundr.com" className="text-blue-600 hover:text-blue-700 font-medium">
                   hello@cofoundr.com

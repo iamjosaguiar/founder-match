@@ -19,7 +19,7 @@ export default function AboutPage() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               About CoFoundr
             </h1>
-            <p className="text-slate-600 mt-2">Your startup's ultimate sidekick</p>
+            <p className="text-slate-600 mt-2">Your startup&apos;s ultimate sidekick</p>
           </div>
         </div>
 
@@ -37,8 +37,8 @@ export default function AboutPage() {
             <p className="text-lg text-slate-700 leading-relaxed">
               We believe no founder should go it alone. CoFoundr exists to democratize access to 
               the expertise, connections, and support that traditionally only well-connected founders 
-              in Silicon Valley could access. Whether you're looking for a co-founder, need expert 
-              guidance, or want to execute fast with professional teams—we're here to help you succeed.
+              in Silicon Valley could access. Whether you&apos;re looking for a co-founder, need expert 
+              guidance, or want to execute fast with professional teams—we&apos;re here to help you succeed.
             </p>
           </CardContent>
         </Card>
@@ -60,7 +60,7 @@ export default function AboutPage() {
               partnerships, guidance, or execution support.
             </p>
             <p className="text-slate-700 leading-relaxed">
-              We've built a comprehensive ecosystem that connects founders with everything they need: 
+              We&apos;ve built a comprehensive ecosystem that connects founders with everything they need: 
               compatible co-founders through AI-powered matching, expert advisors for strategic guidance, 
               vetted execution teams for rapid development, and a supportive community of fellow entrepreneurs.
             </p>
@@ -94,7 +94,7 @@ export default function AboutPage() {
               <div>
                 <h4 className="font-semibold text-slate-900 mb-2">Accessibility</h4>
                 <p className="text-slate-600 text-sm">
-                  World-class expertise shouldn't be limited to well-connected founders in major tech hubs.
+                  World-class expertise shouldn&apos;t be limited to well-connected founders in major tech hubs.
                 </p>
               </div>
               <div>

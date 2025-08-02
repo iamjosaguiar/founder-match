@@ -151,7 +151,7 @@ export default function ExecutionNetworkLanding() {
           
           <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-              Your Startup's
+              Your Startup&apos;s
             </span>
             <br />
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
@@ -414,7 +414,7 @@ export default function ExecutionNetworkLanding() {
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-6">Ready to Build Your Dream Team?</h3>
           <p className="text-xl text-purple-100 mb-12 max-w-3xl mx-auto">
-            Join hundreds of startups who've accelerated their growth with our expert execution network.
+            Join hundreds of startups who&apos;ve accelerated their growth with our expert execution network.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-purple-600 hover:bg-purple-50 hover:text-purple-700 font-semibold px-8 py-4">

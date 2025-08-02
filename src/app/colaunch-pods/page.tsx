@@ -184,7 +184,7 @@ export default function CoLaunchPodsLanding() {
           
           <h1 className="text-5xl md:text-6xl font-bold mb-12 leading-tight">
             <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
-              Your Startup's
+              Your Startup&apos;s
             </span>
             <br />
             <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
@@ -256,7 +256,7 @@ export default function CoLaunchPodsLanding() {
               Specialized Expertise for Every Challenge
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Each pod is carefully designed around specific startup challenges with expert advisors who've solved these problems before.
+              Each pod is carefully designed around specific startup challenges with expert advisors who&apos;ve solved these problems before.
             </p>
           </div>
 
@@ -433,7 +433,7 @@ export default function CoLaunchPodsLanding() {
                     ))}
                   </div>
                   <blockquote className="text-slate-700 mb-6 leading-relaxed">
-                    "{testimonial.quote}"
+                    &ldquo;{testimonial.quote}&rdquo;
                   </blockquote>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-green-400 to-blue-500 rounded-full"></div>
@@ -455,8 +455,8 @@ export default function CoLaunchPodsLanding() {
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-4">Get Expert Guidance for Your Startup</h3>
           <p className="text-xl text-green-100 mb-12 max-w-3xl mx-auto">
-            Don't struggle alone. Join the waitlist for CoLaunch Pods and get access to the expert guidance 
-            that can accelerate your startup's success.
+            Don&apos;t struggle alone. Join the waitlist for CoLaunch Pods and get access to the expert guidance 
+            that can accelerate your startup&apos;s success.
           </p>
           
           <div className="bg-green-500/20 border border-green-400/30 rounded-lg p-8 mb-12 max-w-4xl mx-auto">

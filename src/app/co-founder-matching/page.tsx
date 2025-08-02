@@ -141,7 +141,7 @@ export default function CoFounderMatchingLanding() {
           </h1>
           
           <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
-            Don't leave your most important business decision to chance. Our science-backed personality 
+            Don&apos;t leave your most important business decision to chance. Our science-backed personality 
             matching system finds co-founders who truly complement your strengths and working style.
           </p>
           
@@ -310,7 +310,7 @@ export default function CoFounderMatchingLanding() {
               Which Founder Type Are You?
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Based on your personality assessment, you'll be classified as one of these seven distinct founder types, each with unique strengths and ideal co-founder matches.
+              Based on your personality assessment, you&apos;ll be classified as one of these seven distinct founder types, each with unique strengths and ideal co-founder matches.
             </p>
           </div>
 
@@ -345,7 +345,7 @@ export default function CoFounderMatchingLanding() {
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-6">Ready to Find Your Co-Founder?</h3>
           <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto">
-            Join thousands of founders who've found their perfect business partner through our science-backed matching system.
+            Join thousands of founders who&apos;ve found their perfect business partner through our science-backed matching system.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button asChild size="lg" className="bg-white text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold px-8 py-4">

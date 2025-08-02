@@ -90,7 +90,7 @@ export default function AssessmentPage() {
                 </div>
                 <h2 className="text-2xl font-bold text-green-900 mb-2">Assessment Completed!</h2>
                 <p className="text-green-700 mb-6">
-                  You've successfully completed your founder assessment. Your profile is active and ready for matching.
+                  You&apos;ve successfully completed your founder assessment. Your profile is active and ready for matching.
                 </p>
                 <Badge className="bg-green-100 text-green-800 border-green-200 mb-6">
                   ✅ Profile Active

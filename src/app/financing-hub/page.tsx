@@ -184,7 +184,7 @@ export default function FinancingHubLanding() {
           
           <p className="text-xl text-slate-600 mb-16 leading-relaxed max-w-3xl mx-auto">
             Discover funding opportunities, connect with investors, and access the resources you need 
-            to fuel your startup's growth. From pre-seed to Series A and beyond.
+            to fuel your startup&apos;s growth. From pre-seed to Series A and beyond.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-20">
@@ -293,7 +293,7 @@ export default function FinancingHubLanding() {
               Types of Startup Investors
             </h2>
             <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-              Different investor types bring unique value beyond capital. Choose the right fit for your startup's stage and needs.
+              Different investor types bring unique value beyond capital. Choose the right fit for your startup&apos;s stage and needs.
             </p>
           </div>
 
@@ -455,7 +455,7 @@ export default function FinancingHubLanding() {
         <div className="container mx-auto px-6 text-center">
           <h3 className="text-4xl font-bold text-white mb-4">Ready to Fuel Your Growth?</h3>
           <p className="text-xl text-blue-100 mb-12 max-w-3xl mx-auto">
-            Join hundreds of startups who've connected with investors and raised capital through our platform.
+            Join hundreds of startups who&apos;ve connected with investors and raised capital through our platform.
           </p>
           
           {/* Legal Notice */}

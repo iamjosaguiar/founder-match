@@ -209,7 +209,7 @@ export default function JoinInvestorNetworkPage() {
                 <div className="text-sm">
                   <p className="font-medium text-green-800 mb-1">Profile Information Synced</p>
                   <p className="text-green-700">
-                    We've pre-filled some fields with information from your existing profile. 
+                    We&apos;ve pre-filled some fields with information from your existing profile. 
                     Please review and update as needed for your investor profile.
                   </p>
                 </div>

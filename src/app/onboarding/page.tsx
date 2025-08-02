@@ -425,7 +425,7 @@ export default function Onboarding() {
                             className="w-4 h-4 text-blue-600 mt-0.5"
                           />
                           <span className="text-sm">
-                            I agree to CoFoundr's{" "}
+                            I agree to CoFoundr&apos;s{" "}
                             <a href="/terms" target="_blank" className="text-blue-600 underline">
                               Terms of Service
                             </a>
@@ -439,7 +439,7 @@ export default function Onboarding() {
                             className="w-4 h-4 text-blue-600 mt-0.5"
                           />
                           <span className="text-sm">
-                            I agree to CoFoundr's{" "}
+                            I agree to CoFoundr&apos;s{" "}
                             <a href="/privacy" target="_blank" className="text-blue-600 underline">
                               Privacy Policy
                             </a>

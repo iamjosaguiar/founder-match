@@ -172,7 +172,7 @@ export default function CategoryPage() {
       <DashboardLayout>
         <div className="p-6 max-w-4xl mx-auto text-center">
           <h1 className="text-2xl font-bold text-slate-900 mb-4">Category Not Found</h1>
-          <p className="text-slate-600 mb-6">The category you're looking for doesn't exist.</p>
+          <p className="text-slate-600 mb-6">The category you&apos;re looking for doesn&apos;t exist.</p>
           <Button asChild>
             <Link href="/community">
               <ArrowLeft className="w-4 h-4 mr-2" />

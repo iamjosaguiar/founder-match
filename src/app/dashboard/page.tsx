@@ -359,7 +359,7 @@ export default function DashboardPage() {
             Welcome back, {session.user?.name?.split(' ')[0] || 'Founder'}! 👋
           </h1>
           <p className="text-slate-600 text-lg">
-            Here's what's happening with your startup journey
+            Here&apos;s what&apos;s happening with your startup journey
           </p>
         </div>
 

@@ -200,7 +200,7 @@ export default function PricingPage() {
         <div className="text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to Find Your Co-Founder?</h2>
           <p className="text-xl text-slate-600 mb-8 max-w-2xl mx-auto">
-            Join thousands of founders who've found their perfect co-founder and built successful startups together.
+            Join thousands of founders who&apos;ve found their perfect co-founder and built successful startups together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button asChild size="lg" className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">

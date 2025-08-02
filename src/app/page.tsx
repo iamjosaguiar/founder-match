@@ -210,7 +210,7 @@ export default function Home() {
               </CardHeader>
               <CardContent className="text-center px-8 pb-8">
                 <p className="text-slate-600 leading-relaxed mb-6 text-lg">
-                  Get perspective from founders who've solved your exact problems. No more building in a feedback vacuum.
+                  Get perspective from founders who&apos;ve solved your exact problems. No more building in a feedback vacuum.
                 </p>
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center text-sm text-slate-600">
@@ -307,7 +307,7 @@ export default function Home() {
                 1
               </div>
               <h3 className="text-xl font-bold mb-6 group-hover:text-blue-600 transition-colors">Identify Your Gaps</h3>
-              <p className="text-slate-600 mb-8 leading-relaxed">Map what you're missing—technical skills, business expertise, or industry connections. Get matched accordingly.</p>
+              <p className="text-slate-600 mb-8 leading-relaxed">Map what you&apos;re missing—technical skills, business expertise, or industry connections. Get matched accordingly.</p>
               <Button asChild variant="outline" size="sm" className="border-blue-300 !text-blue-600 hover:bg-blue-50 hover:!text-blue-700">
                 <Link href="/co-founder-matching">Start Matching</Link>
               </Button>
