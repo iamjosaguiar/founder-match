@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { Providers } from "@/components/providers";
 import Footer from "@/components/footer";
+import ConditionalFooter from "@/components/conditional-footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,7 +36,7 @@ export default function RootLayout({
           <main className="flex-1">
             {children}
           </main>
-          <Footer />
+          <ConditionalFooter />
         </Providers>
       </body>
     </html>
