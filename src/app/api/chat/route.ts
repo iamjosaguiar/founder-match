@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
+import { getRelevantKnowledge } from '@/lib/knowledge-base';
 
 // Initialize OpenAI client only when needed to avoid build-time errors
 const getOpenAIClient = () => {
@@ -197,8 +198,8 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Get user context and memories
-    const [userContext, relevantMemories, conversationHistory] = await Promise.all([
+    // Get user context, memories, and relevant knowledge
+    const [userContext, relevantMemories, conversationHistory, relevantKnowledge] = await Promise.all([
       getUserContext(user.id),
       getRelevantMemories(user.id, message),
       prisma.chatMessage.findMany({
@@ -206,7 +207,8 @@ export async function POST(request: NextRequest) {
         orderBy: { createdAt: 'asc' },
         take: 20, // Last 20 messages for context
         select: { role: true, content: true }
-      })
+      }),
+      getRelevantKnowledge(message, userContext)
     ]);
 
     // Build context-aware system prompt
@@ -238,7 +240,12 @@ Recent Activity:
 ${relevantMemories.length > 0 ? `Previous Context:
 ${relevantMemories.map(m => `- ${m.content} (${m.memoryType})`).join('\n')}` : ''}
 
-Your Personality & Approach:
+${relevantKnowledge ? `SPECIALIZED KNOWLEDGE:
+${relevantKnowledge}
+
+When relevant to the user's query, apply the above specialized knowledge to provide expert-level guidance. Combine this knowledge with their personal context for tailored advice.
+
+` : ''}Your Personality & Approach:
 - Act as CoLaunchr, their personal business co-pilot and trusted sidekick
 - Be encouraging, practical, and action-oriented
 - Think like a seasoned entrepreneur who's been through it all
