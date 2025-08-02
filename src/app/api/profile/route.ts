@@ -219,7 +219,7 @@ export async function PATCH(request: NextRequest) {
       ...updatedUser,
       skills: skillsArray,
       projectLinks: projectLinksArray,
-      avatar: updatedUser.image,
+      avatar: updatedUser.profileImage,
     });
 
   } catch (error) {
