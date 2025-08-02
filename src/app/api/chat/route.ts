@@ -157,6 +157,8 @@ async function extractAndStoreMemories(userId: string, userMessage: string, aiRe
 
 // POST /api/chat - Send message and get AI response
 export async function POST(request: NextRequest) {
+  console.log('🚨 CHAT API CALLED - Starting request processing');
+  
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const session = await getServerSession(authOptions) as any;
@@ -175,6 +177,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { message, conversationId } = await request.json();
+    console.log('📝 MESSAGE RECEIVED:', message);
 
     if (!message?.trim()) {
       return NextResponse.json({ message: 'Message is required' }, { status: 400 });
