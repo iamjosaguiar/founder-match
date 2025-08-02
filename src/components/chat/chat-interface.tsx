@@ -430,12 +430,14 @@ export default function ChatInterface({
                     {message.role === "assistant" ? (
                       <ReactMarkdown 
                         className="prose prose-sm max-w-none leading-relaxed
-                          prose-headings:text-slate-900 prose-headings:font-semibold
-                          prose-p:text-slate-700 prose-p:my-2
+                          prose-headings:text-slate-900 prose-headings:font-semibold prose-headings:mb-3 prose-headings:mt-4
+                          prose-p:text-slate-700 prose-p:mb-4 prose-p:leading-relaxed
                           prose-strong:text-slate-900 prose-strong:font-semibold
-                          prose-ul:my-2 prose-li:text-slate-700
-                          prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded
-                          prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:pl-4"
+                          prose-ul:my-3 prose-li:text-slate-700 prose-li:mb-1
+                          prose-ol:my-3 prose-ol:ml-4
+                          prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+                          prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:pl-4 prose-blockquote:my-4
+                          [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
                       >
                         {message.content}
                       </ReactMarkdown>
