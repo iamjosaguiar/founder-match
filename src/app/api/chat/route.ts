@@ -41,6 +41,32 @@ async function getUserContext(userId: string) {
       passionateIndustries: true,
       workingStyle: true,
       
+      // Business context
+      currentBusiness: {
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          industry: true,
+          businessType: true,
+          subType: true,
+          location: true,
+          country: true,
+          targetMarket: true,
+          targetAudience: true,
+          stage: true,
+          teamSize: true,
+          revenueRange: true,
+          businessModel: true,
+          revenueModel: true,
+          pricePoint: true,
+          primaryServices: true,
+          specialties: true,
+          mainCompetitors: true,
+          marketPosition: true
+        }
+      },
+      
       // Recent activity
       forumPosts: {
         select: { title: true, createdAt: true },
@@ -82,6 +108,27 @@ async function getUserContext(userId: string) {
       currentStage: user.currentStage,
       passionateIndustries: user.passionateIndustries,
       workingStyle: user.workingStyle
+    } : null,
+    business: user.currentBusiness ? {
+      name: user.currentBusiness.name,
+      description: user.currentBusiness.description,
+      industry: user.currentBusiness.industry,
+      businessType: user.currentBusiness.businessType,
+      subType: user.currentBusiness.subType,
+      location: user.currentBusiness.location,
+      country: user.currentBusiness.country,
+      targetMarket: user.currentBusiness.targetMarket,
+      targetAudience: user.currentBusiness.targetAudience,
+      stage: user.currentBusiness.stage,
+      teamSize: user.currentBusiness.teamSize,
+      revenueRange: user.currentBusiness.revenueRange,
+      businessModel: user.currentBusiness.businessModel,
+      revenueModel: user.currentBusiness.revenueModel,
+      pricePoint: user.currentBusiness.pricePoint,
+      primaryServices: user.currentBusiness.primaryServices,
+      specialties: user.currentBusiness.specialties,
+      mainCompetitors: user.currentBusiness.mainCompetitors,
+      marketPosition: user.currentBusiness.marketPosition
     } : null,
     recentActivity: {
       posts: user.forumPosts,
@@ -231,7 +278,7 @@ export async function POST(request: NextRequest) {
     if (shouldPerformWebSearch(message)) {
       try {
         console.log('🔍 Performing web search for:', message);
-        const searchResult = await searchDuckDuckGo(message);
+        const searchResult = await searchDuckDuckGo(message, userContext?.business);
         if (searchResult) {
           webSearchResults = formatSearchResults(searchResult);
           console.log('✅ Web search completed successfully, results length:', webSearchResults.length);
@@ -270,6 +317,22 @@ ${userContext.assessment ? `Assessment Data:
 - Stage: ${userContext.assessment.currentStage}
 - Industries: ${userContext.assessment.passionateIndustries}
 - Work Style: ${userContext.assessment.workingStyle}` : 'Assessment not completed'}
+
+${userContext.business ? `CURRENT BUSINESS:
+- Name: ${userContext.business.name}
+- Type: ${userContext.business.businessType}${userContext.business.subType ? ` (${userContext.business.subType})` : ''}
+- Industry: ${userContext.business.industry}
+- Location: ${userContext.business.location || 'Not specified'}${userContext.business.country ? `, ${userContext.business.country}` : ''}
+- Stage: ${userContext.business.stage}
+- Target Market: ${userContext.business.targetMarket || 'Not specified'}
+- Business Model: ${userContext.business.businessModel || 'Not specified'}
+- Team Size: ${userContext.business.teamSize || 'Not specified'}
+- Revenue Range: ${userContext.business.revenueRange || 'Not specified'}
+- Price Point: ${userContext.business.pricePoint || 'Not specified'}
+${userContext.business.primaryServices ? `- Primary Services: ${Array.isArray(userContext.business.primaryServices) ? userContext.business.primaryServices.join(', ') : userContext.business.primaryServices}` : ''}
+${userContext.business.specialties ? `- Specialties: ${Array.isArray(userContext.business.specialties) ? userContext.business.specialties.join(', ') : userContext.business.specialties}` : ''}
+${userContext.business.targetAudience ? `- Target Audience: ${userContext.business.targetAudience}` : ''}
+${userContext.business.description ? `- Description: ${userContext.business.description}` : ''}` : 'No business profile set up'}
 
 Recent Activity:
 - Community Posts: ${userContext?.recentActivity.posts.length || 0}

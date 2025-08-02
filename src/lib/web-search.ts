@@ -16,36 +16,66 @@ export interface SearchResult {
   type?: string;
 }
 
-// Improve search queries for better results
-function optimizeSearchQuery(query: string): string {
+// Improve search queries for better results using business context
+function optimizeSearchQuery(query: string, businessContext?: any): string {
   const lowerQuery = query.toLowerCase();
+  
+  // Use business context to make searches more specific
+  let businessInfo = '';
+  if (businessContext) {
+    businessInfo = `${businessContext.businessType || 'business'} ${businessContext.industry || ''} ${businessContext.location || ''}`.trim();
+  }
   
   // For competitor queries, make them more specific and searchable
   if (lowerQuery.includes('competitor') || lowerQuery.includes('competition')) {
-    // Extract business type if mentioned
-    const businessTypes = ['salon', 'restaurant', 'shop', 'store', 'cafe', 'gym', 'clinic', 'spa'];
-    const mentionedType = businessTypes.find(type => lowerQuery.includes(type));
-    
-    if (mentionedType) {
-      return `${mentionedType} business market competition analysis`;
+    if (businessContext) {
+      // Use specific business context
+      const searchTerms = [
+        businessContext.businessType || 'business',
+        businessContext.industry,
+        businessContext.location,
+        'competitors market analysis'
+      ].filter(Boolean).join(' ');
+      
+      return searchTerms;
     } else {
-      return 'business competition market analysis';
+      // Fallback to generic business types
+      const businessTypes = ['salon', 'restaurant', 'shop', 'store', 'cafe', 'gym', 'clinic', 'spa'];
+      const mentionedType = businessTypes.find(type => lowerQuery.includes(type));
+      
+      if (mentionedType) {
+        return `${mentionedType} business market competition analysis`;
+      } else {
+        return 'business competition market analysis';
+      }
     }
   }
   
-  // For local queries, make them more general
+  // For local queries, add business context
   if (lowerQuery.includes('local') || lowerQuery.includes('my area')) {
-    return query.replace(/local|my area|around me|in my city/gi, 'business').trim();
+    if (businessContext && businessContext.location) {
+      return `${businessContext.businessType || 'business'} ${businessContext.location} market analysis`;
+    } else {
+      return query.replace(/local|my area|around me|in my city/gi, 'business').trim();
+    }
+  }
+  
+  // For market/industry queries, add business context
+  if (lowerQuery.includes('market') || lowerQuery.includes('industry') || lowerQuery.includes('trends')) {
+    if (businessContext) {
+      return `${businessContext.industry || businessContext.businessType || 'business'} market trends analysis ${new Date().getFullYear()}`;
+    }
   }
   
   return query;
 }
 
-export async function searchDuckDuckGo(query: string): Promise<SearchResult | null> {
+export async function searchDuckDuckGo(query: string, businessContext?: any): Promise<SearchResult | null> {
   try {
     // Optimize the query for better results
-    const optimizedQuery = optimizeSearchQuery(query);
+    const optimizedQuery = optimizeSearchQuery(query, businessContext);
     console.log('🌐 Making DuckDuckGo API request for:', optimizedQuery);
+    console.log('📊 Using business context:', businessContext?.businessType, businessContext?.location);
     
     // DuckDuckGo Instant Answer API
     const url = `https://api.duckduckgo.com/?q=${encodeURIComponent(optimizedQuery)}&format=json&no_html=1&skip_disambig=1`;

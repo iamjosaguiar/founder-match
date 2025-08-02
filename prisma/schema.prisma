@@ -128,7 +128,70 @@ model User {
   conversations     ChatConversation[] @relation("UserConversations")
   memories          UserMemory[] @relation("UserMemories")
   
+  // Business relationships
+  businesses        Business[] @relation("UserBusinesses")
+  currentBusinessId String?  // ID of the currently selected business
+  currentBusiness   Business? @relation("CurrentBusiness", fields: [currentBusinessId], references: [id])
+  
   @@map("users")
+}
+
+model Business {
+  id                String   @id @default(uuid())
+  name              String
+  description       String?
+  
+  // Business classification
+  industry          String   // Tech, Healthcare, Beauty, Food, etc.
+  businessType      String   // salon, restaurant, saas, ecommerce, etc.
+  subType           String?  // hair salon, pizza restaurant, b2b saas, etc.
+  
+  // Location & Market
+  location          String?  // City, State/Region, Country
+  country           String?  // For better search targeting
+  targetMarket      String?  // Local, National, Global
+  targetAudience    String?  // Demographics, psychographics
+  
+  // Business Stage & Size
+  stage             String   // idea, validation, mvp, early-revenue, growth, established
+  foundedYear       Int?
+  teamSize          Int?
+  revenueRange      String?  // 0-10k, 10k-100k, 100k-1M, 1M+
+  
+  // Business Model
+  businessModel     String?  // B2B, B2C, B2B2C, Marketplace, etc.
+  revenueModel      String?  // subscription, one-time, commission, freemium
+  pricePoint        String?  // budget, mid-market, premium, luxury
+  
+  // Online presence
+  website           String?
+  socialMedia       Json?    // {instagram: "", facebook: "", linkedin: ""}
+  
+  // Services/Products (for service businesses like salons)
+  primaryServices   Json?    // ["balayage", "cuts", "color"] for salon
+  specialties       Json?    // Unique selling propositions
+  
+  // Competitive context
+  mainCompetitors   Json?    // Known competitor names/info
+  marketPosition    String?  // premium, budget, mid-market
+  
+  // Business goals
+  shortTermGoals    String?  // Next 6 months
+  longTermVision    String?  // 2-5 year vision
+  
+  // Metadata
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relationships
+  userId            String
+  user              User     @relation("UserBusinesses", fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Users who have this as current business
+  usersWithCurrent  User[]   @relation("CurrentBusiness")
+  
+  @@map("businesses")
 }
 
 model Account {
