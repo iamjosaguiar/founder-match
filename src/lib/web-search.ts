@@ -58,31 +58,48 @@ export async function searchDuckDuckGo(query: string): Promise<SearchResult | nu
 }
 
 export function shouldPerformWebSearch(message: string): boolean {
+  console.log('Checking if web search needed for:', message);
+  
   // Patterns that indicate a web search would be helpful
   const searchIndicators = [
     // Current/recent information
     /\b(current|latest|recent|new|2024|2025|today|now|this year)\b/i,
     
-    // Market research
-    /\b(market|trend|industry|competitor|price|pricing|cost)\b/i,
+    // Market research and competitors
+    /\b(market|trend|industry|competitor|competitors|competition|competitive|price|pricing|cost)\b/i,
+    
+    // Local business research
+    /\b(local|my area|nearby|in my city|around me|my location)\b/i,
+    
+    // Competitor-specific queries
+    /\b(who are my|find competitors|competitor analysis|competitive landscape|rival|rivals)\b/i,
     
     // Definitions and explanations
-    /\b(what is|define|explain|how does|how to)\b/i,
+    /\b(what is|define|explain|how does|how to|who are)\b/i,
     
     // Statistics and data
-    /\b(statistics|stats|data|report|survey|study)\b/i,
+    /\b(statistics|stats|data|report|survey|study|research)\b/i,
     
     // News and events
     /\b(news|announcement|launch|funding|acquisition|IPO)\b/i,
     
     // Comparison queries
-    /\b(vs|versus|compare|comparison|alternative|similar)\b/i,
+    /\b(vs|versus|compare|comparison|alternative|similar|better than|worse than)\b/i,
+    
+    // Business discovery queries
+    /\b(find|search for|list of|who makes|companies that|businesses that)\b/i,
     
     // Specific business questions
-    /\b(startup|business|company|revenue|valuation|growth rate)\b/i,
+    /\b(startup|business|company|revenue|valuation|growth rate|market share)\b/i,
+    
+    // Service/product research
+    /\b(best|top|leading|popular|recommended|reviews)\b/i,
   ];
 
-  return searchIndicators.some(pattern => pattern.test(message));
+  const shouldSearch = searchIndicators.some(pattern => pattern.test(message));
+  console.log('Web search needed:', shouldSearch);
+  
+  return shouldSearch;
 }
 
 export function formatSearchResults(results: SearchResult): string {
