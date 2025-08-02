@@ -58,7 +58,18 @@ export async function searchDuckDuckGo(query: string): Promise<SearchResult | nu
 }
 
 export function shouldPerformWebSearch(message: string): boolean {
-  console.log('Checking if web search needed for:', message);
+  console.log('🔍 Checking if web search needed for:', message);
+  
+  // Quick check for obvious competitor queries
+  const competitorKeywords = ['competitor', 'competitors', 'competition', 'rival', 'rivals'];
+  const hasCompetitorKeyword = competitorKeywords.some(keyword => 
+    message.toLowerCase().includes(keyword)
+  );
+  
+  if (hasCompetitorKeyword) {
+    console.log('✅ Found competitor keyword, triggering search');
+    return true;
+  }
   
   // Patterns that indicate a web search would be helpful
   const searchIndicators = [
@@ -96,8 +107,17 @@ export function shouldPerformWebSearch(message: string): boolean {
     /\b(best|top|leading|popular|recommended|reviews)\b/i,
   ];
 
-  const shouldSearch = searchIndicators.some(pattern => pattern.test(message));
-  console.log('Web search needed:', shouldSearch);
+  // Test each pattern and log which ones match
+  const matchingPatterns = [];
+  searchIndicators.forEach((pattern, index) => {
+    if (pattern.test(message)) {
+      matchingPatterns.push(index);
+    }
+  });
+
+  const shouldSearch = matchingPatterns.length > 0;
+  console.log('📊 Matching patterns:', matchingPatterns);
+  console.log('🎯 Web search needed:', shouldSearch);
   
   return shouldSearch;
 }

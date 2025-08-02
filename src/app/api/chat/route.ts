@@ -223,19 +223,25 @@ export async function POST(request: NextRequest) {
 
     // Perform web search if the query would benefit from current information
     let webSearchResults = '';
+    console.log('🚀 Starting web search check for message:', message);
+    
     if (shouldPerformWebSearch(message)) {
       try {
-        console.log('Performing web search for:', message);
+        console.log('🔍 Performing web search for:', message);
         const searchResult = await searchDuckDuckGo(message);
         if (searchResult) {
           webSearchResults = formatSearchResults(searchResult);
-          console.log('Web search completed successfully');
+          console.log('✅ Web search completed successfully, results length:', webSearchResults.length);
+        } else {
+          console.log('❌ Web search returned no results');
         }
       } catch (searchError) {
-        console.warn('Web search error:', searchError);
+        console.warn('💥 Web search error:', searchError);
         // Continue without web search if it fails
         webSearchResults = '';
       }
+    } else {
+      console.log('❌ Web search not triggered for this message');
     }
 
     // Build context-aware system prompt
