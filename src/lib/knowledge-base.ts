@@ -1,5 +1,7 @@
-import fs from 'fs';
 import path from 'path';
+
+// Dynamic import for fs to avoid build issues
+const fs = typeof window === 'undefined' ? require('fs') : null;
 
 export type KnowledgeTopic = 
   | 'copywriting' 
@@ -88,21 +90,36 @@ export async function analyzeQueryTopics(query: string): Promise<KnowledgeTopic[
 export async function loadKnowledgeFiles(topics: KnowledgeTopic[]): Promise<string> {
   if (topics.length === 0) return '';
 
-  const knowledgeDir = path.join(process.cwd(), 'knowledge-base');
+  // Only try to load files in server environment
+  if (typeof window !== 'undefined' || !fs) return ''; // Skip on client side or if fs not available
+  
   let combinedKnowledge = '';
 
-  for (const topic of topics) {
-    const filename = KNOWLEDGE_FILES[topic];
-    const filePath = path.join(knowledgeDir, filename);
+  try {
+    const knowledgeDir = path.join(process.cwd(), 'knowledge-base');
     
-    try {
-      if (fs.existsSync(filePath)) {
-        const content = fs.readFileSync(filePath, 'utf-8');
-        combinedKnowledge += `\n## ${topic.toUpperCase()} KNOWLEDGE:\n${content}\n`;
+    for (const topic of topics) {
+      const filename = KNOWLEDGE_FILES[topic];
+      if (!filename) continue;
+      
+      const filePath = path.join(knowledgeDir, filename);
+      
+      try {
+        if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, 'utf-8');
+          combinedKnowledge += `\n## ${topic.toUpperCase()} KNOWLEDGE:\n${content}\n`;
+        } else {
+          console.warn(`Knowledge file not found: ${filePath}`);
+        }
+      } catch (fileError) {
+        console.warn(`Could not load knowledge file: ${filename}`, fileError);
+        // Continue processing other files
       }
-    } catch (error) {
-      console.warn(`Could not load knowledge file: ${filename}`, error);
     }
+  } catch (dirError) {
+    console.warn('Knowledge base directory access error:', dirError);
+    // Return empty string if knowledge base is not available
+    return '';
   }
 
   return combinedKnowledge;

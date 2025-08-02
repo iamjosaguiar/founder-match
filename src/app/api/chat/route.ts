@@ -199,7 +199,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Get user context, memories, and relevant knowledge
-    const [userContext, relevantMemories, conversationHistory, relevantKnowledge] = await Promise.all([
+    const [userContext, relevantMemories, conversationHistory] = await Promise.all([
       getUserContext(user.id),
       getRelevantMemories(user.id, message),
       prisma.chatMessage.findMany({
@@ -207,9 +207,18 @@ export async function POST(request: NextRequest) {
         orderBy: { createdAt: 'asc' },
         take: 20, // Last 20 messages for context
         select: { role: true, content: true }
-      }),
-      getRelevantKnowledge(message, userContext)
+      })
     ]);
+
+    // Get relevant knowledge with error handling
+    let relevantKnowledge = '';
+    try {
+      relevantKnowledge = await getRelevantKnowledge(message, userContext);
+    } catch (knowledgeError) {
+      console.warn('Knowledge retrieval error:', knowledgeError);
+      // Continue without knowledge base if it fails
+      relevantKnowledge = '';
+    }
 
     // Build context-aware system prompt
     const systemPrompt = `You are CoLaunchr, a personal business sidekick AI for entrepreneurs and business owners. Your role is to be their trusted co-pilot, helping them navigate challenges, make decisions, and grow their businesses.
