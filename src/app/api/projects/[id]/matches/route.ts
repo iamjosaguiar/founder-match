@@ -174,7 +174,7 @@ export async function GET(
         roles: { contains: 'service_provider' },
         name: { not: null },
         title: { not: null },
-        serviceTypes: { isEmpty: false }
+        serviceTypes: { not: null }
       },
       select: {
         id: true,
