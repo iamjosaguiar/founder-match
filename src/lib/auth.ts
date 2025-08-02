@@ -4,6 +4,7 @@ import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
       name: "credentials",
@@ -64,6 +65,7 @@ export const authOptions: AuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
+  debug: process.env.NODE_ENV === 'development',
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
