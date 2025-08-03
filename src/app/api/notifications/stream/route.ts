@@ -14,8 +14,14 @@ export async function GET(request: NextRequest) {
     const userId = session.user.id;
     const url = new URL(request.url);
     const requestedUserId = url.searchParams.get('userId');
+    const requestedEmail = url.searchParams.get('email');
 
-    if (requestedUserId !== userId) {
+    // Allow access if either userId matches or email matches (for client components)
+    if (requestedUserId && requestedUserId !== userId) {
+      return new Response('Forbidden', { status: 403 });
+    }
+    
+    if (requestedEmail && requestedEmail !== session.user.email) {
       return new Response('Forbidden', { status: 403 });
     }
 

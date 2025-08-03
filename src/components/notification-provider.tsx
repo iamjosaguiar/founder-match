@@ -84,9 +84,9 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
 
   // Set up Server-Sent Events connection
   useEffect(() => {
-    if (!session?.user?.id) return;
+    if (!session?.user?.email) return;
 
-    const es = new EventSource(`/api/notifications/stream?userId=${session.user.id}`);
+    const es = new EventSource(`/api/notifications/stream?email=${encodeURIComponent(session.user.email)}`);
     
     es.onmessage = (event) => {
       try {
