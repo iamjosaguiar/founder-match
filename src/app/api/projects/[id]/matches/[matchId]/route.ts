@@ -36,7 +36,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
-    if (project.ownerId !== session.user.id) {
+    if (project.ownerId !== (session.user as any).id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

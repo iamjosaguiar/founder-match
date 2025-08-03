@@ -60,7 +60,7 @@ export async function POST(
     const comment = await prisma.forumComment.create({
       data: {
         content: content.trim(),
-        authorId: session.user.id,
+        authorId: (session.user as any).id,
         postId: postId,
         parentId: parentId || null
       },

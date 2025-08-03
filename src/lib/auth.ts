@@ -1,12 +1,12 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
+import { getServerSession } from "next-auth/next";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
 export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
   providers: [
-    Credentials({
+    CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -74,7 +74,7 @@ export const authOptions = {
     })
   ],
   session: {
-    strategy: "jwt",
+    strategy: "jwt" as const,
     maxAge: 24 * 60 * 60, // 24 hours
   },
   jwt: {
@@ -104,7 +104,7 @@ export const authOptions = {
     },
     async session({ session, token }: any) {
       if (token) {
-        session.user.id = token.id as string;
+        (session.user as any).id = token.id as string;
         session.user.image = token.image as string;
         session.user.profileImage = token.profileImage as string;
       }
@@ -113,18 +113,7 @@ export const authOptions = {
   },
 };
 
-// Create handlers for the route
-export const handlers = {
-  GET: async (req: Request) => new Response('Auth handler not implemented', { status: 501 }),
-  POST: async (req: Request) => new Response('Auth handler not implemented', { status: 501 })
-};
-
-// Create auth function with proper typing
-export async function auth(): Promise<{ user: { id: string; email: string; name: string } } | null> {
-  // This is a placeholder implementation for TypeScript compilation
-  // In a real implementation, this would integrate with NextAuth session handling
-  return null;
+// Export auth function for server-side usage
+export async function auth() {
+  return await getServerSession(authOptions);
 }
-
-// Export default for compatibility
-export default authOptions;

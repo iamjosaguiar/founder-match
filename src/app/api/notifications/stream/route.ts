@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    const userId = session.user.id;
+    const userId = (session.user as any).id;
     const url = new URL(request.url);
     const requestedUserId = url.searchParams.get('userId');
     const requestedEmail = url.searchParams.get('email');

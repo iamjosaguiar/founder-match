@@ -64,7 +64,7 @@ export async function GET(
         },
         likes: {
           where: {
-            userId: session.user.id || ''
+            userId: (session.user as any).id || ''
           }
         }
       }
@@ -140,7 +140,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    if (existingPost.authorId !== session.user.id) {
+    if (existingPost.authorId !== (session.user as any).id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
@@ -215,7 +215,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Post not found' }, { status: 404 });
     }
 
-    if (existingPost.authorId !== session.user.id) {
+    if (existingPost.authorId !== (session.user as any).id) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 

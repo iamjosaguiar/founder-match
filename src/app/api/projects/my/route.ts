@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     // Fetch projects owned by the current user
     const projects = await prisma.project.findMany({
       where: {
-        ownerId: session.user.id
+        ownerId: (session.user as any).id
       },
       include: {
         matches: {

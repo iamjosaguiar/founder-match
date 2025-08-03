@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const senderId = session.user.id;
+    const senderId = (session.user as any).id;
 
     // Check if match already exists
     const existingMatch = await prisma.match.findUnique({
@@ -160,7 +160,7 @@ export async function GET() {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
     }
 
-    const userId = session.user.id;
+    const userId = (session.user as any).id;
 
     // Get all mutual matches
     const matches = await prisma.match.findMany({
