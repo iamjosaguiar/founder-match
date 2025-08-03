@@ -453,15 +453,17 @@ export default function InvestorNetworkPage() {
         )}
 
         {/* Introduction Request Modal */}
-        <IntroductionRequestModal
-          isOpen={modalOpen}
-          onClose={() => {
-            setModalOpen(false);
-            setSelectedInvestor(null);
-          }}
-          recipient={selectedInvestor || {}}
-          context="investor"
-        />
+        {selectedInvestor && (
+          <IntroductionRequestModal
+            isOpen={modalOpen}
+            onClose={() => {
+              setModalOpen(false);
+              setSelectedInvestor(null);
+            }}
+            recipient={selectedInvestor}
+            context="investor"
+          />
+        )}
       </div>
     </DashboardLayout>
   );
