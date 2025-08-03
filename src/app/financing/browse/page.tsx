@@ -132,6 +132,7 @@ export default function BrowseCompaniesPage() {
   });
 
   const handleExpressInterest = (company: any) => {
+    // Set selected company for modal
     setSelectedCompany({
       id: company.id,
       name: company.companyName,
