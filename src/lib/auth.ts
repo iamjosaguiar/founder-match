@@ -1,4 +1,5 @@
 import NextAuth from "next-auth";
+import { getServerSession } from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
@@ -117,3 +118,6 @@ export default NextAuth(authOptions);
 
 // For compatibility with Next.js middleware and API routes
 export { authOptions };
+
+// Compatibility wrapper for v5-style auth function
+export const auth = () => getServerSession(authOptions);
