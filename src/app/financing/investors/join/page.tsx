@@ -24,6 +24,15 @@ import {
   CheckCircle
 } from "lucide-react";
 
+type UserProfile = {
+  title?: string;
+  bio?: string;
+  skills?: string[];
+  industry?: string;
+  stage?: string;
+  location?: string;
+};
+
 type InvestorProfileData = {
   profileType: string;
   organization: string;
@@ -75,7 +84,7 @@ export default function JoinInvestorNetworkPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   const { register, handleSubmit, formState: { errors }, watch, setValue, reset } = useForm<InvestorProfileData>({
