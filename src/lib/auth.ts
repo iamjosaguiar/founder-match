@@ -25,22 +25,25 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
+    async sendVerificationEmail({ user, url }) {
+      // Skip email verification for now
+      return;
+    },
   },
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // extend session by 1 day on activity
   },
-  // Use existing user table structure
+  // Map to existing user table structure
   user: {
+    modelName: "user", // Use lowercase to match Prisma model
+    fields: {
+      email: "email",
+      name: "name", 
+      image: "image",
+      emailVerified: "emailVerified",
+    },
     additionalFields: {
-      name: {
-        type: "string",
-        required: false,
-      },
-      image: {
-        type: "string", 
-        required: false,
-      },
       profileImage: {
         type: "string",
         required: false,

@@ -1,4 +1,235 @@
-import { auth } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const handler = auth.handler;
-export { handler as GET, handler as POST };
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || "fallback-secret-for-development";
+
+// Helper to create JWT token
+function createToken(user: any) {
+  return jwt.sign(
+    {
+      sub: user.id,
+      email: user.email,
+      name: user.name,
+      image: user.image || user.profileImage,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7), // 7 days
+    },
+    JWT_SECRET
+  );
+}
+
+// Helper to verify JWT token
+function verifyToken(token: string) {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+  
+  console.log('GET request to:', pathname);
+  
+  // Handle session endpoint
+  if (pathname.includes('/session')) {
+    try {
+      const token = request.cookies.get('better-auth.session_token')?.value ||
+                   request.headers.get('authorization')?.replace('Bearer ', '');
+      
+      if (!token) {
+        return NextResponse.json(null);
+      }
+      
+      const payload = verifyToken(token);
+      if (!payload || typeof payload !== 'object') {
+        return NextResponse.json(null);
+      }
+      
+      return NextResponse.json({
+        user: {
+          id: payload.sub,
+          email: payload.email,
+          name: payload.name,
+          image: payload.image,
+        },
+        expires: new Date((payload.exp || 0) * 1000).toISOString(),
+      });
+    } catch (error) {
+      console.error('Session error:', error);
+      return NextResponse.json(null);
+    }
+  }
+  
+  // Handle other GET endpoints
+  return NextResponse.json({ message: "Auth API GET" });
+}
+
+export async function POST(request: NextRequest) {
+  const url = new URL(request.url);
+  const pathname = url.pathname;
+  
+  console.log('POST request to:', pathname);
+  
+  try {
+    const body = await request.json();
+    
+    // Handle sign-in with email/password
+    if (pathname.includes('/sign-in/email')) {
+      const { email, password } = body;
+      
+      if (!email || !password) {
+        return NextResponse.json(
+          { error: 'Email and password are required' },
+          { status: 400 }
+        );
+      }
+      
+      // Find user in database
+      const user = await prisma.user.findUnique({
+        where: { email },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          profileImage: true,
+          password: true,
+        }
+      });
+      
+      if (!user || !user.password) {
+        return NextResponse.json(
+          { error: 'Invalid credentials' },
+          { status: 400 }
+        );
+      }
+      
+      // Verify password
+      const isValid = await bcrypt.compare(password, user.password);
+      if (!isValid) {
+        return NextResponse.json(
+          { error: 'Invalid credentials' },
+          { status: 400 }
+        );
+      }
+      
+      // Create JWT token
+      const token = createToken(user);
+      
+      // Create response
+      const response = NextResponse.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image || user.profileImage,
+        },
+        token,
+      });
+      
+      // Set cookie
+      response.cookies.set('better-auth.session_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
+      
+      return response;
+    }
+    
+    // Handle sign-up with email/password  
+    if (pathname.includes('/sign-up/email')) {
+      const { email, password, name } = body;
+      
+      if (!email || !password) {
+        return NextResponse.json(
+          { error: 'Email and password are required' },
+          { status: 400 }
+        );
+      }
+      
+      // Check if user already exists
+      const existingUser = await prisma.user.findUnique({
+        where: { email }
+      });
+      
+      if (existingUser) {
+        return NextResponse.json(
+          { error: 'User already exists' },
+          { status: 400 }
+        );
+      }
+      
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 12);
+      
+      // Create user
+      const user = await prisma.user.create({
+        data: {
+          email,
+          name: name || email.split('@')[0],
+          password: hashedPassword,
+          emailVerified: new Date(), // Auto-verify for now
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          profileImage: true,
+        }
+      });
+      
+      // Create JWT token
+      const token = createToken(user);
+      
+      // Create response
+      const response = NextResponse.json({
+        user: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          image: user.image || user.profileImage,
+        },
+        token,
+      });
+      
+      // Set cookie
+      response.cookies.set('better-auth.session_token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        path: '/',
+      });
+      
+      return response;
+    }
+    
+    // Handle sign-out
+    if (pathname.includes('/sign-out')) {
+      const response = NextResponse.json({ success: true });
+      response.cookies.delete('better-auth.session_token');
+      return response;
+    }
+    
+    return NextResponse.json(
+      { error: 'Endpoint not found' },
+      { status: 404 }
+    );
+    
+  } catch (error) {
+    console.error('Auth API error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
