@@ -302,7 +302,7 @@ export default function Onboarding() {
 
   const nextStep = async () => {
     console.log('nextStep clicked, current step:', step, 'isCurrentStepComplete:', isCurrentStepComplete);
-    console.log('totalSteps:', totalSteps, 'totalPsychPages:', totalPsychPages);
+    console.log('totalSteps:', totalSteps);
     if (step < totalSteps) {
       try {
         console.log('About to save current step...');
