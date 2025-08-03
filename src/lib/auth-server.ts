@@ -2,14 +2,14 @@ import { auth } from "./auth";
 import { headers } from "next/headers";
 
 export async function getSession() {
-  const headersList = headers();
+  const headersList = await headers();
   const cookie = headersList.get("cookie") || "";
   
   try {
     const session = await auth.api.getSession({
-      headers: {
-        cookie,
-      },
+      headers: new Headers({
+        cookie: cookie,
+      }),
     });
     
     return session;

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/lib/auth';
+import { getSession } from '@/lib/auth-server';
 import { prisma } from '@/lib/prisma';
 
 // PATCH /api/chat/memory/[id] - Update specific memory
