@@ -20,6 +20,7 @@ type ServiceProviderProfile = {
   title: string;
   bio: string;
   location?: string;
+  roles?: string[];
   serviceTypes: string[];
   skills: string[];
   experience: string;
