@@ -35,9 +35,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Add service_provider to roles if not already present
-    const updatedRoles = currentUser.roles.includes('service_provider') 
-      ? currentUser.roles 
-      : [...currentUser.roles, 'service_provider'];
+    let currentRoles: string[] = [];
+    try {
+      currentRoles = JSON.parse(currentUser.roles);
+    } catch {
+      currentRoles = ['founder']; // Default fallback
+    }
+    
+    const updatedRoles = currentRoles.includes('service_provider') 
+      ? currentRoles 
+      : [...currentRoles, 'service_provider'];
 
     // Update user with service provider data
     const updatedUser = await prisma.user.update({
@@ -47,8 +54,8 @@ export async function POST(request: NextRequest) {
         title,
         bio,
         location,
-        roles: updatedRoles,
-        serviceTypes: serviceTypes,
+        roles: JSON.stringify(updatedRoles),
+        serviceTypes: JSON.stringify(serviceTypes),
         skills: skills, // Already comma-separated from frontend
         experience,
         hourlyRate: parseInt(hourlyRate),
