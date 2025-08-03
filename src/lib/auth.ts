@@ -86,15 +86,15 @@ const authOptions = {
   },
   debug: process.env.NODE_ENV === 'development',
   events: {
-    async signIn(message) {
+    async signIn(message: any) {
       console.log("NextAuth signIn event:", message);
     },
-    async signOut(message) {
+    async signOut(message: any) {
       console.log("NextAuth signOut event:", message);
     },
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         // Store user data including image info in JWT
         token.id = user.id;
@@ -103,7 +103,7 @@ const authOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (token) {
         session.user.id = token.id as string;
         session.user.image = token.image as string;
