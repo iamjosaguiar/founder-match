@@ -1,16 +1,10 @@
-const NextAuth = require("next-auth").default;
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut,
-} = NextAuth({
+export const authOptions = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
-  trustHost: true,
   providers: [
     Credentials({
       name: "credentials",
@@ -91,15 +85,15 @@ export const {
   },
   debug: process.env.NODE_ENV === 'development',
   events: {
-    async signIn(message: any) {
+    async signIn(message) {
       console.log("NextAuth signIn event:", message);
     },
-    async signOut(message: any) {
+    async signOut(message) {
       console.log("NextAuth signOut event:", message);
     },
   },
   callbacks: {
-    async jwt({ token, user }: any) {
+    async jwt({ token, user }) {
       if (user) {
         // Store user data including image info in JWT
         token.id = user.id;
@@ -108,7 +102,7 @@ export const {
       }
       return token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string;
         session.user.image = token.image as string;
@@ -117,6 +111,9 @@ export const {
       return session;
     },
   },
-});
+};
 
-export const handlers = { GET, POST };
+export default NextAuth(authOptions);
+
+// For compatibility with Next.js middleware and API routes
+export { authOptions };
