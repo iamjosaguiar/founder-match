@@ -1,12 +1,12 @@
-import { getServerSession } from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
-export const authOptions = {
+const config = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
   providers: [
-    CredentialsProvider({
+    Credentials({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -113,7 +113,4 @@ export const authOptions = {
   },
 };
 
-// Export auth function for server-side usage
-export async function auth() {
-  return await getServerSession(authOptions);
-}
+export const { handlers, auth, signIn, signOut } = (NextAuth as any)(config);
