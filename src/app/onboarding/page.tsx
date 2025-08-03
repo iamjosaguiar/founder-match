@@ -38,7 +38,7 @@ type CompleteOnboardingData = {
   fundingStatus: string;
   companyGoals: string;
   workStyle: string;
-  isTechnical: boolean;
+  isTechnical: string;
   
 };
 
@@ -210,7 +210,7 @@ export default function Onboarding() {
         profileData.fundingStatus = data.fundingStatus;
         profileData.companyGoals = data.companyGoals;
         profileData.workStyle = data.workStyle;
-        profileData.isTechnical = data.isTechnical === 'true' || data.isTechnical === true;
+        profileData.isTechnical = data.isTechnical === 'true';
       }
 
       const profileResponse = await fetch('/api/update-profile', {
@@ -275,7 +275,7 @@ export default function Onboarding() {
         fundingStatus: currentData.fundingStatus,
         companyGoals: currentData.companyGoals,
         workStyle: currentData.workStyle,
-        isTechnical: currentData.isTechnical === 'true' || currentData.isTechnical === true
+        isTechnical: currentData.isTechnical === 'true'
       };
     }
     
