@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
-import type { AuthOptions } from "next-auth";
+import type { AuthOptions, Session } from "next-auth";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
@@ -118,6 +118,6 @@ export const authOptions: AuthOptions = {
 export default NextAuth(authOptions);
 
 // Correct auth function for server-side usage
-export async function auth() {
+export async function auth(): Promise<Session | null> {
   return await getServerSession(authOptions);
 }
