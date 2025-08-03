@@ -11,10 +11,20 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Get the current user to find their ID
+    const currentUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true }
+    });
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
     // Fetch posts created by the current user
     const posts = await prisma.forumPost.findMany({
       where: {
-        authorId: session.user.id
+        authorId: currentUser.id
       },
       include: {
         category: {
