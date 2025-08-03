@@ -121,7 +121,7 @@ export function NotificationProvider({ children }: NotificationProviderProps) {
     return () => {
       es.close();
     };
-  }, [session?.user?.id]);
+  }, [session?.user?.email]);
 
   // Cleanup on unmount
   useEffect(() => {
