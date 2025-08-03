@@ -1,9 +1,9 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
-const authConfig = NextAuth({
+const authOptions: NextAuthConfig = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
   trustHost: true,
   providers: [
@@ -112,6 +112,6 @@ const authConfig = NextAuth({
       return session;
     },
   },
-});
+};
 
-export const { auth, handlers, signIn, signOut } = authConfig;
+export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);
