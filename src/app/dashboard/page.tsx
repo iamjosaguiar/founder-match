@@ -283,7 +283,7 @@ export default function DashboardPage() {
           isLocked: false,
           isLiked: false,
           author: {
-            id: session?.user?.id || '',
+            id: result.post.author?.id || '',
             name: session?.user?.name || '',
             email: session?.user?.email || '',
             image: session?.user?.image ?? undefined,
