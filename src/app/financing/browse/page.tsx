@@ -27,6 +27,13 @@ import {
   MessageCircle
 } from "lucide-react";
 
+type SelectedCompany = {
+  id: string;
+  name: string;
+  companyName: string;
+  tagline: string;
+};
+
 // Sample data - would come from API in real implementation
 const sampleCompanies = [
   {
@@ -102,7 +109,7 @@ export default function BrowseCompaniesPage() {
   const [selectedStage, setSelectedStage] = useState("All Stages");
   const [companies, setCompanies] = useState(sampleCompanies);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState<SelectedCompany | null>(null);
 
   useEffect(() => {
     if (status === "loading") return;
