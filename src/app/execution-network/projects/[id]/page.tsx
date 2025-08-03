@@ -133,7 +133,7 @@ export default function ProjectDetailsPage() {
       if (response.ok) {
         const data = await response.json();
         setProject(data.project);
-        setIsOwner(data.project.owner.id === session.user.id);
+        setIsOwner(data.project.owner.id === session.user?.id);
       } else if (response.status === 404) {
         router.push('/execution-network/projects');
       } else if (response.status === 401) {
