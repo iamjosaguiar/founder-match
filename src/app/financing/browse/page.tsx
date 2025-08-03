@@ -365,15 +365,17 @@ export default function BrowseCompaniesPage() {
         )}
 
         {/* Introduction Request Modal */}
-        <IntroductionRequestModal
-          isOpen={modalOpen}
-          onClose={() => {
-            setModalOpen(false);
-            setSelectedCompany(null);
-          }}
-          recipient={selectedCompany || {}}
-          context="company"
-        />
+        {selectedCompany && (
+          <IntroductionRequestModal
+            isOpen={modalOpen}
+            onClose={() => {
+              setModalOpen(false);
+              setSelectedCompany(null);
+            }}
+            recipient={selectedCompany}
+            context="company"
+          />
+        )}
       </div>
     </DashboardLayout>
   );
