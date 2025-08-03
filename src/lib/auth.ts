@@ -1,9 +1,9 @@
-import NextAuth, { NextAuthConfig } from "next-auth";
+import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
 
-const authOptions: NextAuthConfig = {
+const authOptions = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
   trustHost: true,
   providers: [
