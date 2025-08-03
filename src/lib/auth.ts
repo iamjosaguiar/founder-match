@@ -2,7 +2,23 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
 
+const getServerBaseURL = () => {
+  // For Vercel deployment
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  
+  // For custom domain or explicit URL
+  if (process.env.BETTER_AUTH_URL) {
+    return process.env.BETTER_AUTH_URL;
+  }
+  
+  // Fallback for development
+  return "http://localhost:3000";
+};
+
 export const auth = betterAuth({
+  baseURL: getServerBaseURL(),
   database: prismaAdapter(prisma, {
     provider: "postgresql"
   }),
