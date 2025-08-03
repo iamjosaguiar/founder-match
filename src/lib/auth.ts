@@ -114,4 +114,9 @@ const authOptions = {
   },
 };
 
-export const { auth, handlers, signIn, signOut } = NextAuth(authOptions);
+const handler = NextAuth(authOptions);
+
+export const auth = handler.auth;
+export const handlers = handler.handlers;
+export const signIn = handler.signIn;
+export const signOut = handler.signOut;
