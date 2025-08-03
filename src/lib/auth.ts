@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+const NextAuth = require("next-auth").default;
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
