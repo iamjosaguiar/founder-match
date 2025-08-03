@@ -7,18 +7,18 @@ type Project = {
   title: string;
   description: string;
   serviceType: string;
-  budget?: number;
-  timeline?: string;
-  complexity?: string;
+  budget?: number | null;
+  timeline?: string | null;
+  complexity?: string | null;
   techStack: string[];
-  requirements?: string;
+  requirements?: string | null;
   status: string;
   createdAt: Date;
   owner: {
     id: string;
-    name: string;
-    title?: string;
-    location?: string;
+    name: string | null;
+    title?: string | null;
+    location?: string | null;
   };
   matchCount: number;
 };
@@ -210,10 +210,20 @@ export async function GET(request: NextRequest) {
     });
 
     // Transform projects and add match count
-    const projectsWithMatchCount = projects.map(project => ({
-      ...project,
-      matchCount: project.matches.length
-    }));
+    const projectsWithMatchCount = projects.map(project => {
+      let techStack: string[] = [];
+      try {
+        techStack = project.techStack ? JSON.parse(project.techStack) : [];
+      } catch {
+        techStack = [];
+      }
+      
+      return {
+        ...project,
+        techStack,
+        matchCount: project.matches.length
+      };
+    });
 
     // Calculate match scores
     const matches: ProjectMatch[] = projectsWithMatchCount
