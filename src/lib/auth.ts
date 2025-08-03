@@ -24,7 +24,7 @@ const authOptions = {
 
           const user = await prisma.user.findUnique({
             where: {
-              email: credentials.email
+              email: credentials.email as string
             },
             select: {
               id: true,
@@ -44,7 +44,7 @@ const authOptions = {
           }
 
           const isPasswordValid = await bcrypt.compare(
-            credentials.password,
+            credentials.password as string,
             user.password
           );
 
