@@ -3,8 +3,9 @@ import { getServerSession } from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import { prisma } from "./prisma";
 import bcrypt from "bcryptjs";
+import type { AuthOptions } from "next-auth";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
   providers: [
     Credentials({
@@ -86,15 +87,15 @@ export const authOptions = {
   },
   debug: process.env.NODE_ENV === 'development',
   events: {
-    async signIn(message) {
+    async signIn(message: any) {
       console.log("NextAuth signIn event:", message);
     },
-    async signOut(message) {
+    async signOut(message: any) {
       console.log("NextAuth signOut event:", message);
     },
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         // Store user data including image info in JWT
         token.id = user.id;
@@ -103,7 +104,7 @@ export const authOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       if (token) {
         session.user.id = token.id as string;
         session.user.image = token.image as string;
@@ -116,5 +117,7 @@ export const authOptions = {
 
 export default NextAuth(authOptions);
 
-// Compatibility wrapper for v5-style auth function
-export const auth = () => getServerSession(authOptions);
+// Correct auth function for server-side usage
+export async function auth() {
+  return await getServerSession(authOptions);
+}

@@ -11,6 +11,16 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Get the current user to find their ID
+    const currentUser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true }
+    });
+
+    if (!currentUser) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') || '10');
     const offset = parseInt(searchParams.get('offset') || '0');
@@ -39,7 +49,7 @@ export async function GET(request: NextRequest) {
         },
         likes: {
           where: {
-            userId: session.user.id
+            userId: currentUser.id
           },
           select: {
             id: true
