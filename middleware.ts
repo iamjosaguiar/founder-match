@@ -1,20 +1,23 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import jwt from 'jsonwebtoken';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // TODO: Re-enable authentication checks after NextAuth compatibility is resolved
-  // For now, allow all requests to pass through
-  const token = null; // Temporarily disabled
+  // Get the JWT token from cookies
+  const sessionToken = request.cookies.get('session-token');
+  let token = null;
   
-  /*
-  // Get the token to check if user is authenticated
-  const token = await getToken({ 
-    req: request, 
-    secret: process.env.NEXTAUTH_SECRET 
-  });
-  */
+  if (sessionToken?.value) {
+    try {
+      const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development';
+      token = jwt.verify(sessionToken.value, JWT_SECRET);
+    } catch (error) {
+      // Invalid token, treat as not authenticated
+      token = null;
+    }
+  }
   
   // Protected routes that require authentication
   const protectedRoutes = ['/discover', '/matches', '/onboarding'];

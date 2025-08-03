@@ -1,117 +1,35 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
-import { prisma } from "./prisma";
-import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
+import jwt from "jsonwebtoken";
 
-const authConfig = {
-  secret: process.env.NEXTAUTH_SECRET || "fallback-secret-for-development",
-  providers: [
-    Credentials({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials) {
-        try {
-          if (!credentials?.email || !credentials?.password) {
-            if (process.env.NODE_ENV === 'development') {
-              console.log("Missing credentials");
-            }
-            return null;
-          }
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || "fallback-secret-for-development";
 
-          const user = await prisma.user.findUnique({
-            where: {
-              email: credentials.email as string
-            },
-            select: {
-              id: true,
-              email: true,
-              name: true,
-              image: true,
-              profileImage: true,
-              password: true
-            }
-          });
+export async function auth() {
+  try {
+    const cookieStore = await cookies();
+    const sessionToken = cookieStore.get('session-token');
+    
+    if (!sessionToken?.value) {
+      return null;
+    }
 
-          if (!user || !user.password) {
-            if (process.env.NODE_ENV === 'development') {
-              console.log("User not found or no password");
-            }
-            return null;
-          }
+    const decoded = jwt.verify(sessionToken.value, JWT_SECRET) as any;
+    
+    return {
+      user: decoded.user,
+      expires: new Date(decoded.exp * 1000).toISOString()
+    };
+  } catch (error) {
+    return null;
+  }
+}
 
-          const isPasswordValid = await bcrypt.compare(
-            credentials.password as string,
-            user.password
-          );
+// Placeholder functions for compatibility
+export async function signIn() {
+  // This should redirect to sign-in page
+  return;
+}
 
-          if (!isPasswordValid) {
-            if (process.env.NODE_ENV === 'development') {
-              console.log("Invalid password");
-            }
-            return null;
-          }
-
-          if (process.env.NODE_ENV === 'development') {
-            console.log("User authenticated successfully:", user.email);
-          }
-          
-          // Return user data including image fields
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image || user.profileImage,
-            profileImage: user.profileImage
-          };
-        } catch (error) {
-          console.error("Error in authorize function:", error);
-          return null;
-        }
-      }
-    })
-  ],
-  session: {
-    strategy: "jwt" as const,
-    maxAge: 24 * 60 * 60, // 24 hours
-  },
-  jwt: {
-    maxAge: 24 * 60 * 60, // 24 hours
-  },
-  pages: {
-    signIn: "/auth/signin",
-  },
-  debug: process.env.NODE_ENV === 'development',
-  events: {
-    async signIn(message: any) {
-      console.log("NextAuth signIn event:", message);
-    },
-    async signOut(message: any) {
-      console.log("NextAuth signOut event:", message);
-    },
-  },
-  callbacks: {
-    async jwt({ token, user }: any) {
-      if (user) {
-        // Store user data including image info in JWT
-        token.id = user.id;
-        token.image = user.image;
-        token.profileImage = user.profileImage;
-      }
-      return token;
-    },
-    async session({ session, token }: any) {
-      if (token) {
-        (session.user as any).id = token.id as string;
-        session.user.image = token.image as string;
-        session.user.profileImage = token.profileImage as string;
-      }
-      return session;
-    },
-  },
-};
-
-// Create NextAuth instance with type assertion
-export const { auth, handlers, signIn, signOut } = (NextAuth as any)(authConfig);
+export async function signOut() {
+  // This should clear session
+  return;
+}
