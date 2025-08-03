@@ -122,7 +122,7 @@ export default function DashboardPage() {
       const recentActivities: RecentActivity[] = [];
 
       // Get matches count
-      if (matchesResponse.ok) {
+      if (matchesResponse.ok && 'json' in matchesResponse) {
         const matchesData = await matchesResponse.json();
         founderMatches = matchesData.matches?.length || 0;
         
@@ -142,13 +142,13 @@ export default function DashboardPage() {
       }
 
       // Get projects count (fallback for now since API may not exist)
-      if (projectsResponse.ok) {
+      if (projectsResponse.ok && 'json' in projectsResponse) {
         const projectsData = await projectsResponse.json();
         executionProjects = projectsData.projects?.length || 0;
       }
 
       // Get community posts count (fallback for now since API may not exist)
-      if (postsResponse.ok) {
+      if (postsResponse.ok && 'json' in postsResponse) {
         const postsData = await postsResponse.json();
         communityPosts = postsData.posts?.length || 0;
       }
