@@ -39,7 +39,7 @@ type ProfileData = {
   fundingStatus?: string;
   companyGoals?: string;
   workStyle?: string;
-  isTechnical?: boolean;
+  isTechnical?: string;
   quizScores?: {
     openness: number;
     conscientiousness: number;
@@ -233,7 +233,7 @@ export default function Profile() {
         fundingStatus: data.fundingStatus || "",
         companyGoals: data.companyGoals || "",
         workStyle: data.workStyle || "",
-        isTechnical: data.isTechnical === 'true' || data.isTechnical === true,
+        isTechnical: data.isTechnical === 'true',
       };
 
       console.log('Request body:', requestBody);
@@ -710,14 +710,14 @@ export default function Profile() {
                     </Badge>
                     <div>
                       <Badge 
-                        variant={profileData.isTechnical ? "default" : "secondary"}
+                        variant={profileData.isTechnical === 'true' ? "default" : "secondary"}
                         className={`px-4 py-2 text-sm font-medium ${
-                          profileData.isTechnical 
+                          profileData.isTechnical === 'true'
                             ? "bg-blue-600 text-white hover:bg-blue-700" 
                             : "bg-slate-100 text-slate-700 hover:bg-slate-200"
                         }`}
                       >
-                        {profileData.isTechnical ? "Technical" : "Non-Technical"}
+                        {profileData.isTechnical === 'true' ? "Technical" : "Non-Technical"}
                       </Badge>
                     </div>
                   </div>
