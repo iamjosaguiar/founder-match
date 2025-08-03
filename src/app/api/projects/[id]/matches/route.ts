@@ -4,16 +4,16 @@ import { prisma } from '@/lib/prisma';
 
 type ServiceProvider = {
   id: string;
-  name: string;
-  title: string;
-  bio: string;
-  location?: string;
-  profileImage?: string;
+  name: string | null;
+  title: string | null;
+  bio: string | null;
+  location?: string | null;
+  profileImage?: string | null;
   serviceTypes: string[];
-  skills: string;
-  experience: string;
-  hourlyRate?: number;
-  availability: string;
+  skills: string | null;
+  experience: string | null;
+  hourlyRate?: number | null;
+  availability: string | null;
   remoteOk: boolean;
   portfolio: string;
   completedProjects: number;
@@ -70,7 +70,7 @@ function calculateMatchScore(project: any, provider: ServiceProvider): MatchScor
   };
   
   const suitableExperience = complexityExperienceMap[project.complexity || 'medium'] || [];
-  if (suitableExperience.includes(provider.experience)) {
+  if (provider.experience && suitableExperience.includes(provider.experience)) {
     score += 15;
     reasons.push(`${provider.experience.charAt(0).toUpperCase() + provider.experience.slice(1)} level suits project complexity`);
   }
@@ -102,7 +102,7 @@ function calculateMatchScore(project: any, provider: ServiceProvider): MatchScor
   };
   
   const suitableAvailability = timelineAvailabilityMap[project.timeline || 'flexible'] || [];
-  if (suitableAvailability.includes(provider.availability)) {
+  if (provider.availability && suitableAvailability.includes(provider.availability)) {
     score += 10;
     reasons.push("Available for project timeline");
   }
@@ -198,6 +198,7 @@ export async function GET(
 
     // Transform and calculate match scores
     const matches: MatchScore[] = serviceProviders
+      .filter(provider => provider.name && provider.title) // Filter out providers with null required fields
       .map(provider => ({
         ...provider,
         skills: provider.skills || '',
@@ -223,16 +224,16 @@ export async function GET(
       matches: matches.map(match => ({
         provider: {
           id: match.provider.id,
-          name: match.provider.name,
-          title: match.provider.title,
-          bio: match.provider.bio,
-          location: match.provider.location,
-          profileImage: match.provider.profileImage,
+          name: match.provider.name || '',
+          title: match.provider.title || '',
+          bio: match.provider.bio || '',
+          location: match.provider.location || null,
+          profileImage: match.provider.profileImage || null,
           serviceTypes: match.provider.serviceTypes,
           skills: match.provider.skills ? match.provider.skills.split(',').map(s => s.trim()) : [],
-          experience: match.provider.experience,
-          hourlyRate: match.provider.hourlyRate,
-          availability: match.provider.availability,
+          experience: match.provider.experience || '',
+          hourlyRate: match.provider.hourlyRate || null,
+          availability: match.provider.availability || '',
           remoteOk: match.provider.remoteOk,
           completedProjects: match.provider.completedProjects,
           totalProjects: match.provider.totalProjects
