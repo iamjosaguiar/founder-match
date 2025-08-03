@@ -178,7 +178,7 @@ export function shouldPerformWebSearch(message: string): boolean {
   ];
 
   // Test each pattern and log which ones match
-  const matchingPatterns = [];
+  const matchingPatterns: number[] = [];
   searchIndicators.forEach((pattern, index) => {
     if (pattern.test(message)) {
       matchingPatterns.push(index);
