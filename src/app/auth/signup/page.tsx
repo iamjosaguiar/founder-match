@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { signUp } from "@/lib/auth-client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -58,44 +59,30 @@ export default function SignUp() {
     setError("");
 
     try {
-      // First create the user account
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          email: data.email,
-          password: data.password,
-        }),
+      // Create the user account with better-auth
+      const result = await signUp.email({
+        name: data.name,
+        email: data.email,
+        password: data.password,
       });
 
-      if (response.ok) {
+      if (result.error) {
+        setError(result.error.message || "Registration failed");
+      } else {
         // If image was selected, upload it after account creation
         if (selectedImage) {
           try {
             const formData = new FormData();
             formData.append('image', selectedImage);
             
-            // Use NextAuth signIn instead of fetch to properly handle session
-            const { signIn } = await import('next-auth/react');
-            const signInResult = await signIn('credentials', {
-              email: data.email,
-              password: data.password,
-              redirect: false,
+            // Upload the avatar
+            const avatarResponse = await fetch("/api/upload-avatar", {
+              method: "POST",
+              body: formData,
             });
-
-            if (signInResult && !signInResult.error) {
-              // Now upload the avatar
-              const avatarResponse = await fetch("/api/upload-avatar", {
-                method: "POST",
-                body: formData,
-              });
-              
-              if (!avatarResponse.ok) {
-                console.error('Failed to upload profile image, but account was created');
-              }
+            
+            if (!avatarResponse.ok) {
+              console.error('Failed to upload profile image, but account was created');
             }
           } catch (imageError) {
             console.error('Failed to upload profile image:', imageError);
@@ -104,9 +91,6 @@ export default function SignUp() {
         }
         
         router.push("/auth/signin?message=Account created successfully");
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || "An error occurred");
       }
     } catch {
       setError("Network error. Please try again.");

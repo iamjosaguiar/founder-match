@@ -10,7 +10,7 @@ export async function GET(
 ) {
   try {
     const resolvedParams = await params;
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -118,7 +118,7 @@ export async function PATCH(
 ) {
   try {
     const resolvedParams = await params;
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -195,7 +195,7 @@ export async function DELETE(
 ) {
   try {
     const resolvedParams = await params;
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

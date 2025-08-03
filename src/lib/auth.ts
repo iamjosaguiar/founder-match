@@ -1,35 +1,41 @@
-import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import { prisma } from "./prisma";
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || "fallback-secret-for-development";
+export const auth = betterAuth({
+  database: prismaAdapter(prisma, {
+    provider: "postgresql"
+  }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: false,
+  },
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // extend session by 1 day on activity
+  },
+  // Use existing user table structure
+  user: {
+    additionalFields: {
+      name: {
+        type: "string",
+        required: false,
+      },
+      image: {
+        type: "string", 
+        required: false,
+      },
+      profileImage: {
+        type: "string",
+        required: false,
+      },
+      roles: {
+        type: "string",
+        required: false,
+        defaultValue: "[\"founder\"]",
+      },
+    },
+  },
+});
 
-export async function auth() {
-  try {
-    const cookieStore = await cookies();
-    const sessionToken = cookieStore.get('session-token');
-    
-    if (!sessionToken?.value) {
-      return null;
-    }
-
-    const decoded = jwt.verify(sessionToken.value, JWT_SECRET) as any;
-    
-    return {
-      user: decoded.user,
-      expires: new Date(decoded.exp * 1000).toISOString()
-    };
-  } catch (error) {
-    return null;
-  }
-}
-
-// Placeholder functions for compatibility
-export async function signIn() {
-  // This should redirect to sign-in page
-  return;
-}
-
-export async function signOut() {
-  // This should clear session
-  return;
-}
+export type Session = typeof auth.$Infer.Session;

@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/auth-server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user) {
       return NextResponse.json(

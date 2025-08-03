@@ -1,23 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import jwt from 'jsonwebtoken';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
-  // Get the JWT token from cookies
-  const sessionToken = request.cookies.get('session-token');
-  let token = null;
-  
-  if (sessionToken?.value) {
-    try {
-      const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development';
-      token = jwt.verify(sessionToken.value, JWT_SECRET);
-    } catch (error) {
-      // Invalid token, treat as not authenticated
-      token = null;
-    }
-  }
+  // Get the better-auth session token from cookies
+  const sessionToken = request.cookies.get('better-auth.session_token');
+  const token = sessionToken?.value || null;
   
   // Protected routes that require authentication
   const protectedRoutes = ['/discover', '/matches', '/onboarding'];

@@ -5,7 +5,7 @@ import { connections } from '@/lib/notifications';
 export async function GET(request: NextRequest) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.id) {
       return new Response('Unauthorized', { status: 401 });

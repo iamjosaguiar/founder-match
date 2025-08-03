@@ -10,7 +10,7 @@ export async function POST(
 ) {
   try {
     const resolvedParams = await params;
-    const session = await auth();
+    const session = await getSession();
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     // Check authentication
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
@@ -148,7 +148,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication - only admins can create categories
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Authentication required' }, { status: 401 });

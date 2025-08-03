@@ -7,7 +7,7 @@ import { sendNotificationToUser } from '@/lib/notifications';
 export async function POST(request: NextRequest) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     console.log('Match API session:', JSON.stringify(session));
     console.log('Session user ID:', session?.user?.id);
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.id) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

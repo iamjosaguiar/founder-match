@@ -134,7 +134,7 @@ export async function GET(
   try {
     const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
@@ -270,7 +270,7 @@ export async function POST(
   try {
     const resolvedParams = await params;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

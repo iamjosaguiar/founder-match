@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 export async function POST(request: NextRequest) {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     
     if (!session?.user?.email) {
       return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

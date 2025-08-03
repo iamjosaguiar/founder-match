@@ -110,7 +110,7 @@ export async function POST(req: Request) {
   try {
     // Check if user is authenticated
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const session = await auth() as any;
+    const session = await getSession() as any;
     if (!session || !session.user) {
       return NextResponse.json(
         { error: 'Unauthorized' },

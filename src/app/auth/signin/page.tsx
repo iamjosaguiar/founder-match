@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn, getSession } from "next-auth/react";
+import { signIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -25,20 +25,15 @@ export default function SignIn() {
     setError("");
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn.email({
         email: data.email,
         password: data.password,
-        redirect: false,
       });
 
-      if (result?.error) {
+      if (result.error) {
         setError("Invalid email or password");
       } else {
-        // Get the updated session and redirect to dashboard
-        const session = await getSession();
-        if (session) {
-          router.push("/dashboard");
-        }
+        router.push("/dashboard");
       }
     } catch {
       setError("An error occurred. Please try again.");
