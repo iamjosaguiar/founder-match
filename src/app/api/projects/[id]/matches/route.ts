@@ -199,13 +199,23 @@ export async function GET(
     // Transform and calculate match scores
     const matches: MatchScore[] = serviceProviders
       .filter(provider => provider.name && provider.title) // Filter out providers with null required fields
-      .map(provider => ({
-        ...provider,
-        skills: provider.skills || '',
-        portfolio: provider.portfolio || '[]',
-        completedProjects: provider.projectMatches.filter(m => m.status === 'completed').length,
-        totalProjects: provider.projectMatches.length
-      }))
+      .map(provider => {
+        let serviceTypes: string[] = [];
+        try {
+          serviceTypes = provider.serviceTypes ? JSON.parse(provider.serviceTypes) : [];
+        } catch {
+          serviceTypes = [];
+        }
+        
+        return {
+          ...provider,
+          skills: provider.skills || '',
+          portfolio: provider.portfolio || '[]',
+          serviceTypes,
+          completedProjects: provider.projectMatches.filter(m => m.status === 'completed').length,
+          totalProjects: provider.projectMatches.length
+        };
+      })
       .map(provider => calculateMatchScore(project, provider))
       .filter(match => match.score >= minScore)
       .sort((a, b) => b.score - a.score)
