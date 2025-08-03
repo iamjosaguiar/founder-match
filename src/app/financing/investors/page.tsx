@@ -28,6 +28,14 @@ import {
   Linkedin
 } from "lucide-react";
 
+type SelectedInvestor = {
+  id: string;
+  name: string;
+  title: string;
+  organization: string;
+  profileType: string;
+};
+
 // Sample data - would come from API in real implementation
 const sampleInvestors = [
   {
@@ -109,7 +117,7 @@ export default function InvestorNetworkPage() {
   const [selectedStage, setSelectedStage] = useState("All Stages");
   const [investors, setInvestors] = useState(sampleInvestors);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedInvestor, setSelectedInvestor] = useState(null);
+  const [selectedInvestor, setSelectedInvestor] = useState<SelectedInvestor | null>(null);
 
   useEffect(() => {
     if (status === "loading") return;
