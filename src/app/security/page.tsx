@@ -98,7 +98,7 @@ export default function SecurityPage() {
               </div>
               
               <div>
-                <h3 className="font-semibold text-slate-900 mb-2">What We Don't Do</h3>
+                <h3 className="font-semibold text-slate-900 mb-2">What We Don&apos;t Do</h3>
                 <ul className="list-disc list-inside space-y-1 text-slate-600">
                   <li>Sell your personal information to third parties</li>
                   <li>Share your data without explicit consent</li>

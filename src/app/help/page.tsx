@@ -38,7 +38,7 @@ export default function HelpPage() {
             </CardHeader>
             <CardContent>
               <p className="text-slate-600 mb-4">
-                Need personalized help? Send us an email and we'll get back to you within 24 hours.
+                Need personalized help? Send us an email and we&apos;ll get back to you within 24 hours.
               </p>
               <a href="mailto:support@cofoundr.online" className="text-blue-600 hover:underline">
                 support@cofoundr.online
@@ -92,7 +92,7 @@ export default function HelpPage() {
               <div>
                 <h3 className="font-semibold text-slate-900 mb-2">How do I add my OpenAI API key?</h3>
                 <p className="text-slate-600">
-                  Go to Settings and scroll to the OpenAI API Key section. Click "Add API Key" and paste your key from the OpenAI platform.
+                  Go to Settings and scroll to the OpenAI API Key section. Click &quot;Add API Key&quot; and paste your key from the OpenAI platform.
                 </p>
               </div>
               

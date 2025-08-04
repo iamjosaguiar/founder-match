@@ -67,7 +67,7 @@ export default function CareersPage() {
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-2">🚀 Mission-Driven</h3>
                   <p className="text-slate-600">
-                    We're building tools that help entrepreneurs find their perfect co-founder and build successful businesses.
+                    We&apos;re building tools that help entrepreneurs find their perfect co-founder and build successful businesses.
                   </p>
                 </div>
                 <div>
@@ -79,7 +79,7 @@ export default function CareersPage() {
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-2">🤝 Collaborative Culture</h3>
                   <p className="text-slate-600">
-                    Work with a team of experienced entrepreneurs and technologists who support each other's growth.
+                    Work with a team of experienced entrepreneurs and technologists who support each other&apos;s growth.
                   </p>
                 </div>
                 <div>
@@ -168,11 +168,11 @@ export default function CareersPage() {
           <Card className="bg-slate-50">
             <CardContent className="p-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                Don't See a Perfect Fit?
+                Don&apos;t See a Perfect Fit?
               </h2>
               <p className="text-slate-600 mb-6">
-                We're always looking for exceptional talent. Send us your resume and let us know 
-                how you'd like to contribute to our mission.
+                We&apos;re always looking for exceptional talent. Send us your resume and let us know 
+                how you&apos;d like to contribute to our mission.
               </p>
               <a 
                 href="mailto:careers@cofoundr.online" 
