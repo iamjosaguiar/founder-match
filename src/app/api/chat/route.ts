@@ -218,12 +218,16 @@ export async function POST(request: NextRequest) {
       select: { id: true, name: true, openaiApiKey: true }
     });
 
+    console.log('🔍 USER FOUND:', { id: user?.id, name: user?.name, hasApiKey: !!user?.openaiApiKey });
+
     if (!user) {
+      console.log('❌ USER NOT FOUND');
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
     // Check if user has provided their OpenAI API key
     if (!user.openaiApiKey) {
+      console.log('🔑 NO API KEY FOUND - Returning requiresApiKey error');
       return NextResponse.json({ 
         message: 'OpenAI API key required. Please add your API key in Settings to use the chat feature.',
         requiresApiKey: true 
@@ -504,10 +508,12 @@ Keep responses conversational, practical, and personalized to their specific bus
     });
 
   } catch (error) {
-    console.error('Chat error:', error);
+    console.error('💥 CHAT API ERROR:', error);
+    console.error('💥 ERROR STACK:', error instanceof Error ? error.stack : 'No stack trace');
     return NextResponse.json({ 
       message: 'Internal server error',
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: error instanceof Error ? error.message : 'Unknown error',
+      details: process.env.NODE_ENV === 'development' ? error : undefined
     }, { status: 500 });
   }
 }

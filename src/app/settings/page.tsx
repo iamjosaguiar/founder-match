@@ -453,7 +453,9 @@ export default function SettingsPage() {
             </Card>
 
             {/* OpenAI API Key Settings */}
-            <OpenAIKeySettings />
+            <div id="openai-key">
+              <OpenAIKeySettings />
+            </div>
 
             {/* Notifications */}
             <Card className="border-0 bg-white shadow-lg">

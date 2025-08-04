@@ -199,8 +199,11 @@ export default function ChatInterface({
         setMessages(prev => prev.slice(0, -1));
         
         if (error.requiresApiKey) {
-          // Show a more helpful message for API key requirement
-          alert(`${error.message}\n\nYou can add your OpenAI API key in Settings to enable the chat feature.`);
+          // Show a more helpful message for API key requirement with option to go to settings
+          const goToSettings = confirm(`${error.message}\n\nWould you like to go to Settings now to add your OpenAI API key?`);
+          if (goToSettings) {
+            window.location.href = '/settings#openai-key';
+          }
         } else {
           alert(`Error: ${error.message}`);
         }
