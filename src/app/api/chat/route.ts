@@ -5,14 +5,12 @@ import OpenAI from 'openai';
 import { getRelevantKnowledge } from '@/lib/knowledge-base';
 import { searchDuckDuckGo, shouldPerformWebSearch, formatSearchResults } from '@/lib/web-search';
 import { updateBusinessFromConversation } from '@/lib/business-updater';
+import { decryptApiKey } from '@/lib/encryption';
 
-// Initialize OpenAI client only when needed to avoid build-time errors
-const getOpenAIClient = () => {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error('OPENAI_API_KEY environment variable is required');
-  }
+// Initialize OpenAI client with user's API key
+const getOpenAIClient = (apiKey: string) => {
   return new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: apiKey,
   });
 };
 
@@ -217,11 +215,30 @@ export async function POST(request: NextRequest) {
 
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
-      select: { id: true, name: true }
+      select: { id: true, name: true, openaiApiKey: true }
     });
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
+    }
+
+    // Check if user has provided their OpenAI API key
+    if (!user.openaiApiKey) {
+      return NextResponse.json({ 
+        message: 'OpenAI API key required. Please add your API key in Settings to use the chat feature.',
+        requiresApiKey: true 
+      }, { status: 400 });
+    }
+
+    // Decrypt the user's API key
+    let userApiKey: string;
+    try {
+      userApiKey = decryptApiKey(user.openaiApiKey);
+    } catch (error) {
+      return NextResponse.json({ 
+        message: 'Invalid API key. Please update your API key in Settings.',
+        requiresApiKey: true 
+      }, { status: 400 });
     }
 
     const { message, conversationId } = await request.json();
@@ -393,8 +410,8 @@ Keep responses conversational, practical, and personalized to their specific bus
       { role: 'user' as const, content: message }
     ];
 
-    // Get AI response
-    const openai = getOpenAIClient();
+    // Get AI response using user's API key
+    const openai = getOpenAIClient(userApiKey);
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini', // Cost-effective model
       messages,

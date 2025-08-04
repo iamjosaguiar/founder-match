@@ -197,7 +197,13 @@ export default function ChatInterface({
         const error = await response.json();
         // Remove the temporary user message on error
         setMessages(prev => prev.slice(0, -1));
-        alert(`Error: ${error.message}`);
+        
+        if (error.requiresApiKey) {
+          // Show a more helpful message for API key requirement
+          alert(`${error.message}\n\nYou can add your OpenAI API key in Settings to enable the chat feature.`);
+        } else {
+          alert(`Error: ${error.message}`);
+        }
       }
     } catch (error) {
       console.error("Error sending message:", error);

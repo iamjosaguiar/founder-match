@@ -13,6 +13,7 @@ import UserAvatar from "@/components/user-avatar";
 import { Badge } from "@/components/ui/badge";
 import BusinessSelector from "@/components/business/business-selector";
 import BusinessForm from "@/components/business/business-form";
+import OpenAIKeySettings from "@/components/settings/openai-key-settings";
 import { 
   User, 
   Mail, 
@@ -450,6 +451,9 @@ export default function SettingsPage() {
                 )}
               </CardContent>
             </Card>
+
+            {/* OpenAI API Key Settings */}
+            <OpenAIKeySettings />
 
             {/* Notifications */}
             <Card className="border-0 bg-white shadow-lg">

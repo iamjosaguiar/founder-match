@@ -94,6 +94,9 @@ model User {
   workStyle         String?  // Structured, Flexible, Fast-paced
   isTechnical       Boolean?  // Can build product without outside assistance
   
+  // User's personal OpenAI API key for chat functionality
+  openaiApiKey      String?  // Encrypted OpenAI API key
+  
   // Service Provider fields
   serviceTypes      String @default("[]") // JSON: ["development", "design", "marketing", "legal"]
   portfolio         String?  // JSON string of portfolio items
