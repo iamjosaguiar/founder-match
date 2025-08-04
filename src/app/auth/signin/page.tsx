@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import { signInWithEmail } from "@/lib/auth-client-custom";
+import { socialSignIn } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Github, Chrome } from "lucide-react";
 
 type SignInForm = {
   email: string;
@@ -54,6 +56,39 @@ export default function SignIn() {
           </CardHeader>
           
           <CardContent>
+            {/* Social Sign-In Options */}
+            <div className="space-y-3 mb-6">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => socialSignIn.google()}
+              >
+                <Chrome className="w-4 h-4 mr-2" />
+                Continue with Google
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+                onClick={() => socialSignIn.github()}
+              >
+                <Github className="w-4 h-4 mr-2" />
+                Continue with GitHub
+              </Button>
+            </div>
+
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with email
+                </span>
+              </div>
+            </div>
+
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">

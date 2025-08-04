@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { auth } from "@/lib/auth";
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || "fallback-secret-for-development";
 
@@ -33,6 +34,12 @@ export async function GET(request: NextRequest) {
   const pathname = url.pathname;
   
   console.log('GET request to:', pathname);
+  
+  // Let better-auth handle social provider GET requests (OAuth callbacks, etc.)
+  if (pathname.includes('/github') || pathname.includes('/google') || pathname.includes('/discord') || 
+      pathname.includes('/callback') || pathname.includes('/signin') || pathname.includes('/signup')) {
+    return auth.handler(request);
+  }
   
   // Handle session endpoint
   if (pathname.includes('/session')) {
@@ -82,6 +89,12 @@ export async function POST(request: NextRequest) {
   const pathname = url.pathname;
   
   console.log('POST request to:', pathname);
+  
+  // Let better-auth handle social provider POST requests
+  if (pathname.includes('/github') || pathname.includes('/google') || pathname.includes('/discord') || 
+      pathname.includes('/callback')) {
+    return auth.handler(request);
+  }
   
   // Handle sign-out before JSON parsing (no body needed)
   if (pathname.includes('/sign-out')) {

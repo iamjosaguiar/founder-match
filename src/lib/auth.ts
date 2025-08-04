@@ -23,11 +23,20 @@ export const auth = betterAuth({
     provider: "postgresql"
   }),
   emailAndPassword: {
-    enabled: true,
-    requireEmailVerification: false,
-    async sendVerificationEmail({ user, url }: { user: any; url: string }) {
-      // Skip email verification for now
-      return;
+    enabled: false, // Disable better-auth email/password since we use custom
+  },
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID || "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+    },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID || "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+    },
+    discord: {
+      clientId: process.env.DISCORD_CLIENT_ID || "",
+      clientSecret: process.env.DISCORD_CLIENT_SECRET || "",
     },
   },
   session: {

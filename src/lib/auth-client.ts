@@ -11,3 +11,10 @@ export const {
   useSession,
   getSession,
 } = authClient;
+
+// Social sign-in functions using better-auth
+export const socialSignIn = {
+  github: () => signIn.social({ provider: "github" }),
+  google: () => signIn.social({ provider: "google" }),  
+  discord: () => signIn.social({ provider: "discord" }),
+};
