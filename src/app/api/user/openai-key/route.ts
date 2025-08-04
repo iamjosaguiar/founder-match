@@ -5,24 +5,80 @@ import { encryptApiKey, decryptApiKey, validateOpenAIKey } from "@/lib/encryptio
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getSession();
+    console.log('🔍 OpenAI Key GET - Starting request');
+    
+    // Test database connection first
+    try {
+      await prisma.$connect();
+      console.log('✅ Database connected for OpenAI key check');
+    } catch (dbError) {
+      console.error('💥 Database connection failed in OpenAI key check:', dbError);
+      return NextResponse.json({ 
+        error: "Database connection failed",
+        details: process.env.NODE_ENV === 'development' ? dbError : undefined
+      }, { status: 500 });
+    }
+
+    // Get session with enhanced error handling
+    let session;
+    try {
+      session = await getSession();
+      console.log('🔑 Session check result:', { hasSession: !!session, userId: session?.user?.id });
+    } catch (sessionError) {
+      console.error('💥 Session retrieval failed:', sessionError);
+      return NextResponse.json({ 
+        error: "Session validation failed",
+        details: process.env.NODE_ENV === 'development' ? sessionError : undefined
+      }, { status: 500 });
+    }
+
     if (!session?.user?.id) {
+      console.log('❌ No valid session found');
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      select: { openaiApiKey: true }
-    });
+    // Query user with enhanced error handling
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { openaiApiKey: true }
+      });
 
-    // Return whether the user has a key, but not the key itself
-    return NextResponse.json({ 
-      hasKey: !!user?.openaiApiKey,
-      keyPreview: user?.openaiApiKey ? `sk-***${user.openaiApiKey.slice(-4)}` : null
-    });
+      console.log('👤 User lookup result:', { 
+        userId: session.user.id, 
+        userFound: !!user, 
+        hasApiKey: !!user?.openaiApiKey 
+      });
+
+      // Return whether the user has a key, but not the key itself
+      return NextResponse.json({ 
+        hasKey: !!user?.openaiApiKey,
+        keyPreview: user?.openaiApiKey ? `sk-***${user.openaiApiKey.slice(-4)}` : null
+      });
+    } catch (userError) {
+      console.error('💥 User query failed:', userError);
+      return NextResponse.json({ 
+        error: "User lookup failed",
+        details: process.env.NODE_ENV === 'development' ? userError : undefined
+      }, { status: 500 });
+    }
+
   } catch (error) {
-    console.error("Error checking OpenAI key:", error);
-    return NextResponse.json({ error: "Failed to check API key" }, { status: 500 });
+    console.error("💥 Unexpected error in OpenAI key check:", error);
+    console.error("💥 Error details:", {
+      message: error instanceof Error ? error.message : 'Unknown',
+      stack: error instanceof Error ? error.stack : undefined,
+      type: typeof error,
+      name: error instanceof Error ? error.name : undefined
+    });
+    
+    return NextResponse.json({ 
+      error: "Failed to check API key",
+      details: process.env.NODE_ENV === 'development' ? {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      } : undefined
+    }, { status: 500 });
   }
 }
 
