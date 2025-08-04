@@ -14,16 +14,6 @@ export const prisma =
         url: process.env.DATABASE_URL
       }
     },
-    // Connection pooling and timeout settings for production
-    ...(process.env.NODE_ENV === 'production' && {
-      // Increase timeout for production
-      __internal: {
-        engine: {
-          requestTimeout: 60000, // 60 seconds
-          connectTimeout: 60000,  // 60 seconds
-        }
-      }
-    })
   })
 
 // Enhanced connection management
