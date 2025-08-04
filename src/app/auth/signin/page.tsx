@@ -34,7 +34,8 @@ export default function SignIn() {
         setError("Invalid email or password");
       } else {
         console.log('Sign-in successful, redirecting to dashboard');
-        router.push("/dashboard");
+        // Use window.location to force full page reload and let middleware recognize new session
+        window.location.href = "/dashboard";
       }
     } catch {
       setError("An error occurred. Please try again.");
