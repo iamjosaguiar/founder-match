@@ -122,10 +122,11 @@ export async function POST(request: NextRequest) {
     
     // Handle sign-in with email/password
     if (pathname.includes('/sign-in/email')) {
-      console.log('Processing sign-in request for:', body.email);
+      console.log('🔐 Processing sign-in request for:', body.email);
       const { email, password } = body;
       
       if (!email || !password) {
+        console.log('❌ Missing email or password');
         return NextResponse.json(
           { error: 'Email and password are required' },
           { status: 400 }
@@ -133,6 +134,7 @@ export async function POST(request: NextRequest) {
       }
       
       // Find user in database
+      console.log('🔍 Looking up user in database...');
       const user = await prisma.user.findUnique({
         where: { email },
         select: {
@@ -145,7 +147,10 @@ export async function POST(request: NextRequest) {
         }
       });
       
+      console.log('👤 User found:', { id: user?.id, email: user?.email, hasPassword: !!user?.password });
+      
       if (!user || !user.password) {
+        console.log('❌ User not found or no password set');
         return NextResponse.json(
           { error: 'Invalid credentials' },
           { status: 400 }
@@ -153,8 +158,12 @@ export async function POST(request: NextRequest) {
       }
       
       // Verify password
+      console.log('🔒 Verifying password...');
       const isValid = await bcrypt.compare(password, user.password);
+      console.log('✅ Password valid:', isValid);
+      
       if (!isValid) {
+        console.log('❌ Invalid password');
         return NextResponse.json(
           { error: 'Invalid credentials' },
           { status: 400 }
@@ -162,6 +171,7 @@ export async function POST(request: NextRequest) {
       }
       
       // Create JWT token
+      console.log('🎫 Creating JWT token...');
       const token = createToken(user);
       
       // Create response that matches better-auth expected format
@@ -267,9 +277,19 @@ export async function POST(request: NextRequest) {
     );
     
   } catch (error) {
-    console.error('Auth API error:', error);
+    console.error('💥 Auth API error:', error);
+    console.error('💥 Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    console.error('💥 Request pathname:', pathname);
+    console.error('💥 Request method:', request.method);
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        details: process.env.NODE_ENV === 'development' ? {
+          message: error instanceof Error ? error.message : 'Unknown error',
+          stack: error instanceof Error ? error.stack : undefined
+        } : undefined
+      },
       { status: 500 }
     );
   }
