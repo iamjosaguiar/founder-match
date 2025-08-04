@@ -30,9 +30,13 @@ export default function SignIn() {
         password: data.password,
       });
 
+      console.log('Sign-in result:', result);
+
       if (result.error) {
+        console.log('Sign-in error:', result.error);
         setError("Invalid email or password");
       } else {
+        console.log('Sign-in successful, redirecting to dashboard');
         router.push("/dashboard");
       }
     } catch {

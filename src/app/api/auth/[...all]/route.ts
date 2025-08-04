@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
     
     // Handle sign-in with email/password
     if (pathname.includes('/sign-in/email')) {
+      console.log('Processing sign-in request for:', body.email);
       const { email, password } = body;
       
       if (!email || !password) {
@@ -129,7 +130,7 @@ export async function POST(request: NextRequest) {
       // Create JWT token
       const token = createToken(user);
       
-      // Create response
+      // Create response that matches better-auth expected format
       const response = NextResponse.json({
         user: {
           id: user.id,
@@ -137,7 +138,11 @@ export async function POST(request: NextRequest) {
           name: user.name,
           image: user.image || user.profileImage,
         },
-        token,
+        session: {
+          token,
+          userId: user.id,
+          expiresAt: new Date(Date.now() + (60 * 60 * 24 * 7 * 1000)).toISOString(),
+        }
       });
       
       // Set cookie
