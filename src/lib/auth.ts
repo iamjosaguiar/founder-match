@@ -25,7 +25,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: false,
-    async sendVerificationEmail({ user, url }) {
+    async sendVerificationEmail({ user, url }: { user: any; url: string }) {
       // Skip email verification for now
       return;
     },
