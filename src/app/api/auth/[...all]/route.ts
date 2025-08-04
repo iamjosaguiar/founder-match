@@ -122,83 +122,123 @@ export async function POST(request: NextRequest) {
     
     // Handle sign-in with email/password
     if (pathname.includes('/sign-in/email')) {
-      console.log('🔐 Processing sign-in request for:', body.email);
-      const { email, password } = body;
-      
-      if (!email || !password) {
-        console.log('❌ Missing email or password');
-        return NextResponse.json(
-          { error: 'Email and password are required' },
-          { status: 400 }
-        );
-      }
-      
-      // Find user in database
-      console.log('🔍 Looking up user in database...');
-      const user = await prisma.user.findUnique({
-        where: { email },
-        select: {
-          id: true,
-          email: true,
-          name: true,
-          image: true,
-          profileImage: true,
-          password: true,
+      try {
+        console.log('🔐 Processing sign-in request for:', body.email);
+        console.log('🔐 Environment check:', {
+          nodeEnv: process.env.NODE_ENV,
+          hasJwtSecret: !!process.env.NEXTAUTH_SECRET,
+          hasDatabaseUrl: !!process.env.DATABASE_URL,
+          databaseUrl: process.env.DATABASE_URL?.substring(0, 30) + '...'
+        });
+        
+        const { email, password } = body;
+        
+        if (!email || !password) {
+          console.log('❌ Missing email or password');
+          return NextResponse.json(
+            { error: 'Email and password are required' },
+            { status: 400 }
+          );
         }
-      });
-      
-      console.log('👤 User found:', { id: user?.id, email: user?.email, hasPassword: !!user?.password });
-      
-      if (!user || !user.password) {
-        console.log('❌ User not found or no password set');
-        return NextResponse.json(
-          { error: 'Invalid credentials' },
-          { status: 400 }
-        );
-      }
-      
-      // Verify password
-      console.log('🔒 Verifying password...');
-      const isValid = await bcrypt.compare(password, user.password);
-      console.log('✅ Password valid:', isValid);
-      
-      if (!isValid) {
-        console.log('❌ Invalid password');
-        return NextResponse.json(
-          { error: 'Invalid credentials' },
-          { status: 400 }
-        );
-      }
-      
-      // Create JWT token
-      console.log('🎫 Creating JWT token...');
-      const token = createToken(user);
-      
-      // Create response that matches better-auth expected format
-      const response = NextResponse.json({
-        user: {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          image: user.image || user.profileImage,
-        },
-        session: {
-          token,
-          userId: user.id,
-          expiresAt: new Date(Date.now() + (60 * 60 * 24 * 7 * 1000)).toISOString(),
+        
+        // Test database connection first
+        console.log('🔌 Testing database connection...');
+        try {
+          await prisma.$connect();
+          console.log('✅ Database connected successfully');
+        } catch (dbError) {
+          console.error('💥 Database connection failed:', dbError);
+          throw new Error(`Database connection failed: ${dbError instanceof Error ? dbError.message : 'Unknown error'}`);
         }
-      });
-      
-      // Set cookie
-      response.cookies.set('better-auth.session_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        path: '/',
-      });
-      
-      return response;
+        
+        // Find user in database
+        console.log('🔍 Looking up user in database...');
+        const user = await prisma.user.findUnique({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            image: true,
+            profileImage: true,
+            password: true,
+          }
+        });
+        
+        console.log('👤 User found:', { id: user?.id, email: user?.email, hasPassword: !!user?.password });
+        
+        if (!user || !user.password) {
+          console.log('❌ User not found or no password set');
+          return NextResponse.json(
+            { error: 'Invalid credentials' },
+            { status: 400 }
+          );
+        }
+        
+        // Verify password
+        console.log('🔒 Verifying password...');
+        const isValid = await bcrypt.compare(password, user.password);
+        console.log('✅ Password valid:', isValid);
+        
+        if (!isValid) {
+          console.log('❌ Invalid password');
+          return NextResponse.json(
+            { error: 'Invalid credentials' },
+            { status: 400 }
+          );
+        }
+        
+        // Create JWT token
+        console.log('🎫 Creating JWT token...');
+        const token = createToken(user);
+        
+        // Create response that matches better-auth expected format
+        const response = NextResponse.json({
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            image: user.image || user.profileImage,
+          },
+          session: {
+            token,
+            userId: user.id,
+            expiresAt: new Date(Date.now() + (60 * 60 * 24 * 7 * 1000)).toISOString(),
+          }
+        });
+        
+        // Set cookie
+        response.cookies.set('better-auth.session_token', token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+          path: '/',
+        });
+        
+        console.log('✅ Sign-in successful for user:', user.id);
+        return response;
+        
+      } catch (signInError) {
+        console.error('💥 Sign-in specific error:', signInError);
+        console.error('💥 Sign-in error details:', {
+          message: signInError instanceof Error ? signInError.message : 'Unknown',
+          stack: signInError instanceof Error ? signInError.stack : undefined,
+          type: typeof signInError,
+          name: signInError instanceof Error ? signInError.name : undefined
+        });
+        
+        return NextResponse.json(
+          { 
+            error: 'Sign-in failed',
+            details: process.env.NODE_ENV === 'development' ? {
+              message: signInError instanceof Error ? signInError.message : 'Unknown error',
+              stack: signInError instanceof Error ? signInError.stack : undefined
+            } : 'Authentication error'
+          },
+          { status: 500 }
+        );
+      }
     }
     
     // Handle sign-up with email/password  
