@@ -55,6 +55,8 @@ export default function ChatInterface({
   const [isLoading, setIsLoading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [hasApiKey, setHasApiKey] = useState<boolean | null>(null);
+  const [apiKeyError, setApiKeyError] = useState<string | null>(null);
   
   // Show sidebar by default on large screens
   useEffect(() => {
@@ -76,12 +78,36 @@ export default function ChatInterface({
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Load conversations on mount
+  // Check API key and load conversations on mount
   useEffect(() => {
     if (session?.user) {
+      checkApiKeyStatus();
       loadConversations();
     }
   }, [session]);
+
+  const checkApiKeyStatus = async () => {
+    try {
+      setApiKeyError(null);
+      const response = await fetch("/api/user/openai-key");
+      if (response.ok) {
+        const data = await response.json();
+        setHasApiKey(data.hasKey);
+      } else if (response.status === 401) {
+        // User not authenticated, will be handled by session check
+        setHasApiKey(false);
+      } else {
+        // Server error - but don't show error unless user tries to chat
+        console.error("Failed to check API key status:", await response.text());
+        setHasApiKey(null);
+        setApiKeyError("Unable to check API key status. Please try refreshing the page.");
+      }
+    } catch (error) {
+      console.error("Error checking API key:", error);
+      setHasApiKey(null);
+      setApiKeyError("Connection error. Please check your internet connection.");
+    }
+  };
 
   // Load messages when conversation changes
   useEffect(() => {
@@ -141,6 +167,20 @@ export default function ChatInterface({
 
   const sendMessage = async () => {
     if (!newMessage.trim() || isSending) return;
+    
+    // Check if API key is available before sending
+    if (hasApiKey === false) {
+      const goToSettings = confirm("You need to add your OpenAI API key before you can start chatting.\n\nWould you like to go to Settings now to add your API key?");
+      if (goToSettings) {
+        window.location.href = '/settings#openai-key';
+      }
+      return;
+    }
+    
+    if (hasApiKey === null || apiKeyError) {
+      alert("Please wait while we check your API key status, or refresh the page if there's a connection issue.");
+      return;
+    }
     
     const messageContent = newMessage.trim();
     setNewMessage("");
@@ -404,18 +444,62 @@ export default function ChatInterface({
                 <h3 className="text-xl font-semibold text-slate-900 mb-2">
                   Welcome to CoFoundr! 🚀
                 </h3>
-                <p className="text-slate-600 mb-6">
-                  I&apos;m your personal business sidekick. Think of me as your co-pilot for 
-                  navigating startup challenges, making decisions, and growing your business.
-                </p>
-                <div className="grid grid-cols-1 gap-2 text-sm">
-                  <div className="p-3 bg-blue-50 rounded-lg text-left">
-                    <p className="font-medium text-blue-900">💡 Try asking:</p>
-                    <p className="text-blue-700">• &ldquo;Help me validate my salon CRM idea&rdquo;</p>
-                    <p className="text-blue-700">• &ldquo;What&apos;s my next step for fundraising?&rdquo;</p>
-                    <p className="text-blue-700">• &ldquo;How should I price my SaaS product?&rdquo;</p>
+                
+                {/* API Key Status Check */}
+                {hasApiKey === false ? (
+                  <div className="mb-6">
+                    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
+                      <p className="text-yellow-800 font-medium mb-2">🔑 OpenAI API Key Required</p>
+                      <p className="text-yellow-700 text-sm mb-3">
+                        To start chatting, you&apos;ll need to add your own OpenAI API key. This keeps your costs under control and your data private.
+                      </p>
+                      <Button 
+                        onClick={() => window.location.href = '/settings#openai-key'}
+                        size="sm"
+                        className="bg-yellow-600 hover:bg-yellow-700 text-white"
+                      >
+                        Add API Key in Settings
+                      </Button>
+                    </div>
                   </div>
-                </div>
+                ) : apiKeyError ? (
+                  <div className="mb-6">
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg mb-4">
+                      <p className="text-red-800 font-medium mb-2">⚠️ Connection Issue</p>
+                      <p className="text-red-700 text-sm mb-3">{apiKeyError}</p>
+                      <Button 
+                        onClick={() => {checkApiKeyStatus(); window.location.reload();}}
+                        size="sm"
+                        variant="outline"
+                        className="border-red-300 text-red-700 hover:bg-red-50"
+                      >
+                        Retry
+                      </Button>
+                    </div>
+                  </div>
+                ) : hasApiKey === true ? (
+                  <div className="mb-6">
+                    <p className="text-slate-600 mb-4">
+                      I&apos;m your personal business sidekick. Think of me as your co-pilot for 
+                      navigating startup challenges, making decisions, and growing your business.
+                    </p>
+                    <div className="grid grid-cols-1 gap-2 text-sm">
+                      <div className="p-3 bg-blue-50 rounded-lg text-left">
+                        <p className="font-medium text-blue-900">💡 Try asking:</p>
+                        <p className="text-blue-700">• &ldquo;Help me validate my salon CRM idea&rdquo;</p>
+                        <p className="text-blue-700">• &ldquo;What&apos;s my next step for fundraising?&rdquo;</p>
+                        <p className="text-blue-700">• &ldquo;How should I price my SaaS product?&rdquo;</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="mb-6">
+                    <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                      <Loader2 className="w-4 h-4 animate-spin text-slate-600 mx-auto mb-2" />
+                      <p className="text-slate-600 text-sm">Checking API key status...</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ) : (
@@ -522,10 +606,16 @@ export default function ChatInterface({
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask me anything about your business - strategy, growth, problems, decisions..."
+                  placeholder={
+                    hasApiKey === false 
+                      ? "Add your OpenAI API key in Settings to start chatting..."
+                      : hasApiKey === null 
+                        ? "Checking API key status..."
+                        : "Ask me anything about your business - strategy, growth, problems, decisions..."
+                  }
                   className="resize-none border-slate-300 focus:ring-blue-500 focus:border-blue-500"
                   rows={2}
-                  disabled={isSending}
+                  disabled={isSending || hasApiKey !== true}
                 />
                 <div className="flex items-center justify-between mt-2">
                   <p className="text-xs text-slate-500">
@@ -534,7 +624,7 @@ export default function ChatInterface({
                   <div className="flex items-center gap-2">
                     <Button
                       onClick={sendMessage}
-                      disabled={!newMessage.trim() || isSending}
+                      disabled={!newMessage.trim() || isSending || hasApiKey !== true}
                       className="bg-gradient-to-r from-blue-600 to-indigo-600"
                     >
                       {isSending ? (
