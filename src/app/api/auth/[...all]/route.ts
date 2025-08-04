@@ -5,15 +5,14 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || "fallback-secret-for-development";
 
-// Helper to create JWT token
+// Helper to create JWT token - minimal payload to keep under 4KB cookie limit
 function createToken(user: any) {
   return jwt.sign(
     {
       sub: user.id,
       email: user.email,
-      name: user.name,
-      image: user.image || user.profileImage,
-      iat: Math.floor(Date.now() / 1000),
+      name: (user.name || '').substring(0, 50), // Limit name length
+      // Skip image to reduce token size
       exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7), // 7 days
     },
     JWT_SECRET
@@ -50,12 +49,21 @@ export async function GET(request: NextRequest) {
         return NextResponse.json(null);
       }
       
+      // Fetch additional user data since we keep JWT minimal
+      const userDetails = await prisma.user.findUnique({
+        where: { id: payload.sub },
+        select: {
+          image: true,
+          profileImage: true,
+        }
+      });
+      
       return NextResponse.json({
         user: {
           id: payload.sub,
           email: payload.email,
           name: payload.name,
-          image: payload.image,
+          image: userDetails?.image || userDetails?.profileImage || null,
         },
         expires: new Date((payload.exp || 0) * 1000).toISOString(),
       });
