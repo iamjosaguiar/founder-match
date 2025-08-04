@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signOut } from "@/lib/auth-client-custom";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import UserAvatar from "@/components/user-avatar";
@@ -347,7 +348,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             <Button 
               variant="ghost" 
               className="w-full text-red-600 hover:text-red-700 hover:bg-red-50"
-              onClick={() => signOut({ callbackUrl: "/" })}
+              onClick={() => signOut()}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out

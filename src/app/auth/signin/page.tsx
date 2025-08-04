@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "@/lib/auth-client";
+import { signInWithEmail } from "@/lib/auth-client-custom";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -25,10 +25,7 @@ export default function SignIn() {
     setError("");
 
     try {
-      const result = await signIn.email({
-        email: data.email,
-        password: data.password,
-      });
+      const result = await signInWithEmail(data.email, data.password);
 
       console.log('Sign-in result:', result);
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { signOut } from "@/lib/auth-client-custom";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -121,7 +122,7 @@ export function Navigation() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem 
-                      onClick={() => signOut({ callbackUrl: "/" })}
+                      onClick={() => signOut()}
                       className="flex items-center gap-2 cursor-pointer text-red-600 focus:text-red-600"
                     >
                       <LogOut className="w-4 h-4" />

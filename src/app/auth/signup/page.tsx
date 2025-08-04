@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { signUp } from "@/lib/auth-client";
+import { signUpWithEmail } from "@/lib/auth-client-custom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -60,11 +60,7 @@ export default function SignUp() {
 
     try {
       // Create the user account with better-auth
-      const result = await signUp.email({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      });
+      const result = await signUpWithEmail(data.email, data.password, data.name);
 
       if (result.error) {
         setError(result.error.message || "Registration failed");
