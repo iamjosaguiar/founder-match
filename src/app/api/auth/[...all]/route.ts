@@ -83,6 +83,27 @@ export async function POST(request: NextRequest) {
   
   console.log('POST request to:', pathname);
   
+  // Handle sign-out before JSON parsing (no body needed)
+  if (pathname.includes('/sign-out')) {
+    try {
+      const response = NextResponse.json({ success: true });
+      response.cookies.set('better-auth.session_token', '', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 0, // Expire immediately
+        path: '/',
+      });
+      return response;
+    } catch (error) {
+      console.error('Sign-out error:', error);
+      return NextResponse.json(
+        { error: 'Sign-out failed' },
+        { status: 500 }
+      );
+    }
+  }
+  
   try {
     const body = await request.json();
     
@@ -226,12 +247,6 @@ export async function POST(request: NextRequest) {
       return response;
     }
     
-    // Handle sign-out
-    if (pathname.includes('/sign-out')) {
-      const response = NextResponse.json({ success: true });
-      response.cookies.delete('better-auth.session_token');
-      return response;
-    }
     
     return NextResponse.json(
       { error: 'Endpoint not found' },
