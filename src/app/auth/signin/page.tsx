@@ -100,6 +100,7 @@ export default function SignIn() {
                 <label className="block text-sm font-medium mb-2">Email</label>
                 <Input
                   type="email"
+                  autoComplete="email"
                   {...register("email", { 
                     required: "Email is required",
                     pattern: {
@@ -118,6 +119,7 @@ export default function SignIn() {
                 <label className="block text-sm font-medium mb-2">Password</label>
                 <Input
                   type="password"
+                  autoComplete="current-password"
                   {...register("password", { 
                     required: "Password is required",
                     minLength: {
